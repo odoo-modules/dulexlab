@@ -10,7 +10,6 @@
     'version': '0.1',
     'depends': ['sale_management', 'stock'],
     'data': [
-        'views/sale_order_inherit_view.xml',
     ],
     'installable': True,
     'auto_install': False,
