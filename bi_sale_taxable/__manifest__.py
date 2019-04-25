@@ -10,7 +10,8 @@
     'version': '0.1',
     'depends': ['sale_management'],
     'data': [
-        'views/sale_order_inherit_view.xml'
+        'views/sale_order_inherit_view.xml',
+        'views/account_tax_inherit_view.xml',
     ],
     'installable': True,
     'auto_install': False,
