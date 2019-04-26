@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="view_partner_property_form_inherit" model="ir.ui.view">
+            <field name="name">view.partner.property.form.inherit</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="account.view_partner_property_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group[@name='accounting_entries']" position="after">
+                    <group string="Credit Limit">
+                        <field name="use_credit_limit" attrs="{'invisible': [('customer', '!=', True)]}"/>
+                        <field name="credit_limit_type"
+                               attrs="{'invisible': [('use_credit_limit', '!=', True)],'required': [('use_credit_limit', '=', True)]}"/>
+                        <field name="allowed_amount"
+                               attrs="{'invisible': [('credit_limit_type', '!=', 'amount')],'required': [('credit_limit_type', '=', 'amount')]}"/>
+                        <field name="allowed_invoice_numbers"
+                               attrs="{'invisible': [('credit_limit_type', '!=', 'open_invoices')],'required': [('credit_limit_type', '=', 'open_invoices')]}"/>
+
+                    </group>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
