@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="account_invoice_report_inherit" inherit_id="account.report_invoice_document">
+            <xpath expr="//div[@class='page']/table[@name='invoice_line_table']/thead/tr/th[@t-if='display_discount']/span[1]"
+                   position="replace">
+                <span t-if="o.parent_partner_id">
+                    <td style="text-align: right;">
+                        <span t-field="o.parent_partner_id.name"/>
+                    </td>
+                </span>
+
+                <span>aaa</span>
+                <!--<th class="text-left">-->
+                <!--<span>Barcode</span>-->
+                <!--</th>-->
+            </xpath>
+            <xpath expr="//div[@class='page']/table[@name='invoice_line_table']/tbody/t/tr/t/td[@t-if='display_discount']"
+                   position="attributes">
+                <style>display:none</style>
+            </xpath>
+        </template>
+    </data>
+</odoo>
+
+
