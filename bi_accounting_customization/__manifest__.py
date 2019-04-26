@@ -19,5 +19,7 @@
     # always loaded
     'data': [
         # 'reports/invoices.xml',
+        'wizard/invoice_validate_wizard.xml',
+        'views/account_invoice_inherit.xml',
     ],
 }
