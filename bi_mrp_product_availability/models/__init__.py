@@ -1,2 +1,2 @@
 # -*- coding: utf-8 -*-
-from . import stock_move_inherit
+from . import mrp_production_inherit
