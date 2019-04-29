@@ -16,6 +16,11 @@ class SaleOrder(models.Model):
                 if tax_ids and order.order_line:
                     for line in order.order_line:
                         line.tax_id = tax_ids.ids
+            elif not order.taxable_order:
+                if order.order_line:
+                    for line in order.order_line:
+                        if line.tax_id:
+                            line.tax_id = [(5, line.tax_id.ids)]
 
 
 class SaleOrderLine(models.Model):
