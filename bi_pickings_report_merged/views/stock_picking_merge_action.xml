@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- MERGING WIZARD VIEW -->
+    <record id="merge_pickings_wizard_form" model="ir.ui.view">
+        <field name="name">merge.pickings.wizard.form</field>
+        <field name="model">stock.picking.merge</field>
+        <field name="view_type">form</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="driver_id"/>
+                </group>
+                <group>
+                    <field name="all_pickings"/>
+                </group>
+                <footer>
+                    <button name="print_report" string="Print" type="object" class="oe_highlight"/>
+                    <button string="Cancel" class="oe_highlight" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- MERGE WIZARD ACTION -->
+    <act_window
+        id="pickings_merge"
+        name="Merge Pickings"
+        res_model="stock.picking.merge"
+        src_model="stock.picking"
+        view_mode="form,tree"
+        multi="True"
+        target="new"
+        context="{'actives': context.get('active_ids')}"
+    />
+
+
+</odoo>

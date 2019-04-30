@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="view_sale_order_form_inherit" model="ir.ui.view">
+            <field name="name">inherit.sal.order.form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='payment_term_id']" position="after">
+                    <group class="oe_subtotal oe_left" colspan="2">
+                        <field name="sum_of_products"/>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
