@@ -12,7 +12,7 @@ class BiAccountBatchPaymentInherit(models.Model):
     partners_ids = fields.Many2many('res.partner', relation='partners_account_batch_rel', column1='batch_id',
                                     column2='partner_id', string="Partners", compute='get_lines_data', store=True)
 
-    memos_lines = fields.Text('Memos', compute='get_lines_data', store=True)
+    memos_lines = fields.Text('Memo', compute='get_lines_data', store=True)
 
     @api.depends('payment_ids')
     def get_lines_data(self):
