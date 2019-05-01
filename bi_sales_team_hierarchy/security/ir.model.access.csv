@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_new_area,access.new.area,model_new_area,bi_sales_team_hierarchy.group_new_area,1,1,1,1
+access_driver_name,access.driver.name,model_driver_name,bi_sales_team_hierarchy.group_driver_name,1,1,1,1
+access_car_number,access.car.number,model_car_number,bi_sales_team_hierarchy.group_car_number,1,1,1,1
