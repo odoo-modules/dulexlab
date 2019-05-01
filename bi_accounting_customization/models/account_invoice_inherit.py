@@ -29,12 +29,8 @@ class AccountInvoiceInherit(models.Model):
     @api.depends('refund_invoice_id', 'state', 'type')
     def show_custom_validate_btn(self):
         for invoice in self:
-            if (not invoice.refund_invoice_id) and (invoice.state == 'draft'):
+            if (invoice.type in ['out_invoice', 'in_invoice']) and (invoice.state == 'draft'):
                 invoice.validate_show_btn = True
             else:
                 invoice.validate_show_btn = False
-
-            if invoice.refund_invoice_id and (invoice.state == 'draft'):
                 invoice.custom_validate_show_btn = True
-            else:
-                invoice.custom_validate_show_btn = False
