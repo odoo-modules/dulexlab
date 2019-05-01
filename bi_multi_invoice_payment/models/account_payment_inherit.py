@@ -55,11 +55,11 @@ class AccountPaymentInherit(models.Model):
             for invoice_payment in self.invoice_payment_ids:
                 if invoice_payment.allocation_amount:
                     invoice_ids.append(invoice_payment.invoice_id.id)
-                    amount = invoice_payment.allocation_amount * (
+                    invoice_payment_amount = invoice_payment.allocation_amount * (
                                 self.payment_type in ('outbound', 'transfer') and 1 or -1)
                     aml_obj = self.env['account.move.line'].with_context(check_move_validity=False)
                     debit, credit, amount_currency, currency_id = aml_obj.with_context(
-                        date=self.payment_date)._compute_amount_fields(amount, self.currency_id,
+                        date=self.payment_date)._compute_amount_fields(invoice_payment_amount, self.currency_id,
                                                                        self.company_id.currency_id)
 
                     # Write line corresponding to invoice payment
@@ -68,17 +68,19 @@ class AccountPaymentInherit(models.Model):
                     counterpart_aml_dict.update(self._get_counterpart_move_line_vals(invoice_payment.invoice_id))
                     counterpart_aml_dict.update({'currency_id': currency_id})
                     counterpart_aml = aml_obj.create(counterpart_aml_dict)
-
-                    # Write counterpart lines
-                    if not self.currency_id.is_zero(amount):
-                        if not self.currency_id != self.company_id.currency_id:
-                            amount_currency = 0
-                        liquidity_aml_dict = self._get_shared_move_line_vals(credit, debit, -amount_currency, move.id,
-                                                                             False)
-                        liquidity_aml_dict.update(self._get_liquidity_move_line_vals(-amount))
-                        aml_obj.create(liquidity_aml_dict)
                     # reconcile the invoice receivable/payable line(s) with the payment
                     invoice_payment.invoice_id.register_payment(counterpart_aml)
+
+            # Write counterpart lines
+            debit, credit, amount_currency, currency_id = aml_obj.with_context(
+                date=self.payment_date)._compute_amount_fields(amount, self.currency_id, self.company_id.currency_id)
+            if not self.currency_id.is_zero(self.amount):
+                if not self.currency_id != self.company_id.currency_id:
+                    amount_currency = 0
+                liquidity_aml_dict = self._get_shared_move_line_vals(credit, debit, -amount_currency, move.id,
+                                                                     False)
+                liquidity_aml_dict.update(self._get_liquidity_move_line_vals(-amount))
+                aml_obj.create(liquidity_aml_dict)
 
             # Assign invoices to payment
             if invoice_ids:
@@ -92,10 +94,9 @@ class AccountPaymentInherit(models.Model):
                 if self.payment_difference_handling == 'reconcile':
                     # writeoff journal items
                     if self.writeoff_account_id and self.writeoff_amount:
-                        writeoff_amount = self.writeoff_amount if self.payment_type == 'outbound' else -self.writeoff_amount
                         writeoff_line = self._get_shared_move_line_vals(0, 0, 0, move.id, False)
                         debit_wo, credit_wo, amount_currency_wo, currency_id = aml_obj.with_context(
-                            date=self.payment_date)._compute_amount_fields(writeoff_amount, self.currency_id,
+                            date=self.payment_date)._compute_amount_fields(self.writeoff_amount, self.currency_id,
                                                                            self.company_id.currency_id)
                         writeoff_line['name'] = self.writeoff_label
                         writeoff_line['account_id'] = self.writeoff_account_id.id
@@ -106,10 +107,9 @@ class AccountPaymentInherit(models.Model):
                         aml_obj.create(writeoff_line)
                     # writeoff2 journal items
                     if self.writeoff2_account_id and self.writeoff2_amount:
-                        writeoff2_amount = self.writeoff2_amount if self.payment_type == 'outbound' else -self.writeoff2_amount
                         writeoff_line = self._get_shared_move_line_vals(0, 0, 0, move.id, False)
                         debit_wo, credit_wo, amount_currency_wo, currency_id = aml_obj.with_context(
-                            date=self.payment_date)._compute_amount_fields(writeoff2_amount, self.currency_id,
+                            date=self.payment_date)._compute_amount_fields(self.writeoff2_amount, self.currency_id,
                                                                            self.company_id.currency_id)
                         writeoff_line['name'] = self.writeoff_label
                         writeoff_line['account_id'] = self.writeoff2_account_id.id
@@ -125,14 +125,6 @@ class AccountPaymentInherit(models.Model):
                     counterpart_aml_dict.update(self._get_counterpart_move_line_vals(self.invoice_ids))
                     counterpart_aml_dict.update({'currency_id': currency_id})
                     aml_obj.create(counterpart_aml_dict)
-
-                if not self.currency_id.is_zero(abs(self.payment_difference)):
-                    if not self.currency_id != self.company_id.currency_id:
-                        amount_currency = 0
-                        liquidity_aml_dict = self._get_shared_move_line_vals(credit, debit, -amount_currency, move.id,
-                                                                             False)
-                        liquidity_aml_dict.update(self._get_liquidity_move_line_vals(self.payment_difference))
-                        aml_obj.create(liquidity_aml_dict)
             # validate the payment
             if not self.journal_id.post_at_bank_rec:
                 move.post()
@@ -153,17 +145,11 @@ class AccountPaymentInherit(models.Model):
                 total_payment_invoice = -pay.total_payment_invoice if pay.payment_type == 'outbound' else pay.total_payment_invoice
                 pay.payment_difference = total_payment_invoice - payment_amount
 
-    @api.constrains('invoice_payment_ids', 'total_payment_invoice', 'amount')
-    def invoice_payment_constrain(self):
-        for rec in self:
-            if rec.total_payment_invoice > rec.amount:
-                raise UserError(_('Allocation Amount Greater Than Payment Amount!'))
-
     # constrain on payment difference amount with writeoff amounts
     @api.constrains('payment_difference', 'writeoff_amount', 'writeoff2_amount')
     def payment_difference_constrain(self):
         for rec in self:
             if rec.payment_difference and rec.payment_difference_handling == 'reconcile':
                 total_writeoff_amount = rec.writeoff_amount + rec.writeoff2_amount
-                if abs(rec.payment_difference) != abs(total_writeoff_amount):
+                if rec.payment_difference != total_writeoff_amount:
                     raise UserError(_('Total Difference Amount Must Be Equal To Payment Difference Amount!'))
