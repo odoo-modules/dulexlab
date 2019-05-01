@@ -45,9 +45,9 @@
                                     <field name="date_invoice"/>
                                     <field name="date_due"/>
                                     <field name="currency_id" groups="base.group_multi_currency"/>
-                                    <field name="amount_total"/>
-                                    <field name="residual"/>
-                                    <field name="allocation_amount"/>
+                                    <field name="amount_total" sum="Total"/>
+                                    <field name="residual" sum="Total"/>
+                                    <field name="allocation_amount" sum="Total"/>
                                 </tree>
                             </field>
                         </page>
