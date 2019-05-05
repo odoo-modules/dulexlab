@@ -7,6 +7,8 @@
             <field name="inherit_id" ref="stock.view_picking_form"/>
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='company_id']" position="before">
+                    <field name="sales_person"/>
+                    <field name="sales_team"/>
                     <field name="team_leader"/>
                     <field name="team_supervisor"/>
                     <field name="area" widget="many2one" options="{'no_create': False}"/>
