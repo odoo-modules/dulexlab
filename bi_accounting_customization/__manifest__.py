@@ -2,7 +2,7 @@
 {
     'name': "Bi Accounting Customizations",
 
-    'summary': """Bi Invoice Customizations""",
+    'summary': """Bi Accounting Customizations""",
 
     'description': """
         1- Hide the default discount column from the invoice layout and adding a new discounts column based on the price list.\n

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="under_collection_batch_payment_form" model="ir.ui.view">
+        <field name="name">under.collection.batch.payment.form</field>
+        <field name="model">under.collection.batch.payment</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="journal_id" required="1" options="{'no_create_edit': 1}"/>
+                        </group>
+                    </group>
+                    <group col="4">
+                        <field name="debit_account_id" required="1" options="{'no_create_edit': 1}"/>
+                        <field name="credit_account_id" options="{'no_create_edit': 1}" required="1"/>
+                    </group>
+
+                    <footer>
+                        <button string='Confirm' name="action_confirm_payment" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-default" special="cancel"/>
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="under_collection_batch_payment_action" model="ir.actions.act_window">
+        <field name="name">Wizard</field>
+        <field name="res_model">under.collection.batch.payment</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+
+
+</odoo>
+
