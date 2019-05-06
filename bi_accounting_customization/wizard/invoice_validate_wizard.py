@@ -24,8 +24,7 @@ class InvoiceValidateWizard(models.TransientModel):
         location_dest_ids = []
 
         # TODO Picking >> Customer Invoice
-        if inv_id.refund_invoice_id.type == 'out_invoice':
-            print('customer')
+        if inv_id.type == 'out_refund':
             operation_type_ids = self.env['stock.picking.type'].search(
                 [('code', '=', 'incoming'), ('warehouse_id.company_id', '=', inv_id.company_id.id)])
             location_ids = self.env['stock.location'].search(
@@ -39,7 +38,7 @@ class InvoiceValidateWizard(models.TransientModel):
                 self.location_id = location_ids.ids[0]
 
         # TODO Picking >> Vendor Bill Invoice
-        if inv_id.refund_invoice_id.type == 'in_invoice':
+        if inv_id.type == 'in_refund':
             operation_type_ids = self.env['stock.picking.type'].search(
                 [('code', '=', 'outgoing'), ('warehouse_id.company_id', '=', inv_id.company_id.id)],
                 order='id')

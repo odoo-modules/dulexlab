@@ -5,6 +5,8 @@ from odoo import models, fields, api
 class InheritedSaleOrder(models.Model):
     _inherit = 'sale.order'
 
+    user_id = fields.Many2one('res.users', string='Salesperson', index=True, track_visibility='onchange')
+    team_id = fields.Many2one('crm.team', related='user_id.sale_team_id')
     area = fields.Many2one('new.area', string="Area", related='user_id.area', readonly=False)
     team_supervisor = fields.Many2one('res.users', related='team_id.team_supervisor', srting="Team Supervisor")
     team_leader = fields.Many2one('res.users', related='team_id.user_id', srting="Team Leader")

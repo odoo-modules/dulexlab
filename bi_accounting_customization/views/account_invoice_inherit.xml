@@ -20,6 +20,7 @@
                 <xpath expr="//button[@name='action_invoice_open']" position="attributes">
                     <attribute name="invisible">1</attribute>
                 </xpath>
+
                 <xpath expr="//button[@name='action_invoice_open']" position="after">
                     <button name="action_invoice_open" type="object" string="Validate"
                             attrs="{'invisible': [('validate_show_btn', '=', False)]}"

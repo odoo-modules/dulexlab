@@ -6,7 +6,7 @@ from odoo.exceptions import ValidationError
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
-    @api.constrains('partner_id')
+    @api.constrains('partner_id', 'amount_total')
     def check_customer_credit_limit(self):
         for order in self:
             if order.partner_id.use_credit_limit:
@@ -23,6 +23,6 @@ class SaleOrder(models.Model):
                     partner_allowed_invoice_numbers = order.partner_id.allowed_invoice_numbers
                     all_partner_open_invoices = self.env['account.invoice'].search_count(
                         [('partner_id', '=', order.partner_id.id), ('state', '=', 'open')])
-                    if all_partner_open_invoices > partner_allowed_invoice_numbers:
-                        raise ValidationError(_('Customer %s exceed his credit invoices %s.' % (
+                    if all_partner_open_invoices >= partner_allowed_invoice_numbers:
+                        raise ValidationError(_('Customer %s exceed allowed number of invoices %s.' % (
                             order.partner_id.name, order.partner_id.allowed_invoice_numbers)))

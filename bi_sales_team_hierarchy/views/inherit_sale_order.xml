@@ -9,10 +9,13 @@
                 <xpath expr="//notebook//page[@name='other_information']//field[@name='team_id']" position="after">
                     <field name="team_leader"/>
                     <field name="team_supervisor"/>
-                    <field name="area" widget="many2one" options="{'no_create': False}" />
+                    <field name="area" widget="many2one" options="{'no_create': False}"/>
                     <field name="driver_name"/>
                     <field name="car_number"/>
                 </xpath>
+                <!--<xpath expr="//notebook//page[@name='other_information']//field[@name='team_id']" position="attributes">-->
+                <!--<attribute name="domain">[('team_id','=',member_ids.name)]</attribute>-->
+                <!--</xpath>-->
             </field>
         </record>
     </data>
