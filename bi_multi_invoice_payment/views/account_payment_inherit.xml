@@ -16,22 +16,62 @@
                             <div>
                                 <field name="payment_difference"/>
                                 <field name="payment_difference_handling" widget="radio" nolabel="1"/>
-                                <div attrs="{'invisible': [('payment_difference_handling','=','open')]}">
-                                    <label for="writeoff_account_id" class="oe_edit_only" string="Post Difference In"/>
-                                    <div name="writeoff_account_div" class="o_row">
-                                        <field name="writeoff_account_id" string="Post Difference In" attrs="{'required': [('payment_difference_handling', '=', 'reconcile')]}"/>
-                                        <field name="writeoff_amount" attrs="{'required': [('payment_difference_handling', '=', 'reconcile')]}"/>
-                                    </div>
-                                    <label for="writeoff2_account_id" class="oe_edit_only" string="Post Difference In"/>
-                                    <div name="writeoff2_account_div" class="o_row">
-                                        <field name="writeoff2_account_id" string="Post Difference In" attrs="{'required': [('writeoff2_amount', '>', 0.0)]}"/>
-                                        <field name="writeoff2_amount"/>
-                                    </div>
-                                    <label for="journal_id" string="Journal" attrs="{'invisible': [('amount', '!=', 0)]}"/>
-                                    <field name="journal_id" string="Journal" widget="selection" attrs="{'invisible': [('amount', '!=', 0)]}"/>
-                                    <label for="writeoff_label" class="oe_edit_only" string="Label"/>
-                                    <field name="writeoff_label" attrs="{'required': [('payment_difference_handling', '=', 'reconcile')]}"/>
+                            </div>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <div attrs="{'invisible': [('payment_difference_handling','=','open')]}">
+                                <label for="writeoff_account_id" class="oe_edit_only" string="Post Difference In"/>
+                                <div name="writeoff_account_div" class="o_row">
+                                    <field name="writeoff_account_id" string="Post Difference In"
+                                           attrs="{'required': [('payment_difference_handling', '=', 'reconcile')]}"/>
+                                    <field name="writeoff_amount"
+                                           attrs="{'required': [('payment_difference_handling', '=', 'reconcile')]}"/>
                                 </div>
+                                <label for="writeoff2_account_id" class="oe_edit_only"
+                                       string="Post Difference In(2)"/>
+                                <div name="writeoff2_account_div" class="o_row">
+                                    <field name="writeoff2_account_id" string="Post Difference In"
+                                           attrs="{'required': [('writeoff2_amount', '!=', 0.0)]}"/>
+                                    <field name="writeoff2_amount"/>
+                                </div>
+
+                                <label for="journal_id" string="Journal"
+                                       attrs="{'invisible': [('amount', '!=', 0)]}"/>
+                                <field name="journal_id" string="Journal" widget="selection"
+                                       attrs="{'invisible': [('amount', '!=', 0)]}"/>
+                                <label for="writeoff_label" class="oe_edit_only" string="Label"/>
+                                <field name="writeoff_label"
+                                       attrs="{'required': [('payment_difference_handling', '=', 'reconcile')]}"/>
+                            </div>
+
+                        </group>
+                        <group>
+                            <div attrs="{'invisible': [('payment_difference_handling','=','open')]}">
+
+                                <label for="writeoff3_account_id" class="oe_edit_only"
+                                       string="Post Difference In(3)"/>
+                                <div name="writeoff3_account_div" class="o_row">
+                                    <field name="writeoff3_account_id" string="Post Difference In"
+                                           attrs="{'required': [('writeoff3_amount', '!=', 0.0)]}"/>
+                                    <field name="writeoff3_amount"/>
+                                </div>
+                                <label for="writeoff4_account_id" class="oe_edit_only"
+                                       string="Post Difference In(4)"/>
+                                <div name="writeoff4_account_div" class="o_row">
+                                    <field name="writeoff4_account_id" string="Post Difference In"
+                                           attrs="{'required': [('writeoff4_amount', '!=', 0.0)]}"/>
+                                    <field name="writeoff4_amount"/>
+                                </div>
+                                <label for="writeoff5_account_id" class="oe_edit_only"
+                                       string="Post Difference In(5)"/>
+                                <div name="writeoff5_account_div" class="o_row">
+                                    <field name="writeoff5_account_id" string="Post Difference In"
+                                           attrs="{'required': [('writeoff5_amount', '!=', 0.0)]}"/>
+                                    <field name="writeoff5_amount"/>
+                                </div>
+
                             </div>
 
                         </group>
