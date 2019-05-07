@@ -16,4 +16,11 @@ class StockReport(models.TransientModel):
         data['location_name'] = self.location.name
         data['start_date'] = self.start_date
         data['end_date'] = self.end_date
-        return self.env.ref('bi_stock_card_report.stock_card_xlsx').report_action(docids=self.id, data=data)
+        return {
+            'data': data,
+            'type': 'ir.actions.report',
+            'report_name': 'bi_stock_card_report.report_stock_card_excel',
+            'report_type': 'xlsx',
+            'report_file': "Stock Card Report.xlsx",
+        }
+        # return self.env.ref('bi_stock_card_report.stock_card_xlsx').report_action(docids=self.id, data=data)
