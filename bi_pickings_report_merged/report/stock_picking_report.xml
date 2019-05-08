@@ -9,14 +9,16 @@
                         <h1>Delivery Order</h1>
                         <hr/>
                         <table style="width:30%;">
-                            <tr>
-                                <td>
-                                    <strong>Driver:</strong>
-                                </td>
-                                <td>
-                                    <span t-field="doc.driver_id"/>
-                                </td>
-                            </tr>
+                            <t t-if="doc.driver_id">
+                                <tr>
+                                    <td>
+                                        <strong>Driver:</strong>
+                                    </td>
+                                    <td>
+                                        <span t-field="doc.driver_id"/>
+                                    </td>
+                                </tr>
+                            </t>
                             <tr>
                                 <td>
                                     <strong>Date:</strong>

@@ -31,7 +31,8 @@ class PickingsMerge(models.TransientModel):
     def _get_driver(self):
         driver = False
         if self.all_pickings:
-            driver = self.all_pickings[0].driver_name.id
+            if self.all_pickings[0].driver_name:
+                driver = self.all_pickings[0].driver_name.id
         return driver
 
     all_pickings = fields.Many2many(comodel_name='stock.picking', default=_get_pickings)
