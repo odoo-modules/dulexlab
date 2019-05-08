@@ -12,8 +12,8 @@ class PickingsMerge(models.TransientModel):
     # RETURNS SELECTED TICKETS IDS
     @api.model
     def _get_pickings(self):
-        pickings = self.env['stock.picking'].search(self._selected_pickings()).ids
-        if self.all_pickings[0].driver_name:
+        pickings = self.env['stock.picking'].search(self._selected_pickings())
+        if pickings and pickings[0].driver_name:
             self.driver_id = pickings[0].driver_name.id or False
         return pickings.ids
 
