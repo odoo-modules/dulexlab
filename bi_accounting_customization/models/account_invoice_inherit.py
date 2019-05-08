@@ -31,6 +31,7 @@ class AccountInvoiceInherit(models.Model):
         for invoice in self:
             if (invoice.type in ['out_invoice', 'in_invoice']) and (invoice.state == 'draft'):
                 invoice.validate_show_btn = True
-            else:
+
+            if (invoice.type in ['out_refund', 'in_refund']) and (invoice.state == 'draft'):
                 invoice.validate_show_btn = False
                 invoice.custom_validate_show_btn = True
