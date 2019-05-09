@@ -11,7 +11,6 @@
                     <field name="complete_status"/>
                     <field name="failure_reason_id"/>
                     <field name="maintenance_team_note"/>
-                    <field name="stock_picking_type_id"/>
                 </xpath>
                 <xpath expr="//field[@name='description']" position="replace">
                     <notebook>

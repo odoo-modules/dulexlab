@@ -7,6 +7,20 @@ from odoo.addons import decimal_precision as dp
 class MaintenanceRequestLine(models.Model):
     _name = 'maintenance.request.line'
 
+    def get_default_source_location(self):
+        maintenance_stock_picking_type_id = int(
+            self.env['ir.config_parameter'].sudo().get_param('maintenance_stock_picking_type_id'))
+        picking_type_object = self.env['stock.picking.type'].search([('id', '=', maintenance_stock_picking_type_id)])
+        if picking_type_object:
+            return picking_type_object.default_location_src_id
+
+    def get_default_dest_location(self):
+        maintenance_stock_picking_type_id = int(
+            self.env['ir.config_parameter'].sudo().get_param('maintenance_stock_picking_type_id'))
+        picking_type_object = self.env['stock.picking.type'].search([('id', '=', maintenance_stock_picking_type_id)])
+        if picking_type_object:
+            return picking_type_object.default_location_dest_id
+
     name = fields.Text('Description', required=True)
     maintenance_id = fields.Many2one(
         'maintenance.request', 'Maintenance Reference', ondelete='cascade')
@@ -19,10 +33,10 @@ class MaintenanceRequestLine(models.Model):
         'uom.uom', 'Unit of Measure',
         required=True)
     location_id = fields.Many2one(
-        'stock.location', 'Source Location',
+        'stock.location', 'Source Location', default=get_default_source_location,
         required=True)
     location_dest_id = fields.Many2one(
-        'stock.location', 'Dest. Location',
+        'stock.location', 'Dest. Location', default=get_default_dest_location,
         required=True)
     lot_id = fields.Many2one('stock.production.lot', 'Lot/Serial')
 
