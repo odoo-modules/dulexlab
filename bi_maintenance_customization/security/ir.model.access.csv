@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_technical_reason,access.technical.reason,model_technical_reason,,1,1,1,1
+access_failure_reason,access.failure.reason,model_failure_reason,,1,1,1,1
+access_maintenance_request_line,access.maintenance.request.line,model_maintenance_request_line,,1,1,1,1

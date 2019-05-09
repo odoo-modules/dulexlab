@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="hr_equipment_request_view_form_inherit" model="ir.ui.view">
+            <field name="name">hr.equipment.request.view.form.inherit</field>
+            <field name="model">maintenance.request</field>
+            <field name="inherit_id" ref="maintenance.hr_equipment_request_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='priority']" position="after">
+                    <field name="technical_reason_id"/>
+                    <field name="complete_status"/>
+                    <field name="failure_reason_id"/>
+                    <field name="maintenance_team_note"/>
+                    <field name="stock_picking_type_id"/>
+                </xpath>
+                <xpath expr="//field[@name='description']" position="replace">
+                    <notebook>
+                        <page string="Parts">
+                            <field name="maintenance_line_ids">
+                                <tree editable="top">
+                                    <field name="product_id"/>
+                                    <field name="name"/>
+                                    <field name="lot_id"/>
+                                    <field name="location_id"/>
+                                    <field name="location_dest_id"/>
+                                    <field name="product_uom_qty"/>
+                                    <field name="product_uom"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Internal Note">
+                            <field name="description"/>
+                        </page>
+                    </notebook>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

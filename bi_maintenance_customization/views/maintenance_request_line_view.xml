@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+        <record id="maintenance_request_line_form_view" model="ir.ui.view">
+            <field name="name">maintenance.request.line.form.view</field>
+            <field name="model">maintenance.request.line</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="product_id"/>
+                                <field name="location_id"/>
+                                <field name="lot_id"/>
+                            </group>
+                            <group>
+                                <field name="name"/>
+                                <field name="location_dest_id"/>
+                                <field name="product_uom_qty"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="maintenance_request_line_tree_view" model="ir.ui.view">
+            <field name="name">maintenance.request.line.tree.view</field>
+            <field name="model">maintenance.request.line</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="product_id"/>
+                    <field name="name"/>
+                    <field name="lot_id"/>
+                    <field name="location_id"/>
+                    <field name="location_dest_id"/>
+                    <field name="product_uom_qty"/>
+                    <field name="product_uom"/>
+                </tree>
+            </field>
+        </record>
+
+    </data>
+</odoo>
