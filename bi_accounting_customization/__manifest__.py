@@ -5,8 +5,8 @@
     'summary': """Bi Accounting Customizations""",
 
     'description': """
-        1- Hide the default discount column from the invoice layout and adding a new discounts column based on the price list.\n
-        2- \n
+        1- Create Picking after validating the refund invoice.\n
+        2- Add new group to hide return button from delivery,receipt.\n
 
     """,
 
@@ -19,7 +19,9 @@
     # always loaded
     'data': [
         # 'reports/invoices.xml',
+        'security/security.xml',
         'wizard/invoice_validate_wizard.xml',
         'views/account_invoice_inherit.xml',
+        'views/stock_picking_inherit.xml',
     ],
 }
