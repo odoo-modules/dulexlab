@@ -39,7 +39,11 @@ class ReportPartnerLedgerInherit(models.AbstractModel):
             total_debit += debit
             total_credit += credit
             total_balance += balance
-            columns = [self.format_value(initial_balance), self.format_value(debit), self.format_value(credit)]
+
+            ### updated to consider empty column of the new added field
+            columns = ['', self.format_value(initial_balance), self.format_value(debit), self.format_value(credit)]
+            ### end
+
             if self.user_has_groups('base.group_multi_currency'):
                 columns.append('')
             columns.append(self.format_value(balance))
@@ -97,7 +101,11 @@ class ReportPartnerLedgerInherit(models.AbstractModel):
                                                                                               currency=line.currency_id) if line.amount_currency != 0 else '')
                     domain_columns.append(self.format_value(progress))
                     columns = [{'name': v} for v in domain_columns]
-                    columns[3].update({'class': 'date'})
+
+                    ### updated to consider the new date index
+                    columns[4].update({'class': 'date'})
+                    ### end
+
                     domain_lines.append({
                         'id': line.id,
                         'parent_id': 'partner_' + str(partner.id),
