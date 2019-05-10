@@ -41,7 +41,7 @@
                 <xpath expr="//field[@name='description']" position="replace">
                     <notebook>
                         <page string="Parts">
-                            <field name="maintenance_line_ids">
+                            <field name="maintenance_line_ids" attrs="{'readonly': [('pickings_created', '=', True)]}">
                                 <tree editable="top">
                                     <field name="product_id"/>
                                     <field name="name"/>
