@@ -9,6 +9,7 @@
     'version': '0.1',
     'depends': ['maintenance', 'stock'],
     'data': [
+        'security/maintenance_security_view.xml',
         'security/ir.model.access.csv',
         'views/res_config_setting_inherit_view.xml',
         'views/maintenance_request_line_view.xml',

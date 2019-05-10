@@ -21,24 +21,24 @@ class MaintenanceRequestLine(models.Model):
         if picking_type_object:
             return picking_type_object.default_location_dest_id
 
-    name = fields.Text('Description', required=True)
+    name = fields.Text(string='Description', required=True)
     maintenance_id = fields.Many2one(
-        'maintenance.request', 'Maintenance Reference', ondelete='cascade')
+        'maintenance.request', string='Maintenance Reference', ondelete='cascade')
 
-    product_id = fields.Many2one('product.product', 'Product', required=True)
+    product_id = fields.Many2one('product.product', string='Product', required=True)
     product_uom_qty = fields.Float(
-        'Quantity', default=1.0,
+        string='Quantity', default=1.0,
         digits=dp.get_precision('Product Unit of Measure'), required=True)
     product_uom = fields.Many2one(
-        'uom.uom', 'Unit of Measure',
+        'uom.uom', string='Unit of Measure',
         required=True)
     location_id = fields.Many2one(
-        'stock.location', 'Source Location', default=get_default_source_location,
+        'stock.location', string='Source Location', default=get_default_source_location,
         required=True)
     location_dest_id = fields.Many2one(
-        'stock.location', 'Dest. Location', default=get_default_dest_location,
+        'stock.location', string='Dest. Location', default=get_default_dest_location,
         required=True)
-    lot_id = fields.Many2one('stock.production.lot', 'Lot/Serial')
+    lot_id = fields.Many2one('stock.production.lot', string='Lot/Serial')
 
     @api.constrains('lot_id', 'product_id')
     def constrain_lot_id(self):
