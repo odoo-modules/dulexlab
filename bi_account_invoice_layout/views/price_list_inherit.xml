@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="pricelist_inherit_view_inherit" model="ir.ui.view">
+            <field name="name">bi.product.pricelist.form.view</field>
+            <field name="model">product.pricelist</field>
+            <field name="inherit_id" ref="product.product_pricelist_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='company_id']" position="after">
+                    <field name="phd_disc"/>
+                    <field name="dd_disc"/>
+                    <field name="cd_disc"/>
+                </xpath>
+
+            </field>
+        </record>
+
+    </data>
+</odoo>
