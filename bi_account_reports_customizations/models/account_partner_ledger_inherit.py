@@ -88,8 +88,14 @@ class ReportPartnerLedgerInherit(models.AbstractModel):
                         caret_type = 'account.payment'
 
                     ### updated to add the new fields
+                    if line.invoice_id:
+                        inv_partner = line.invoice_id.partner_id.name
+                    elif line.payment_id:
+                        inv_partner = line.payment_id.partner_id.name
+                    else:
+                        inv_partner = line.partner_id.name
                     domain_columns = [line.journal_id.code, line.account_id.code, self._format_aml_name(line),
-                                      line.partner_id.name,
+                                      inv_partner,
                                       line.date_maturity,
                                       line.full_reconcile_id.name or '', self.format_value(progress_before),
                                       line_debit != 0 and self.format_value(line_debit) or '',
@@ -131,7 +137,7 @@ class ReportPartnerLedgerInherit(models.AbstractModel):
                 lines += domain_lines
 
         if not line_id:
-            total_columns = ['', '', '', '', '', self.format_value(total_initial_balance),
+            total_columns = ['', '', '', '', '', '', self.format_value(total_initial_balance),
                              self.format_value(total_debit), self.format_value(total_credit)]
             if self.user_has_groups('base.group_multi_currency'):
                 total_columns.append('')
