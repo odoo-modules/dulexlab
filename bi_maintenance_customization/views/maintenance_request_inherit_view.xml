@@ -1,11 +1,37 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
     <data>
+        <record id="action_maintenance_request_pickings" model="ir.actions.act_window">
+            <field name="name">Request Moves</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">stock.picking</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'default_maintenance_id': active_id}</field>
+            <field name="domain">[('maintenance_id','=', active_id)]</field>
+        </record>
+
         <record id="hr_equipment_request_view_form_inherit" model="ir.ui.view">
             <field name="name">hr.equipment.request.view.form.inherit</field>
             <field name="model">maintenance.request</field>
             <field name="inherit_id" ref="maintenance.hr_equipment_request_view_form"/>
             <field name="arch" type="xml">
+                <xpath expr="//button[@name='archive_equipment_request']" position="after">
+                    <field name="pickings_created" invisible="1"/>
+                    <button string="Create Transfers" name="create_maintenance_request_pickings" type="object"
+                            groups="bi_maintenance_customization.create_maintenance_transfers_group"
+                            class="oe_highlight" attrs="{'invisible': [('pickings_created', '=', True)]}"/>
+                </xpath>
+
+                <xpath expr="//sheet//div[1]" position="before">
+                    <div class="oe_button_box" name="button_box">
+                        <button name="%(action_maintenance_request_pickings)d" class="oe_stat_button"
+                                icon="fa-calendar" type="action">
+                            <field name="picking_count" widget="statinfo" string="Moves"/>
+                        </button>
+                    </div>
+                </xpath>
+
                 <xpath expr="//field[@name='priority']" position="after">
                     <field name="technical_reason_id"/>
                     <field name="complete_status"/>
@@ -15,7 +41,7 @@
                 <xpath expr="//field[@name='description']" position="replace">
                     <notebook>
                         <page string="Parts">
-                            <field name="maintenance_line_ids">
+                            <field name="maintenance_line_ids" attrs="{'readonly': [('pickings_created', '=', True)]}">
                                 <tree editable="top">
                                     <field name="product_id"/>
                                     <field name="name"/>

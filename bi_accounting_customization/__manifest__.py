@@ -18,10 +18,9 @@
 
     # always loaded
     'data': [
-        # 'reports/invoices.xml',
-        'security/security.xml',
+        # 'security/security.xml',
         'wizard/invoice_validate_wizard.xml',
         'views/account_invoice_inherit.xml',
-        'views/stock_picking_inherit.xml',
+        # 'views/stock_picking_inherit.xml',
     ],
 }

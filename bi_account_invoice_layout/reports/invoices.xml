@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="account_invoice_report_inherit" inherit_id="account.report_invoice_document">
+            <xpath expr="//div[@class='page']/table[@name='invoice_line_table']/thead/tr[1]/th[4]"
+                   position="before">
+                <th class="text-center">
+                    <span>Public Price</span>
+                </th>
+            </xpath>
+            <xpath expr="//div[@class='page']/table[@name='invoice_line_table']/tbody/t/tr/t/td[4]"
+                   position="before">
+                <td class="text-center">
+                    <span t-field="line.public_price_lst"/>
+                </td>
+            </xpath>
+
+            <xpath expr="//div[@class='page']/table[@name='invoice_line_table']/thead/tr/th[@t-if='display_discount']"
+                   position="attributes">
+                <attribute name="style">display:none</attribute>
+            </xpath>
+            <xpath expr="//div[@class='page']/table[@name='invoice_line_table']/thead/tr/th[@t-if='display_discount']"
+                   position="after">
+                <th class="text-center">
+                    <span>PHD</span>
+                </th>
+                <th class="text-center">
+                    <span>DD</span>
+                </th>
+                <th class="text-center">
+                    <span>CD</span>
+                </th>
+            </xpath>
+
+            <xpath expr="//div[@class='page']/table[@name='invoice_line_table']/tbody/t/tr/t/td[@t-if='display_discount']"
+                   position="attributes">
+                <attribute name="style">display:none</attribute>
+            </xpath>
+
+            <xpath expr="//div[@class='page']/table[@name='invoice_line_table']/tbody/t/tr/t/td[@t-if='display_discount']"
+                   position="after">
+
+                <td class="text-center">
+                    <span t-field="line.phd_disc"/>
+                </td>
+                <td class="text-center">
+                    <span t-field="line.dd_disc"/>
+                </td>
+                <td class="text-center">
+                    <span t-field="line.cd_disc"/>
+                </td>
+
+            </xpath>
+
+            <xpath expr="//div[@id='total']/div[1]/table[1]/tr[@class='border-black'][2]" position="before">
+                <tr class="border-black">
+                    <td>
+                        <strong>Discount Amount</strong>
+                    </td>
+                    <td class="text-right">
+                        <span t-field="o.discount_amount"/>
+                    </td>
+                </tr>
+            </xpath>
+
+        </template>
+    </data>
+</odoo>
+
+
