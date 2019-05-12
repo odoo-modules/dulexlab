@@ -26,14 +26,6 @@ class SaleOrderLineInherit(models.Model):
             val.dd_disc = val.order_id.pricelist_id.dd_disc
             val.cd_disc = val.order_id.pricelist_id.cd_disc
 
-    @api.onchange('product_id', 'price_unit', 'product_uom', 'product_uom_qty', 'tax_id')
-    def _onchange_discount(self):
-        super(SaleOrderLineInherit, self)._onchange_discount()
-        if self.product_id:
-            old_disc = self.discount
-            price_list_disc = self.order_id.pricelist_id.phd_disc + self.order_id.pricelist_id.dd_disc + self.order_id.pricelist_id.cd_disc
-            self.discount = old_disc + price_list_disc
-
     @api.multi
     def _prepare_invoice_line(self, qty):
         res = super(SaleOrderLineInherit, self)._prepare_invoice_line(qty)
