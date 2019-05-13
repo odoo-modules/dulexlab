@@ -7,8 +7,7 @@ class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
     @api.multi
-    @api.constrains('order_line')
-    def check_available_qty_of_product(self):
+    def action_confirm(self):
         product_dict = {}
         self.ensure_one()
         for line in self.order_line:
@@ -32,3 +31,4 @@ class SaleOrder(models.Model):
                      product_dict[product]['line_product'].name,
                      location_qty_available, product_dict[product]['line_product'].uom_id.name,
                      self.warehouse_id.out_type_id.default_location_src_id.display_name))
+        return super(SaleOrder, self).action_confirm()
