@@ -66,6 +66,9 @@
                                     <th>
                                         <strong>Quantity</strong>
                                     </th>
+                                    <th>
+                                        <strong>UoM</strong>
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -75,16 +78,24 @@
                                         <td>
                                             <span t-esc="product"/>
                                         </td>
-                                        <td name="td_sched_date">
-                                            <span t-esc="products[product]"/>
+                                        <td>
+                                            <span t-esc="products[product]['amount']"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="products[product]['uom']"/>
                                         </td>
                                     </tr>
                                 </t>
                             </tbody>
                         </table>
-                        <div class="text-right" style="position:absolute;top:950px; page-break-inside: avoid; width:85%;">
-                             Signature: ..................
-                        </div>
+                        <hr/>
+                        <table border="1" style="width:100%;">
+                            <tr style="font-weight:bold; padding-top:25px; text-align:end;">
+                                <td>
+                                    Signature: ..........................
+                                </td>
+                            </tr>
+                        </table>
                     </div>
                 </t>
             </t>

@@ -6,8 +6,10 @@
             <field name="model">sale.order</field>
             <field name="inherit_id" ref="sale.view_order_form"/>
             <field name="arch" type="xml">
-                <xpath expr="//field[@name='order_line']/tree/field[@name='discount']" position="before">
+                <xpath expr="//field[@name='order_line']/tree/field[@name='price_unit']" position="before">
                     <field name="public_price_lst"/>
+                </xpath>
+                <xpath expr="//field[@name='order_line']/tree/field[@name='discount']" position="before">
                     <field name="phd_disc" invisible="1"/>
                     <field name="dd_disc" invisible="1"/>
                     <field name="cd_disc" invisible="1"/>
