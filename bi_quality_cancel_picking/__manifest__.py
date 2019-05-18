@@ -17,5 +17,6 @@
     # always loaded
     'data': [
         'views/product_category_inherit_view.xml',
+        'views/stock_picking_inherit_view.xml',
     ],
 }

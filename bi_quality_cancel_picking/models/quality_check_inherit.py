@@ -13,5 +13,6 @@ class QualityCheckInherit(models.Model):
         if self.picking_id and self.product_id and self.product_id.categ_id.quality_control:
             move_id = self.picking_id.move_lines.filtered(
                 lambda move: move.product_id == self.product_id)
+            move_id.write({'quality_check_status': 'fail'})
             move_id._action_cancel()
         return super(QualityCheckInherit,self).do_fail()
