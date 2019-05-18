@@ -13,8 +13,6 @@ class PickingsMerge(models.TransientModel):
     @api.model
     def _get_pickings(self):
         pickings = self.env['stock.picking'].search(self._selected_pickings())
-        if pickings and pickings[0].driver_name:
-            self.driver_id = pickings[0].driver_name.id or False
         return pickings.ids
 
     @api.model
@@ -23,17 +21,20 @@ class PickingsMerge(models.TransientModel):
         for pick in self.all_pickings:
             for line in pick.move_ids_without_package:
                 if line.product_id.name in products:
-                    products[line.product_id.name] += line.product_uom_qty
+                    products[line.product_id.name]['amount'] += line.product_uom_qty
                 else:
-                    products[line.product_id.name] = line.product_uom_qty
+                    products[line.product_id.name] = {}
+                    products[line.product_id.name]['amount'] = line.product_uom_qty
+
+                products[line.product_id.name]['uom'] = line.product_uom.name
         return products
 
     @api.model
     def _get_driver(self):
         driver = False
-        if self.all_pickings:
-            if self.all_pickings[0].driver_name:
-                driver = self.all_pickings[0].driver_name.id
+        pickings = self.env['stock.picking'].search(self._selected_pickings())
+        if pickings:
+            driver = pickings[0].driver_name.id
         return driver
 
     all_pickings = fields.Many2many(comodel_name='stock.picking', default=_get_pickings)
