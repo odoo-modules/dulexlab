@@ -41,13 +41,16 @@
                    position="after">
 
                 <td class="text-center">
-                    <span t-field="line.phd_disc"/>
+                    <span t-field="line.phd_disc"/>%
+
                 </td>
                 <td class="text-center">
-                    <span t-field="line.dd_disc"/>
+                    <span t-field="line.dd_disc"/>%
+
                 </td>
                 <td class="text-center">
-                    <span t-field="line.cd_disc"/>
+                    <span t-field="line.cd_disc"/>%
+
                 </td>
 
             </xpath>

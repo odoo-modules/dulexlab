@@ -7,9 +7,24 @@
             <field name="inherit_id" ref="product.product_pricelist_view"/>
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='company_id']" position="after">
-                    <field name="phd_disc"/>
-                    <field name="dd_disc"/>
-                    <field name="cd_disc"/>
+
+                    <label for="phd_disc" string="PHD"/>
+                    <div>
+                        <field name="phd_disc" class="oe_inline"/>
+                        %
+                    </div>
+
+                    <label for="dd_disc" string="DD"/>
+                    <div>
+                        <field name="dd_disc" class="oe_inline"/>
+                        %
+                    </div>
+
+                    <label for="cd_disc" string="CD"/>
+                    <div>
+                        <field name="cd_disc" class="oe_inline"/>
+                        %
+                    </div>
                 </xpath>
 
             </field>
