@@ -145,7 +145,7 @@ class CustomerPortal(CustomerPortal):
             lv = request.env['hr.leave'].sudo().create(vals)
 
             temp_rec = request.env['hr.leave'].sudo().new(vals)
-            temp_rec._onchange_holiday_status_id()
+            # temp_rec._onchange_holiday_status_id()
             temp_rec._onchange_request_parameters()
             temp_rec._onchange_request_unit_half()
             temp_rec._onchange_employee_id()
