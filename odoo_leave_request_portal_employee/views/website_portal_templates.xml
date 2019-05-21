@@ -1,100 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-    <!--
-        <template id="portal_my_home_menu_leave_request_activities" name="Portal layout : Leave Request menu entries"
-            inherit_id="portal.portal_layout" priority="25">
-            <xpath expr="//ul[contains(@class,'o_portal_submenu')]" position="inside">
-                <t t-if="user.has_group('odoo_leave_request_portal_employee.group_employee_leave')">
-                    <li>
+        <!--
+            <template id="portal_my_home_menu_leave_request_activities" name="Portal layout : Leave Request menu entries"
+                inherit_id="portal.portal_layout" priority="25">
+                <xpath expr="//ul[contains(@class,'o_portal_submenu')]" position="inside">
+                    <t t-if="user.has_group('odoo_leave_request_portal_employee.group_employee_leave')">
+                        <li>
+                            <a href="/my/leave_request">Leave Requests</a>
+                        </li>
+                    </t>
+                </xpath>
+            </template>
+            -->
+        <template id="portal_my_leave_request" name="Portal My Leave Request: Request entries"
+                  inherit_id="portal.portal_my_home" priority="30">
+            <!--            <xpath expr="//div[contains(@class,'o_my_home_content')]" position="inside"-->
+            <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+                <!--                <t t-if="user.has_group('odoo_leave_request_portal_employee.group_employee_leave')"-->
+                <t t-if="request.env['res.users'].browse(request.session.uid).user_has_groups('odoo_leave_request_portal_employee.group_employee_leave') or request.env['res.users'].browse(request.session.uid).user_has_groups('odoo_leave_request_portal_employee.group_employee_leave_manager')">
+                    <!-- <h3  class="page-header">
+                         <a href="/my/leave_request">Your Leave Requests
+                             <small class="ml8">
+                               <t t-if="holidays_count">
+                                 <span class='badge'><t t-esc="holidays_count"/></span>
+                             </t>
+                             <t t-if =" not holidays_count">
+                                 There are currently no Leave Request for your account.
+                             </t>
+                             </small>
+                         </a>
+                     </h3>-->
+                    <li class="list-group-item">
+                        <span class="badge" t-esc="holidays_count"/>
                         <a href="/my/leave_request">Leave Requests</a>
                     </li>
                 </t>
             </xpath>
         </template>
-        -->
-        <template id="portal_my_leave_request" name="Portal My Leave Request: Request entries" inherit_id="portal.portal_my_home" priority="30">
-<!--            <xpath expr="//div[contains(@class,'o_my_home_content')]" position="inside"-->
-            <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
-<!--                <t t-if="user.has_group('odoo_leave_request_portal_employee.group_employee_leave')"-->
-                 <t t-if="request.env['res.users'].browse(request.session.uid).user_has_groups('odoo_leave_request_portal_employee.group_employee_leave') or request.env['res.users'].browse(request.session.uid).user_has_groups('odoo_leave_request_portal_employee.group_employee_leave_manager')">
-                   <!-- <h3  class="page-header">
-                        <a href="/my/leave_request">Your Leave Requests
-                            <small class="ml8">
-                              <t t-if="holidays_count">
-                                <span class='badge'><t t-esc="holidays_count"/></span>
-                            </t>
-                            <t t-if =" not holidays_count">
-                                There are currently no Leave Request for your account.
-                            </t>
-                            </small>
-                        </a>
-                    </h3>-->
-                   <li class="list-group-item">
-                            <span class="badge" t-esc="holidays_count"/>
-                            <a href="/my/leave_request">Leave Requests</a>
-                        </li>
-                </t>
-            </xpath>
-        </template>
-        
+
         <template id="display_leave_request" name="Display Leave Request">
-             <!--<t t-call="website.layout">-->
-             <t t-call="portal.portal_layout">
-                    <style>
+            <!--<t t-call="website.layout">-->
+            <t t-call="portal.portal_layout">
+                <style>
                     #myInput {
-                      background-position: 10px 10px;
-                      background-repeat: no-repeat;
-                      width: 100%;
-                      font-size: 16px;
-                      padding: 12px 20px 12px 40px;
-                      border: 1px solid #ddd;
-                      margin-bottom: 12px;
+                    background-position: 10px 10px;
+                    background-repeat: no-repeat;
+                    width: 100%;
+                    font-size: 16px;
+                    padding: 12px 20px 12px 40px;
+                    border: 1px solid #ddd;
+                    margin-bottom: 12px;
                     }
-                    </style>
-                    <h3 class="page-header">
-                        Your Leave Requests
-                    </h3>
-                    <div class="row">
-                        <div class="form-group">
-                            <div class="col-sm-6">
-                                <a t-attf-href="/web#view_type=form&amp;model=hr.leave&amp;&amp;action=hr_holidays.hr_leave_action_new_request" class="btn btn-info">New Leave Request</a>
-                            </div>
-                            <div class="dropdown pull-right mr8 col-sm-6">
-                                <ul class="dropdown-menu" aria-labelledby="sortby">
-                                    <li t-foreach="sortings" t-as="option" t-attf-class="#{sortby == option and 'active'}">
-                                        <a t-att-href="default_url + '?' + keep_query('date_begin', 'date_end', sortby=option)"><span t-esc="sortings.get(option).get('label')"/></a>
-                                    </li>
-                                </ul>
-                            </div>
+                </style>
+                <h3 class="page-header">
+                    Your Leave Requests
+                </h3>
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <!--<a t-attf-href="/web#view_type=form&amp;model=hr.leave&amp;&amp;action=hr_holidays.hr_leave_action_new_request"-->
+                               <!--class="btn btn-info">New Leave Request-->
+                            <!--</a>-->
+                            <a t-attf-href="/leave_request_form" class="btn btn-info">New Leave Request</a>
+                        </div>
+                        <div class="dropdown pull-right mr8 col-sm-6">
+                            <ul class="dropdown-menu" aria-labelledby="sortby">
+                                <li t-foreach="sortings" t-as="option" t-attf-class="#{sortby == option and 'active'}">
+                                    <a t-att-href="default_url + '?' + keep_query('date_begin', 'date_end', sortby=option)">
+                                        <span t-esc="sortings.get(option).get('label')"/>
+                                    </a>
+                                </li>
+                            </ul>
                         </div>
                     </div>
-                    <table class="table table-hover o_my_status_table">
+                </div>
+                <table class="table table-hover o_my_status_table">
                     <thead>
-                      <tr class="active">
-                        <th>Leave Type</th>
-                        <th>Description</th>
-                        <th>Start Date</th>
-                        <th>End date</th>
-                        <th>Number of Days</th>
-                        <th>Status</th>
-                        <th></th>
-                        <th></th>
-                      </tr>
+                        <tr class="active">
+                            <th>Leave Type</th>
+                            <th>Employee</th>
+                            <th>Description</th>
+                            <th>Start Date</th>
+                            <th>End date</th>
+                            <th>Number of Days</th>
+                            <th>Status</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
                     </thead>
                     <t t-foreach="holidays" t-as="holiday">
                         <tr>
                             <td class="text-left">
                                 <span t-field="holiday.holiday_status_id"/>
                             </td>
+                            <td class="text-left">
+                                <span t-field="holiday.employee_id"/>
+                            </td>
                             <td>
                                 <span t-field="holiday.name"/>
                             </td>
                             <td class="text-left">
-                                <span t-field="holiday.date_from"/>
+                                <span t-field="holiday.request_date_from"/>
                             </td>
                             <td>
-                                <span t-field="holiday.date_to"/>
+                                <span t-field="holiday.request_date_to"/>
                             </td>
                             <td>
                                 <span t-field="holiday.number_of_days"/>
@@ -103,23 +113,31 @@
                                 <span t-field="holiday.state"/>
                             </td>
                             <td>
-                                <a class="btn btn-info" 
-                                   t-att-href="'/web#return_label=Website&amp;model=hr.leave&amp;id=%s&amp;view_type=form' % (holiday.id)" groups="odoo_leave_request_portal_employee.group_employee_leave, odoo_leave_request_portal_employee.group_employee_leave_manager">Edit</a>
+                                <t t-if="holiday.state == 'draft'">
+                                    <a class="btn btn-info"
+                                       t-att-href="'/web#return_label=Website&amp;model=hr.leave&amp;id=%s&amp;view_type=form' % (holiday.id)"
+                                       groups="odoo_leave_request_portal_employee.group_employee_leave, odoo_leave_request_portal_employee.group_employee_leave_manager">
+                                        Edit
+                                    </a>
+                                </t>
                             </td>
                             <td>
                                 <t t-if="request.env['res.users'].browse(request.session.uid).user_has_groups('odoo_leave_request_portal_employee.group_employee_leave_manager')&amp;(holiday.state == 'confirm')">
                                     <a class="btn btn-info"
-                                       t-att-href="'/leave_approve?id=%s' % (holiday.id)" groups="odoo_leave_request_portal_employee.group_employee_leave, odoo_leave_request_portal_employee.group_employee_leave_manager">Approve</a>
+                                       t-att-href="'/leave_approve?id=%s' % (holiday.id)"
+                                       groups="odoo_leave_request_portal_employee.group_employee_leave, odoo_leave_request_portal_employee.group_employee_leave_manager">
+                                        Approve
+                                    </a>
                                 </t>
                             </td>
 
                         </tr>
                     </t>
                 </table>
-	        </t>
-	    </template>
-        
-	    <template id="not_allowed_leave_request" name="Access Denied">
+            </t>
+        </template>
+
+        <template id="not_allowed_leave_request" name="Access Denied">
             <!--<t t-call="website.layout">-->
             <t t-call="portal.portal_layout">
                 <div id="wrap">
@@ -128,14 +146,104 @@
                         <h1>You are not Allowed Access This Document</h1>
                         <div>
                             <a t-attf-href="/my/home" class="btn btn-lg btn-primary">
-                                    Back
-                                </a>
+                                Back
+                            </a>
                         </div>
                     </div>
-                    
+
                 </div>
             </t>
-       </template>
-        
+        </template>
+
+        <template id="leave_request_submit" name="Leave: Submit a Leave Request">
+            <t t-call="portal.portal_layout">
+                <h2 class="text-center text-muted">
+                    <span>
+                        Leave Request
+                    </span>
+                </h2>
+                <div id="wrap" class="oe_structure oe_empt">
+                    <div class="container">
+                        <div class="row">
+                            <form action="/leave_request_submit/" method="post"
+                                  class="container-fluid mt32" enctype="multipart/form-data"
+                                  data-model_name="crm.leave"
+                                  data-success_page="/my/home"
+                                  data-editable-form="false">
+                                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                <div class="form-group row form-field">
+                                    <div class="col-lg-4 col-md-4">
+                                        <label class="col-form-label" for="leave_type">Leave Type</label>
+                                        <select class="form-control" name="leave_type" required="1">
+                                            <t t-foreach="leave_types" t-as="type">
+                                                <option t-att-value="type.id">
+                                                    <t t-esc="type.name"/>
+                                                </option>
+                                            </t>
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4">
+                                        <label class="col-form-label" for="employee_id">Employee</label>
+                                        <select class="form-control" name="employee_id" required="1">
+                                            <t t-foreach="employees" t-as="employee">
+                                                <option t-att-value="employee.id">
+                                                    <t t-esc="employee.name"/>
+                                                </option>
+                                            </t>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row form-field">
+                                    <div class="col-lg-4 col-md-4">
+                                        <label class="col-form-label" for="date_from">Date From</label>
+                                        <div class="input-append date" id="from_datetime">
+                                            <input type="date" name="date_from" required="1"/>
+                                            <span class="add-on">
+                                                <i class="fa fa-calendar"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4">
+                                        <label class="col-form-label" for="date_to">Date To</label>
+                                        <div class="input-append date" id="to_datetime">
+                                            <input type="date" name="date_to" required="1"/>
+                                            <span class="add-on">
+                                                <i class="fa fa-calendar"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row form-field">
+                                    <div class="col-lg-4 col-md-4">
+                                        <label class="col-form-label" for="half_day">Half Day</label>
+                                        <div>
+                                            <input type="checkbox" name="half_day"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row form-field">
+                                    <div class="col-lg-4 col-md-4">
+                                        <label class="col-form-label" for="description">Description</label>
+                                        <input type="text" class="form-control" name="description"/>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-8 col-lg-7">
+                                        <button type="submit"
+                                                class="btn btn-primary btn-lg o_website_form_send o_default_snippet_text">
+                                            Submit
+                                        </button>
+                                        <span style="color: red;">
+                                            <t t-if="error_fields" t-esc="error_fields"/>
+                                        </span>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+
     </data>
 </odoo>
