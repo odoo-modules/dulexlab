@@ -12,6 +12,7 @@
     'data': [
         'views/hr_employee_inherit_view.xml',
         'views/notification_cron.xml',
+        'views/bi_conf_settings_view.xml',
     ],
     'installable': True,
     'auto_install': False,

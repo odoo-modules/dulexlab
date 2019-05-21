@@ -19,12 +19,11 @@
                         </div>
                         <notebook>
                             <page string="Information">
-                                <h1>
-                                    <field name="name" placeholder="Description .. " required="True"/>
-                                </h1>
                                 <group col="4">
-                                    <field name="expect_sign_out"/>
-                                    <field name="act_sign_out"/>
+                                    <field name="name" placeholder="Description .. "/>
+                                    <field name="reason" required="1"/>
+                                    <field name="expect_sign_out" widget="float_time"/>
+                                    <field name="act_sign_out" widget="float_time"/>
                                     <field name="diff" readonly="1"/>
                                 </group>
                             </page>
