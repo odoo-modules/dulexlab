@@ -139,10 +139,12 @@ class CustomerPortal(CustomerPortal):
             'request_date_to': date_to,
         })
 
+
+        created_leave = False
         try:
             if date_from > date_to:
                 raise UserError(_('The date to should be greater than or equal the date from !'))
-            lv = request.env['hr.leave'].sudo().create(vals)
+            created_leave = request.env['hr.leave'].sudo().create(vals)
 
             temp_rec = request.env['hr.leave'].sudo().new(vals)
             # temp_rec._onchange_holiday_status_id()
@@ -151,8 +153,10 @@ class CustomerPortal(CustomerPortal):
             temp_rec._onchange_employee_id()
             temp_rec._onchange_leave_dates()
             rec_vals = temp_rec._convert_to_write(temp_rec._cache)
-            lv.sudo().write(rec_vals)
+            created_leave.sudo().write(rec_vals)
         except Exception as e:
+            if created_leave:
+                created_leave.unlink()
             values = {}
             leave_types = request.env['hr.leave.type'].sudo().search([])
             employees = request.env['hr.employee'].sudo().search([('user_id', '=', request.env.user.id)])
