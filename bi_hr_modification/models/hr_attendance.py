@@ -22,9 +22,7 @@ class HrAttendanceInherit(models.Model):
             for wsl in employee_obj.contract_id.resource_calendar_id.attendance_ids:
                 wsl_day_name = dict(wsl._fields['dayofweek'].selection).get(wsl.dayofweek)  # get value selection field
                 if wsl_day_name == check_out.strftime("%A"):
-                    print('ok name')
                     if time_checkout > str(wsl.hour_to):
-                        print('ok bigger')
                         t, s = time_checkout.split(":")
                         vals = {'employee_id': employee_obj.id,
                                 'reason': 'none',

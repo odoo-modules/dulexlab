@@ -27,3 +27,18 @@ class EmployeeOverTime(models.Model):
     def calculate_diff_hours(self):
         for val in self:
             val.diff = val.act_sign_out - val.expect_sign_out
+
+    @api.multi
+    def action_confirmed(self):
+        for rec in self:
+            rec.state = 'confirmed'
+
+    @api.multi
+    def action_approve(self):
+        for rec in self:
+            rec.state = 'approved'
+
+    @api.multi
+    def action_cancel(self):
+        for rec in self:
+            rec.state = 'cancel'
