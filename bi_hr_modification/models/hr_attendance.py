@@ -3,6 +3,8 @@ from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError
 from datetime import date
 from datetime import datetime
+from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT as DATETIME_FORMAT
+
 
 
 class HrAttendanceInherit(models.Model):
@@ -14,8 +16,9 @@ class HrAttendanceInherit(models.Model):
         overtime_obj = self.env['employee.overtime']
         employee_obj = res['employee_id']
         check_out = res['check_out']
+
         if check_out:
-            check_out = datetime.strptime(str(check_out), "%Y-%m-%d %H:%M:%S")  # convert into datetime format
+            check_out = datetime.strptime(str(check_out), DATETIME_FORMAT)  # convert into datetime format
             time_checkout = datetime.strftime(check_out, "%H:%M")  # convert into string format and extract time only
 
             # Todo Working schedule line
@@ -24,13 +27,12 @@ class HrAttendanceInherit(models.Model):
                 if wsl_day_name == check_out.strftime("%A"):
                     if time_checkout > str(wsl.hour_to):
                         t, s = time_checkout.split(":")
-                        print(t,'imne')
-                        print(s,'wecnd')
+
                         vals = {'employee_id': employee_obj.id,
                                 'reason': 'none',
                                 'expect_sign_out': wsl.hour_to,
+                                'attend_id': res.id,
                                 'act_sign_out': float(t) + (float(s) / 60)}
                         overtime_obj.sudo().create(vals)
-            # raise ValidationError(_())
 
         return res

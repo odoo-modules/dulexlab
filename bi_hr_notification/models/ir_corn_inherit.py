@@ -34,7 +34,7 @@ class IrCrone(models.Model):
                 id_expiry_date = employee.id_expiry_date
                 diff_date = (id_expiry_date - current_date).days
                 if diff_date > 0 < check_id_expiration:
-                    emp_link = str("<a href=#id=" + str(
+                    emp_link = str("<a target='_blank' href=#id=" + str(
                         employee.id) + "&view_type=form&model=hr.employee>" + employee.name + "</a>")
                     body += str(
                         "<tr><th scope='row'>" + emp_link + "</th><td>" + str(
@@ -76,7 +76,7 @@ class IrCrone(models.Model):
                 contract_expiry_date = contract.date_end
                 diff_date = (contract_expiry_date - current_date).days
                 if diff_date > 0 < check_contract_expiration:
-                    emp_link = str("<a href=#id=" + str(
+                    emp_link = str("<a target='_blank' href=#id=" + str(
                         contract.id) + "&view_type=form&model=hr.employee>" + contract.employee_id.name + "</a>")
                     body += str(
                         "<tr><th scope='row'>" + emp_link + "</th><td>" + str(

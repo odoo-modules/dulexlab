@@ -8,8 +8,6 @@
         <field name="inherit_id" ref="hr.res_config_settings_view_form"/>
         <field name="arch" type="xml">
             <xpath expr="//div[hasclass('settings')]/div[@data-string='Employees']" position="inside">
-                <!--<div class="app_settings_block">-->
-
                     <h2>
                         Notification Configuration
                     </h2>
@@ -84,7 +82,6 @@
                         </div>
 
                     </div>
-                <!--</div>-->
             </xpath>
         </field>
     </record>
