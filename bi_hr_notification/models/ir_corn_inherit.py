@@ -2,6 +2,7 @@
 from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError
 from datetime import date
+import ast
 
 
 class IrCrone(models.Model):
@@ -16,12 +17,14 @@ class IrCrone(models.Model):
     def employee_expiration_mail(self):
         get_param = self.env['ir.config_parameter'].sudo().get_param
         check_id_expiration = int(get_param('check_id_expiration'))
-        user_lst = []
+        id_expiration_groups_ids = ast.literal_eval(
+            (self.env['ir.config_parameter'].sudo().get_param('id_expiration_groups_ids')))
         partner_ids = []
-        for user in self.env['res.users'].search([]):
-            if (user.has_group('hr.group_hr_manager')) and (user not in user_lst):
-                user_lst.append(user)
-                partner_ids.append(user.partner_id.id)
+
+        for group in self.env['res.groups'].search([('id', 'in', id_expiration_groups_ids)]):
+            for user in group.users:
+                if user.partner_id.id not in partner_ids:
+                    partner_ids.append(user.partner_id.id)
 
         if check_id_expiration and partner_ids:
             body = ''
@@ -53,12 +56,14 @@ class IrCrone(models.Model):
     def contract_send_email(self):
         get_param = self.env['ir.config_parameter'].sudo().get_param
         check_contract_expiration = int(get_param('check_contract_expiration'))
-        user_lst = []
+        contract_expiration_groups_ids = ast.literal_eval(
+            (self.env['ir.config_parameter'].sudo().get_param('contract_expiration_groups_ids')))
         partner_ids = []
-        for user in self.env['res.users'].search([]):
-            if (user.has_group('hr.group_hr_manager')) and (user not in user_lst):
-                user_lst.append(user)
-                partner_ids.append(user.partner_id.id)
+
+        for group in self.env['res.groups'].search([('id', 'in', contract_expiration_groups_ids)]):
+            for user in group.users:
+                if user.partner_id.id not in partner_ids:
+                    partner_ids.append(user.partner_id.id)
 
         if check_contract_expiration and partner_ids:
             contract_objs = self.env['hr.contract'].sudo().search([('state', '=', 'open'), ('date_end', '!=', False)])
@@ -80,7 +85,7 @@ class IrCrone(models.Model):
 
             etable = "</tbody></table>"
             vals = {'subject': 'Contract Expiry Date Mail **',
-                    'body_html': 'Dear ' + str(contract.employee_id.parent_id.name) + ',<br/>' + str(
+                    'body_html': 'Dear ,<br/>' + str(
                         table_header) + str(body) + str(etable),
                     'recipient_ids': [(6, 0, partner_ids)],
                     'author_id': self.env.ref('base.partner_admin').id,

@@ -24,6 +24,8 @@ class HrAttendanceInherit(models.Model):
                 if wsl_day_name == check_out.strftime("%A"):
                     if time_checkout > str(wsl.hour_to):
                         t, s = time_checkout.split(":")
+                        print(t,'imne')
+                        print(s,'wecnd')
                         vals = {'employee_id': employee_obj.id,
                                 'reason': 'none',
                                 'expect_sign_out': wsl.hour_to,
