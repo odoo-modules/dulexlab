@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError
-from datetime import date
+import datetime
 
 
 class EmployeeOverTime(models.Model):
@@ -27,12 +27,11 @@ class EmployeeOverTime(models.Model):
     def create(self, values):
         res = super(EmployeeOverTime, self).create(values)
         if res.employee_id.parent_id.address_home_id:
+            ovt = str(datetime.timedelta(hours=res.diff)).rsplit(':', 1)[0]
             btn_style = 'padding: 8px 12px; font-size: 12px; color: #ffffff; text-decoration: none!important; font-weight: 400; background-color: #875a7b; border: 0px solid #875a7b; border-radius: 3px;'
             mail_data = {'subject': 'New Overtime Created ',
                          'body_html': 'Dear ' + res.employee_id.parent_id.name + ',<br/>' +
-                                      'New overtime record has been created to employee ' + res.employee_id.name + '<br/>' +
-                                      "<a target='_blank' style='" + btn_style + "' href=#id=" + str(
-                             self.id) + "&view_type=form&model=employee.overtime>Show</a>",
+                                      'New overtime record has been created to employee ' + res.employee_id.name + " , Overtime hours " + ovt + "<br/>",
                          'recipient_ids': [(6, 0, [res.employee_id.parent_id.address_home_id.id])],
                          'author_id': self.env.ref('base.partner_admin').id,
                          }
