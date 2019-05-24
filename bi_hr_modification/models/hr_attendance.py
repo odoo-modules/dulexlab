@@ -20,6 +20,7 @@ class HrAttendanceInherit(models.Model):
         if check_out:
             check_out = datetime.strptime(str(check_out), DATETIME_FORMAT)  # convert into datetime format
             time_checkout = datetime.strftime(check_out, "%H:%M")  # convert into string format and extract time only
+            # check_out_hours = (attend_checkout_date + timedelta(hours=user_time_zone_offset)).strftime('%H:%M')
 
             # Todo Working schedule line
             for wsl in employee_obj.contract_id.resource_calendar_id.attendance_ids:
