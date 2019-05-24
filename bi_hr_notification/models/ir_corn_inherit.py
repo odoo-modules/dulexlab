@@ -3,6 +3,7 @@ from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError
 from datetime import date
 import ast
+from dateutil.relativedelta import relativedelta
 
 
 class IrCrone(models.Model):
@@ -17,6 +18,7 @@ class IrCrone(models.Model):
     def employee_expiration_mail(self):
         get_param = self.env['ir.config_parameter'].sudo().get_param
         check_id_expiration = int(get_param('check_id_expiration'))
+        id_reminder_after = int(get_param('id_reminder_after'))
         id_expiration_groups_ids = ast.literal_eval(
             (self.env['ir.config_parameter'].sudo().get_param('id_expiration_groups_ids')))
         partner_ids = []
@@ -33,19 +35,29 @@ class IrCrone(models.Model):
             for employee in self.env['hr.employee'].sudo().search([('id_expiry_date', '!=', False)]):
                 id_expiry_date = employee.id_expiry_date
                 diff_date = (id_expiry_date - current_date).days
-                if diff_date > 0 < check_id_expiration:
+                if employee.id_next_notification == current_date:
+                    if diff_date > 0 < check_id_expiration:
+                        emp_link = str("<a target='_blank' href=#id=" + str(
+                            employee.id) + "&view_type=form&model=hr.employee>" + employee.name + "</a>")
+                        body += str(
+                            "<tr><th scope='row'>" + emp_link + "</th><td style='text-align:center'>" + str(
+                                employee.job_id.name or ' ') + "</td><td style='text-align:center'>" + str(
+                                employee.id_expiry_date) + "</td><td style='text-align:center;color:red'>" + str(
+                                diff_date) + "</td></tr>")
+
+                elif not employee.id_next_notification:
+                    employee.id_next_notification = current_date + relativedelta(days=+id_reminder_after)
                     emp_link = str("<a target='_blank' href=#id=" + str(
                         employee.id) + "&view_type=form&model=hr.employee>" + employee.name + "</a>")
                     body += str(
                         "<tr><th scope='row'>" + emp_link + "</th><td style='text-align:center'>" + str(
                             employee.job_id.name or ' ') + "</td><td style='text-align:center'>" + str(
-                            employee.id_expiry_date) + "</td><td style='text-align:center,color:red'>" + str(
+                            employee.id_expiry_date) + "</td><td style='text-align:center;color:red'>" + str(
                             diff_date) + "</td></tr>")
 
             etable = "</tbody></table>"
             vals = {'subject': 'Identification Expiry Date Mail **',
-                    'body_html': 'Dears' + ',<br/>' + str(table_header) + str(body) + str(
-                        etable),
+                    'body_html': 'Dears' + ',<br/>' + str(table_header) + str(body) + str(etable),
                     'recipient_ids': [(6, 0, partner_ids)],
                     'author_id': self.env.ref('base.partner_admin').id,
                     }
@@ -59,16 +71,16 @@ class IrCrone(models.Model):
         contract_expiration_groups_ids = ast.literal_eval(
             (self.env['ir.config_parameter'].sudo().get_param('contract_expiration_groups_ids')))
         partner_ids = []
+        contract_objs = self.env['hr.contract'].sudo().search([('state', '=', 'open'), ('date_end', '!=', False)])
 
         for group in self.env['res.groups'].search([('id', 'in', contract_expiration_groups_ids)]):
             for user in group.users:
                 if user.partner_id.id not in partner_ids:
                     partner_ids.append(user.partner_id.id)
 
-        if check_contract_expiration and partner_ids:
-            contract_objs = self.env['hr.contract'].sudo().search([('state', '=', 'open'), ('date_end', '!=', False)])
+        if check_contract_expiration and partner_ids and contract_objs:
             body = ''
-            table_header = "<table style='width: 100%; max-width: 100%; margin-bottom: 1rem; background-color: transparent;'><strong><thead ><tr><th >Employee Name</th><th scope='col'>Contract Date</th><th scope='col'>Expiration Date</th><th scope='col'>Diff. Days</th></tr></thead></strong><tbody>"
+            table_header = "<table style='width: 100%; max-width: 100%; margin-bottom: 1rem; background-color: transparent;'><strong><thead ><tr><th >Employee Name</th><th scope='col'>Contract Date</th><th scope='col'>Expiration Date</th><th scope='col'>Diffrent Days</th></tr></thead></strong><tbody>"
 
             for contract in contract_objs:
                 current_date = fields.date.today()

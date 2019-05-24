@@ -8,4 +8,4 @@ class HrEmployeeInherit(models.Model):
     _inherit = 'hr.employee'
 
     id_expiry_date = fields.Date('Identification Expiry Date')
-    next_notify_action_date = fields.Date()
+    id_next_notification = fields.Date()
