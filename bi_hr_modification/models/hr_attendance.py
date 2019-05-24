@@ -30,9 +30,9 @@ class HrAttendanceInherit(models.Model):
 
                         vals = {'employee_id': employee_obj.id,
                                 'reason': 'none',
-                                'expect_sign_out': wsl.hour_to,
+                                'expect_sign_out': round(wsl.hour_to,2),
                                 'attend_id': res.id,
-                                'act_sign_out': float(t) + (float(s) / 60)}
+                                'act_sign_out': round(float(t) + (float(s) / 60),2)}
                         overtime_obj.sudo().create(vals)
 
         return res
