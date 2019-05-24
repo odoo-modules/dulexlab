@@ -29,7 +29,7 @@ class IrCrone(models.Model):
         if check_id_expiration and partner_ids:
             body = ''
             current_date = fields.date.today()
-            table_header = "<table class='table'><thead><tr><th scope='col'>Employee Name</th><th scope='col'>Job Position</th><th scope='col'>Expiration Date</th><th scope='col'>Diff. Days</th></tr></thead><tbody>"
+            table_header = "<table style='width: 100%; max-width: 100%; margin-bottom: 1rem; background-color: transparent;'><thead><tr><th scope='col'>Employee Name</th><th scope='col'>Job Position</th><th scope='col'>Expiration Date</th><th scope='col'>Diff. Days</th></tr></thead><tbody>"
             for employee in self.env['hr.employee'].sudo().search([('id_expiry_date', '!=', False)]):
                 id_expiry_date = employee.id_expiry_date
                 diff_date = (id_expiry_date - current_date).days
@@ -37,9 +37,9 @@ class IrCrone(models.Model):
                     emp_link = str("<a target='_blank' href=#id=" + str(
                         employee.id) + "&view_type=form&model=hr.employee>" + employee.name + "</a>")
                     body += str(
-                        "<tr><th scope='row'>" + emp_link + "</th><td>" + str(
-                            employee.job_id.name or ' ') + "</td><td>" + str(
-                            employee.id_expiry_date) + "</td><td style='color:red'>" + str(
+                        "<tr><th scope='row'>" + emp_link + "</th><td style='text-align:center'>" + str(
+                            employee.job_id.name or ' ') + "</td><td style='text-align:center'>" + str(
+                            employee.id_expiry_date) + "</td><td style='text-align:center,color:red'>" + str(
                             diff_date) + "</td></tr>")
 
             etable = "</tbody></table>"
@@ -68,7 +68,7 @@ class IrCrone(models.Model):
         if check_contract_expiration and partner_ids:
             contract_objs = self.env['hr.contract'].sudo().search([('state', '=', 'open'), ('date_end', '!=', False)])
             body = ''
-            table_header = "<table class='table'><thead><tr><th scope='col'>Employee Name</th><th scope='col'>Contract Date</th><th scope='col'>Expiration Date</th><th scope='col'>Diff. Days</th></tr></thead><tbody>"
+            table_header = "<table style='width: 100%; max-width: 100%; margin-bottom: 1rem; background-color: transparent;'><strong><thead ><tr><th >Employee Name</th><th scope='col'>Contract Date</th><th scope='col'>Expiration Date</th><th scope='col'>Diff. Days</th></tr></thead></strong><tbody>"
 
             for contract in contract_objs:
                 current_date = fields.date.today()
@@ -76,16 +76,17 @@ class IrCrone(models.Model):
                 contract_expiry_date = contract.date_end
                 diff_date = (contract_expiry_date - current_date).days
                 if diff_date > 0 < check_contract_expiration:
-                    emp_link = str("<a target='_blank' href=#id=" + str(
+                    emp_link = str("<a href=#id=" + str(
                         contract.id) + "&view_type=form&model=hr.employee>" + contract.employee_id.name + "</a>")
                     body += str(
-                        "<tr><th scope='row'>" + emp_link + "</th><td>" + str(
-                            contract.date_start or ' ') + "</td><td>" + str(
-                            contract.date_end or ' ') + "</td><td style='color:red'>" + str(diff_date) + "</td></tr>")
+                        "<tr><th scope='row'>" + emp_link + "</th><td style='text-align:center'>" + str(
+                            contract.date_start or ' ') + "</td><td style='text-align:center'>" + str(
+                            contract.date_end or ' ') + "</td><td style='text-align:center,color:red'>" + str(
+                            diff_date) + "</td></tr>")
 
             etable = "</tbody></table>"
             vals = {'subject': 'Contract Expiry Date Mail **',
-                    'body_html': 'Dear ,<br/>' + str(
+                    'body_html': 'Dears,<br/>' + str(
                         table_header) + str(body) + str(etable),
                     'recipient_ids': [(6, 0, partner_ids)],
                     'author_id': self.env.ref('base.partner_admin').id,
