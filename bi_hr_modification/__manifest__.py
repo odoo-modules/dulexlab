@@ -10,6 +10,7 @@
     'version': '0.1',
     'depends': ['base', 'hr', 'hr_payroll', 'hr_attendance'],
     'data': [
+        'security/ir.model.access.csv',
         'views/hr_employee_inherit_view.xml',
         'views/hr_employee_overtime.xml',
         'views/payslip_inherit.xml',
