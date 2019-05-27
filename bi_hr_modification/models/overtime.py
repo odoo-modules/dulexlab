@@ -22,6 +22,7 @@ class EmployeeOverTime(models.Model):
         [('none', 'None'), ('business_need', 'Business Need'), ('no_business_need', 'No Business Need')],
         string="Reason", default='none')
     attend_id = fields.Many2one('hr.attendance')
+    checkout_date = fields.Datetime('Checkout Date', related='attend_id.check_out', store=True)
 
     @api.model
     def create(self, values):
