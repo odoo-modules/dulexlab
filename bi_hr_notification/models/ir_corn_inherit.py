@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from odoo import models, fields, api, _
+from odoo import models, fields, api, _, http
 from odoo.exceptions import ValidationError
 from datetime import date
 import ast
@@ -34,13 +34,17 @@ class IrCrone(models.Model):
             etable = "</tbody></table>"
 
             current_date = fields.date.today()
+            # url = str(http.request.httprequest).split("'")[1].split("'")[0]
             for employee in self.env['hr.employee'].sudo().search([('id_expiry_date', '!=', False)]):
                 id_expiry_date = employee.id_expiry_date
                 diff_date = (id_expiry_date - current_date).days
+                current_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
+
                 if employee.id_next_notification == current_date:
                     if diff_date > 0 < check_id_expiration:
-                        emp_link = str("<a target='_blank' href=#id=" + str(
-                            employee.id) + "&view_type=form&model=hr.employee>" + employee.name + "</a>")
+                        emp_link = str("<a target='_blank' href='" + str(current_url) + "/web#id=" + str(
+                            employee.id) + "&view_type=form&model=hr.employee'>" + employee.name + "</a>")
+
                         body += str(
                             "<tr><th scope='row'>" + emp_link + "</th><td style='text-align:center'>" + str(
                                 employee.job_id.name or ' ') + "</td><td style='text-align:center'>" + str(
@@ -49,8 +53,9 @@ class IrCrone(models.Model):
 
                 elif not employee.id_next_notification:
                     employee.id_next_notification = current_date + relativedelta(days=+id_reminder_after)
-                    emp_link = str("<a target='_blank' href=#id=" + str(
-                        employee.id) + "&view_type=form&model=hr.employee>" + employee.name + "</a>")
+                    emp_link = str("<a target='_blank' href='" + str(current_url) + "/web#id=" + str(
+                        employee.id) + "&view_type=form&model=hr.employee'>" + employee.name + "</a>")
+
                     body += str(
                         "<tr><th scope='row'>" + emp_link + "</th><td style='text-align:center'>" + str(
                             employee.job_id.name or ' ') + "</td><td style='text-align:center'>" + str(
