@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
     <data>
-        <record id="bi_hr_contract_form_inherit_view" model="ir.ui.view">
-            <field name="name">bi.hr.contract.form.inherit</field>
-            <field name="model">hr.contract</field>
-            <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+        <record id="bi_hr_employee_form_inherit_view" model="ir.ui.view">
+            <field name="name">bi.hr.employee.form.inherit</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr_holidays.view_employee_form_leave_inherit"/>
             <field name="arch" type="xml">
-                <xpath expr="//page[@name='information']" position="inside">
-                    <group col="4">
-                        <field name="insurance"/>
-                        <field name="tax"/>
-                    </group>
+                <xpath expr="//group[@name='active_group']" position="inside">
+
+                    <field name="last_accumulate_date" class="oe_inline" readonly="1"/>
                 </xpath>
             </field>
         </record>
