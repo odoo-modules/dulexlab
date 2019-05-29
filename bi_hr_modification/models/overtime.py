@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError
-from datetime import date
+import datetime
 
 
 class EmployeeOverTime(models.Model):
@@ -21,6 +21,25 @@ class EmployeeOverTime(models.Model):
     reason = fields.Selection(
         [('none', 'None'), ('business_need', 'Business Need'), ('no_business_need', 'No Business Need')],
         string="Reason", default='none')
+    attend_id = fields.Many2one('hr.attendance')
+    checkout_date = fields.Datetime('Checkout Date', related='attend_id.check_out', store=True)
+
+    @api.model
+    def create(self, values):
+        res = super(EmployeeOverTime, self).create(values)
+        if res.employee_id.parent_id.address_home_id:
+            ovt = str(datetime.timedelta(hours=res.diff)).rsplit(':', 1)[0]
+
+            mail_data = {'subject': 'New Overtime Created ',
+                         'body_html': 'Dear ' + res.employee_id.parent_id.name + ',<br/>' +
+                                      'New overtime record has been created to employee ' + res.employee_id.name + " , Overtime hours " + ovt + "<br/>",
+                         'recipient_ids': [(6, 0, [res.employee_id.parent_id.address_home_id.id])],
+                         'author_id': self.env.ref('base.partner_admin').id,
+                         }
+
+            mail = self.env['mail.mail'].create(mail_data)
+            mail.send()
+        return res
 
     @api.multi
     @api.depends('expect_sign_out', 'act_sign_out', 'employee_id')
@@ -31,6 +50,8 @@ class EmployeeOverTime(models.Model):
     @api.multi
     def action_confirmed(self):
         for rec in self:
+            if rec.reason == 'none':
+                raise ValidationError(_('You must set reason to confirm !'))
             rec.state = 'confirmed'
 
     @api.multi

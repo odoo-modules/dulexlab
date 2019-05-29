@@ -7,48 +7,118 @@
         <field name="priority" eval="11"/>
         <field name="inherit_id" ref="hr.res_config_settings_view_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//div[hasclass('settings')]" position="inside">
-                <div class="app_settings_block" groups="hr.group_hr_manager">
-
-                    <h2>
-                        Notification Configuration
-                    </h2>
-                    <div class="row mt16 o_settings_container">
-                        <div class="col-12 col-lg-6 o_setting_box">
-                            <div class="o_setting_right_pane">
-                                <label for="check_id_expiration"/>
-                                <div class="row">
-                                    <div class="text-muted col-lg-8">
-                                        Send to employee manager daily mail 'id expiration date' before this period
-                                    </div>
+            <xpath expr="//div[hasclass('settings')]/div[@data-string='Employees']" position="inside">
+                <h2>
+                    Notification Configuration
+                </h2>
+                <div class="row mt16 o_settings_container">
+                    <div class="col-12 col-lg-6 o_setting_box">
+                        <div class="o_setting_right_pane">
+                            <label for="check_id_expiration"/>
+                            <div class="row">
+                                <div class="text-muted col-lg-8">
+                                    Send to employee manager daily mail 'id expiration date' before this period
                                 </div>
-                                <div class="content-group">
-                                    <div class="mt16">
-                                        <field name="check_id_expiration" class="o_light_label"/>
-                                        <span>/ days</span>
-                                    </div>
+                            </div>
+                            <div class="content-group">
+                                <div class="mt16">
+                                    <field name="check_id_expiration" class="o_light_label"/>
+                                    <span>/ days</span>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-12 col-lg-6 o_setting_box">
-                            <div class="o_setting_right_pane">
-                                <label for="check_contract_expiration"/>
-                                <div class="row">
-                                    <div class="text-muted col-lg-8">
-                                        Send to employee manager daily mail 'Contract expiration date' before this
-                                        period
-                                    </div>
-                                </div>
-                                <div class="content-group">
-                                    <div class="mt16">
-                                        <field name="check_contract_expiration" class="o_light_label"/>
-                                        <span>/ days</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
                     </div>
+                    <div class="col-12 col-lg-6 o_setting_box">
+                        <div class="o_setting_right_pane">
+                            <label for="check_contract_expiration"/>
+                            <div class="row">
+                                <div class="text-muted col-lg-8">
+                                    Send to employee manager daily mail 'Contract expiration date' before this
+                                    period
+                                </div>
+                            </div>
+                            <div class="content-group">
+                                <div class="mt16">
+                                    <field name="check_contract_expiration" class="o_light_label"/>
+                                    <span>/ days</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row mt16 o_settings_container">
+                    <div class="col-12 col-lg-6 o_setting_box">
+                        <div class="o_setting_right_pane">
+                            <label for="id_expiration_groups_ids"/>
+                            <div class="row">
+                                <div class="text-muted col-lg-8">
+                                    Set specific group to send it an email
+                                </div>
+                            </div>
+                            <div class="content-group">
+                                <div class="mt16">
+                                    <field name="id_expiration_groups_ids" widget="many2many_tags"
+                                           class="o_light_label"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-6 o_setting_box">
+                        <div class="o_setting_right_pane">
+                            <label for="contract_expiration_groups_ids"/>
+                            <div class="row">
+                                <div class="text-muted col-lg-8">
+                                    Set specific group to send it an email
+                                </div>
+                            </div>
+                            <div class="content-group">
+                                <div class="mt16">
+                                    <field name="contract_expiration_groups_ids" widget="many2many_tags"
+                                           class="o_light_label"/>
+                                    <span>/ days</span>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row mt16 o_settings_container">
+                    <div class="col-12 col-lg-6 o_setting_box">
+                        <div class="o_setting_right_pane">
+                            <label for="id_expiration_groups_ids"/>
+                            <div class="row">
+                                <div class="text-muted col-lg-8">
+                                    Set duration after sent id mail notification
+                                </div>
+                            </div>
+                            <div class="content-group">
+                                <div class="mt16">
+                                    <field name="id_reminder_after"
+                                           class="o_light_label"/>
+                                    <span>/ days</span>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-6 o_setting_box">
+                        <div class="o_setting_right_pane">
+                            <label for="contract_expiration_groups_ids"/>
+                            <div class="row">
+                                <div class="text-muted col-lg-8">
+                                    Set duration after sent contract mail notification
+                                </div>
+                            </div>
+                            <div class="content-group">
+                                <div class="mt16">
+                                    <field name="contract_reminder_after" class="o_light_label"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </xpath>
         </field>

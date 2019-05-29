@@ -33,11 +33,12 @@
                                     <field name="name" placeholder="Description .. "
                                            attrs="{'readonly': [('state', '!=', 'draft')]}"/>
                                     <field name="reason" required="1" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                    <field name="checkout_date" readonly="1"/>
                                     <field name="expect_sign_out" widget="float_time"
                                            attrs="{'readonly': [('state', '!=', 'draft')]}"/>
                                     <field name="act_sign_out" widget="float_time"
                                            attrs="{'readonly': [('state', '!=', 'draft')]}"/>
-                                    <field name="diff" readonly="1"/>
+                                    <field name="diff" widget="float_time" readonly="1"/>
                                 </group>
                             </page>
                         </notebook>
@@ -60,6 +61,7 @@
             <field name="arch" type="xml">
                 <tree string="Overtime" decoration-danger="state=='cancel'" decoration-success="state=='confirmed'">
                     <field name="employee_id"/>
+                    <field name="checkout_date"/>
                     <field name="reason"/>
                     <field name="diff"/>
                     <field name="state"/>
