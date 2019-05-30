@@ -1,0 +1,14 @@
+# -*- coding: utf-8 -*-
+from odoo import models, fields, api, _
+from odoo.exceptions import ValidationError
+from datetime import datetime
+from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT as DATETIME_FORMAT
+from datetime import date, timedelta
+import pytz
+
+
+class HrLeaveAllocationInherit(models.Model):
+    _inherit = 'hr.leave.allocation'
+
+    date_from = fields.Date('Date From')
+    date_to = fields.Date('Date To')

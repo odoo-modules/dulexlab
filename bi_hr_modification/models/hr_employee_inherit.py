@@ -4,8 +4,7 @@ from odoo.exceptions import ValidationError
 from datetime import date
 
 
-class HrContractInherit(models.Model):
-    _inherit = 'hr.contract'
+class HrEmployeeInherit(models.Model):
+    _inherit = 'hr.employee'
 
-    insurance = fields.Float('Insurance')
-    tax = fields.Float('Tax')
+    last_accumulate_date = fields.Date('Last Accumulate Date')
