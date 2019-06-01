@@ -76,7 +76,6 @@
                                 <div class="mt16">
                                     <field name="contract_expiration_groups_ids" widget="many2many_tags"
                                            class="o_light_label"/>
-                                    <span>/ days</span>
 
                                 </div>
                             </div>
@@ -87,14 +86,10 @@
                 <div class="row mt16 o_settings_container">
                     <div class="col-12 col-lg-6 o_setting_box">
                         <div class="o_setting_right_pane">
-                            <label for="id_expiration_groups_ids"/>
-                            <div class="row">
-                                <div class="text-muted col-lg-8">
-                                    Set duration after sent id mail notification
-                                </div>
-                            </div>
+                            <label for="id_reminder_after" string="Set next notification"/>
                             <div class="content-group">
                                 <div class="mt16">
+                                    <span style="padding-right:10px;">After</span>
                                     <field name="id_reminder_after"
                                            class="o_light_label"/>
                                     <span>/ days</span>
@@ -105,15 +100,14 @@
                     </div>
                     <div class="col-12 col-lg-6 o_setting_box">
                         <div class="o_setting_right_pane">
-                            <label for="contract_expiration_groups_ids"/>
-                            <div class="row">
-                                <div class="text-muted col-lg-8">
-                                    Set duration after sent contract mail notification
-                                </div>
-                            </div>
+                            <label for="contract_reminder_after"
+                                   string="Set next notification"/>
                             <div class="content-group">
                                 <div class="mt16">
+                                    <span style="padding-right:10px;">After</span>
                                     <field name="contract_reminder_after" class="o_light_label"/>
+                                    <span>/ days</span>
+
                                 </div>
                             </div>
                         </div>
