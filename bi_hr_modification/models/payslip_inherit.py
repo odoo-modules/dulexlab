@@ -77,7 +77,7 @@ class HRPayslip(models.Model):
                  ('accumulate_date', '<=', rec.date_to), ('state', '=', 'approved')])
             for acc in accumulate_objs:
                 acc.payslip_id = rec.id
-                acc.state = 'paid'
+                acc.action_paid()
         return res
 
     @api.multi

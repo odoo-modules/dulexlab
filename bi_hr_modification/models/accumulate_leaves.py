@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api, _
+from odoo.addons.resource.models.resource import HOURS_PER_DAY
 from odoo.exceptions import ValidationError
 import datetime
 
@@ -8,6 +9,30 @@ class AccumulateLeaves(models.Model):
     _name = 'accumulate.leaves'
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _rec_name = 'employee_id'
+
+    @api.multi
+    def action_paid(self):
+        for record in self:
+            allocation_obj = self.env['hr.leave.allocation']
+            for line in record.lines_ids:
+                for leave_line in line.lines_ids:
+                    if leave_line.days:
+                        data = {}
+                        data['employee_id'] = record.employee_id.id
+                        data['holiday_type'] = 'employee'
+                        data['holiday_status_id'] = leave_line.leave_type_id.id
+                        data['name'] = 'ACCUMULATE LEAVE CONCILIATION'
+
+                        if leave_line.leave_type_id.request_unit == 'day':
+                            data['number_of_days'] = (leave_line.days * -1)
+
+                        elif leave_line.leave_type_id.request_unit == 'hour':
+                            data['number_of_days'] = (leave_line.days * 24 * -1) / (
+                                    record.employee_id.resource_calendar_id.hours_per_day or HOURS_PER_DAY)
+
+                        allocation = allocation_obj.sudo().create(data)
+                        allocation.action_approve()
+            record.state = 'paid'
 
     name = fields.Char(string='Description', track_visibility='onchange')
     state = fields.Selection(
@@ -46,11 +71,6 @@ class AccumulateLeaves(models.Model):
                 rec.accumulate_date = fields.date.today()
             rec.employee_id.last_accumulate_date = fields.date.today()
             rec.state = 'approved'
-
-    @api.multi
-    def action_paid(self):
-        for rec in self:
-            rec.state = 'paid'
 
     @api.multi
     def action_cancel(self):

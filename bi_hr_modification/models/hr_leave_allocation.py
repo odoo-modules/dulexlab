@@ -7,6 +7,14 @@ from datetime import date, timedelta
 import pytz
 
 
+class HolidaysAllocation(models.Model):
+    """ Allocation Requests Access specifications: similar to leave requests """
+    _inherit = "hr.leave.allocation"
+    _sql_constraints = [
+        ('duration_check', "CHECK (1=1)", "The number of days must be greater than 0."),
+    ]
+
+
 class HrLeaveAllocationInherit(models.Model):
     _inherit = 'hr.leave.allocation'
 
