@@ -11,6 +11,7 @@
     'depends': ['base', 'hr', 'hr_payroll', 'hr_attendance', 'hr_holidays'],
     'data': [
         'security/ir.model.access.csv',
+        'data/hr_payroll_data.xml',
         'views/hr_contract_inherit_view.xml',
         'views/hr_employee_inherit_view.xml',
         'views/hr_employee_overtime.xml',

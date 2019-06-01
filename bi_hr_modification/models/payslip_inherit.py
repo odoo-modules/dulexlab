@@ -11,13 +11,15 @@ class HRPayslip(models.Model):
 
     absence_days = fields.Float('Absence Days')
     absence_amount = fields.Float('Leaves Amount Deduction')
+    accumulate_leave_amount = fields.Float('Accumulate Leaves Amount')
 
     @api.multi
     def compute_sheet(self):
-        super(HRPayslip, self).compute_sheet()
         for payslip in self:
             payslip.get_absence_days()
-        return True
+            payslip.get_accumulate_leaves()
+        super(HRPayslip, self).compute_sheet()
+        # return True
 
     @api.multi
     def get_absence_days(self):
@@ -56,3 +58,33 @@ class HRPayslip(models.Model):
             rec.absence_amount = (rec.contract_id.wage / 30) * rec.absence_days
 
         return {'absence_days': absence_days, 'leaves_days': leaves_days}
+
+    @api.multi
+    def get_accumulate_leaves(self):
+        for rec in self:
+            accumulate_objs = self.env['accumulate.leaves'].search(
+                [('employee_id', '=', rec.employee_id.id), ('accumulate_date', '>=', rec.date_from),
+                 ('accumulate_date', '<=', rec.date_to), ('state', '=', 'approved')])
+            accumulate_leave_amount = sum([rec.total_amount for rec in accumulate_objs])
+            rec.accumulate_leave_amount = accumulate_leave_amount
+
+    @api.multi
+    def action_payslip_done(self):
+        res = super(HRPayslip, self).action_payslip_done()
+        for rec in self:
+            accumulate_objs = self.env['accumulate.leaves'].search(
+                [('employee_id', '=', rec.employee_id.id), ('accumulate_date', '>=', rec.date_from),
+                 ('accumulate_date', '<=', rec.date_to), ('state', '=', 'approved')])
+            for acc in accumulate_objs:
+                acc.payslip_id = rec.id
+                acc.state = 'paid'
+        return res
+
+    @api.multi
+    def refund_sheet(self):
+        res = super(HRPayslip, self).refund_sheet()
+        for payslip in self:
+            accumulate_objs = self.env['accumulate.leaves'].search([('payslip_id', '=', payslip.id)])
+            for acc in accumulate_objs:
+                acc.state = 'cancel'
+        return res

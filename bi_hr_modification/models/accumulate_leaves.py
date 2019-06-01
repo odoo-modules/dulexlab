@@ -18,6 +18,16 @@ class AccumulateLeaves(models.Model):
     lines_ids = fields.One2many('accumulate.leaves.line', 'acc_leaves_id', string='Lines')
     last_accumulate_date = fields.Date(string='Last Accumulate Leave Date', compute='getlast_accumulate_date', store=1)
     accumulate_date = fields.Date('Approved Date')
+    total_amount = fields.Float('Total Amount', compute='get_total', store=True)
+    total_days = fields.Float('Total Days', compute='get_total', store=True)
+    payslip_id = fields.Many2one('hr.payslip', 'Payslip')
+
+    @api.multi
+    @api.depends('lines_ids', 'lines_ids.days', 'lines_ids.amount')
+    def get_total(self):
+        for val in self:
+            val.total_days = sum([line.days for line in val.lines_ids])
+            val.total_amount = sum([line.amount for line in val.lines_ids])
 
     @api.depends('employee_id')
     def getlast_accumulate_date(self):
@@ -32,7 +42,8 @@ class AccumulateLeaves(models.Model):
     @api.multi
     def action_approve(self):
         for rec in self:
-            rec.accumulate_date = fields.date.today()
+            if not rec.accumulate_date:
+                rec.accumulate_date = fields.date.today()
             rec.employee_id.last_accumulate_date = fields.date.today()
             rec.state = 'approved'
 
@@ -75,7 +86,7 @@ class AccumulateLeaveLines(models.Model):
     @api.onchange('contract_id')
     def get_amount(self):
         for rec in self:
-            rec.amount_rate = rec.contract_id.wage
+            rec.amount_rate = rec.contract_id.wage / 30
 
     @api.multi
     @api.depends('lines_ids', 'lines_ids.days', 'amount_rate')
