@@ -93,14 +93,11 @@ class AccumulateLeaveLines(models.Model):
     def get_total_days(self):
         for val in self:
             days = 0.0
-            amount = 0.0
-
             for line in val.lines_ids:
                 days += line.days
-                amount += (days * val.amount_rate / 30)
-
             val.days = days
-            val.amount = amount
+            amount = (days * val.amount_rate)
+            val.amount = round(amount, 2)
 
 
 class AccumulateLeavesLeaves(models.Model):
@@ -122,6 +119,6 @@ class AccumulateLeavesLeaves(models.Model):
             result = data_days.get(val.leave_type_id.id, {})
 
             if val.leave_type_id.request_unit == 'hour':
-                val.days = result.get('remaining_leaves', 0) / 24
+                val.days = round(result.get('remaining_leaves', 0) / 24, 2)
             else:
                 val.days = result.get('remaining_leaves', 0)

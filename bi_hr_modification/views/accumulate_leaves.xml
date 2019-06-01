@@ -40,7 +40,7 @@
                                         <field name="employee_id" invisible="1"/>
                                         <field name="contract_id" domain="[('employee_id','=',employee_id)]"
                                                options="{'no_create': True}"/>
-                                        <field name="amount_rate"/>
+                                        <field name="amount_rate" string="Rate Amount"/>
                                         <field name="days"/>
                                         <field name="amount"/>
                                     </tree>
