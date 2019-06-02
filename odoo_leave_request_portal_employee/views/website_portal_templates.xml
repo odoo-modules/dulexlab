@@ -87,6 +87,7 @@
                             <th>Status</th>
                             <th></th>
                             <th></th>
+                            <th></th>
                         </tr>
                     </thead>
                     <t t-foreach="holidays" t-as="holiday">
@@ -125,8 +126,17 @@
                                 <t t-if="request.env['res.users'].browse(request.session.uid).user_has_groups('odoo_leave_request_portal_employee.group_employee_leave_manager')&amp;(holiday.state == 'confirm')">
                                     <a class="btn btn-info"
                                        t-att-href="'/leave_approve?id=%s' % (holiday.id)"
-                                       groups="odoo_leave_request_portal_employee.group_employee_leave, odoo_leave_request_portal_employee.group_employee_leave_manager">
+                                       groups="odoo_leave_request_portal_employee.group_employee_leave_manager">
                                         Approve
+                                    </a>
+                                </t>
+                            </td>
+                            <td>
+                                <t t-if="request.env['res.users'].browse(request.session.uid).user_has_groups('odoo_leave_request_portal_employee.group_employee_leave_manager')&amp;(holiday.state == 'confirm')">
+                                    <a class="btn btn-info"
+                                       t-att-href="'/leave_refuse?id=%s' % (holiday.id)"
+                                       groups="odoo_leave_request_portal_employee.group_employee_leave_manager">
+                                        Refuse
                                     </a>
                                 </t>
                             </td>
