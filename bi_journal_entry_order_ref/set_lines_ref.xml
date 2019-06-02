@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <function name="set_ref_order" model="account.move.line"/>
+</odoo>

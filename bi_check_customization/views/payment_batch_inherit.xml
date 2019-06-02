@@ -52,12 +52,11 @@
 
             <xpath expr="//field[@name='payment_ids']/form/group[1]/group[2]/field[@name='payment_date']"
                    position="after">
-                <field name="due_date"/>
+                <field name="due_date" required="1"/>
 
             </xpath>
             <xpath expr="//field[@name='payment_ids']/tree/field[@name='payment_date']" position="after">
-                <field name="due_date"/>
-
+                <field name="due_date" required="1"/>
             </xpath>
         </field>
     </record>

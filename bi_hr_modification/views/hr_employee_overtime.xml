@@ -1,11 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <record id="hr_overtime_form_view" model="ir.ui.view">
+        <record id="bi_hr_overtime_form_view" model="ir.ui.view">
             <field name="name">employee.overtime.form.view</field>
             <field name="model">employee.overtime</field>
             <field name="arch" type="xml">
                 <form>
+                    <header>
+                        <button name="action_approve" class="oe_highlight" type="object" string="Approve"
+                                states="draft"/>
+                        <button name="action_confirmed" class="oe_highlight" type="object" string="Confirm"
+                                states="approved"/>
+                        <button name="action_cancel" type="object" string="cancel"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,approved,confirmed"/>
+
+                    </header>
                     <sheet>
                         <div class="oe_button_box" name="button_box">
 
@@ -14,18 +23,22 @@
                         <div class="oe_title">
                             <label for="employee_id"/>
                             <h2>
-                                <field name="employee_id" required="1"/>
+                                <field name="employee_id" required="1"
+                                       attrs="{'readonly': [('state', '!=', 'draft')]}"/>
                             </h2>
                         </div>
                         <notebook>
                             <page string="Information">
-                                <h1>
-                                    <field name="name" placeholder="Description .. " required="True"/>
-                                </h1>
                                 <group col="4">
-                                    <field name="expect_sign_out"/>
-                                    <field name="act_sign_out"/>
-                                    <field name="diff" readonly="1"/>
+                                    <field name="name" placeholder="Description .. "
+                                           attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                    <field name="reason" required="1" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                    <field name="checkout_date" readonly="1"/>
+                                    <field name="expect_sign_out" widget="float_time"
+                                           attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                    <field name="act_sign_out" widget="float_time"
+                                           attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                    <field name="diff" widget="float_time" readonly="1"/>
                                 </group>
                             </page>
                         </notebook>
@@ -42,19 +55,21 @@
         </record>
 
 
-        <record id="hr_overtime_tree_view" model="ir.ui.view">
+        <record id="bi_hr_overtime_tree_view" model="ir.ui.view">
             <field name="name">employee.overtime.tree</field>
             <field name="model">employee.overtime</field>
             <field name="arch" type="xml">
-                <tree string="Overtime" decoration-danger="state=='cancel'">
-                    <field name="name"/>
+                <tree string="Overtime" decoration-danger="state=='cancel'" decoration-success="state=='confirmed'">
                     <field name="employee_id"/>
+                    <field name="checkout_date"/>
+                    <field name="reason"/>
+                    <field name="diff"/>
                     <field name="state"/>
                 </tree>
             </field>
         </record>
 
-        <record id="hr_employee_overtime_view_action" model="ir.actions.act_window">
+        <record id="bi_hr_employee_overtime_view_action" model="ir.actions.act_window">
             <field name="name">Employee Overtime</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">employee.overtime</field>
@@ -67,7 +82,7 @@
             </field>
         </record>
 
-        <menuitem id="overtime_employee_parent_menu" name="Employee Overtime" parent="hr.menu_hr_root"
-                  action="hr_employee_overtime_view_action"/>
+        <menuitem id="bi_overtime_employee_parent_menu" name="Employee Overtime" parent="hr.menu_hr_root"
+                  action="bi_hr_employee_overtime_view_action"/>
     </data>
 </odoo>
