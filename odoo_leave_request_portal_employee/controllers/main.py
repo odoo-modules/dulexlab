@@ -181,3 +181,16 @@ class CustomerPortal(CustomerPortal):
                 except:
                     pass
         return request.redirect('/my/leave_request')
+
+
+    @http.route(['/leave_refuse'], type='http', auth="user", website=True)
+    def portal_refuse_leave_request(self, **kw):
+        leave_id = request.params.get('id')
+        if leave_id:
+            holiday = request.env['hr.leave'].sudo().search([('id', '=', int(leave_id))])
+            if holiday:
+                try:
+                    holiday.action_refuse()
+                except:
+                    pass
+        return request.redirect('/my/leave_request')

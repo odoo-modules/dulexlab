@@ -9,9 +9,7 @@
                     <header>
                         <button name="action_approve" class="oe_highlight" type="object" string="Approve"
                                 states="draft"/>
-                        <button name="action_confirmed" class="oe_highlight" type="object" string="Confirm"
-                                states="approved"/>
-                        <button name="action_cancel" type="object" string="cancel"/>
+                        <button name="action_cancel" type="object" states="draft,approved" string="cancel"/>
                         <field name="state" widget="statusbar" statusbar_visible="draft,approved,paid"/>
 
                     </header>
@@ -28,9 +26,11 @@
                             </h2>
                         </div>
                         <group col="4">
-                                <field name="last_accumulate_date" readonly="1"/>
-                                <field name="accumulate_date" readonly="1"/>
-                                <!--<field name=""/>-->
+                            <field name="last_accumulate_date" readonly="1"/>
+                            <field name="accumulate_date"/>
+                            <field name="payslip_id" attrs="{'invisible': [('state', '!=', 'paid')]}"/>
+
+                            <!--<field name=""/>-->
                         </group>
                         <notebook>
                             <page string="Leaves">
@@ -40,7 +40,7 @@
                                         <field name="employee_id" invisible="1"/>
                                         <field name="contract_id" domain="[('employee_id','=',employee_id)]"
                                                options="{'no_create': True}"/>
-                                        <field name="amount_rate"/>
+                                        <field name="amount_rate" string="Rate Amount"/>
                                         <field name="days"/>
                                         <field name="amount"/>
                                     </tree>
@@ -56,7 +56,11 @@
                                                 <field name="contract_id" options="{'no_create': True}"
                                                        domain="[('employee_id','=',employee_id)]"/>
                                                 <field name="acc_leaves_id" invisible="1"/>
-                                                <field name="amount_rate"/>
+                                                <label for="amount_rate"/>
+                                                <div>
+                                                    <field name="amount_rate" class="oe_inline"/>
+                                                    / day
+                                                </div>
                                             </group>
                                             <field name="lines_ids">
                                                 <tree editable="top" create="0">
@@ -72,7 +76,13 @@
                                         </sheet>
                                     </form>
                                 </field>
+                                <group class="oe_subtotal_footer oe_right">
+                                    <field name="total_days"/>
+                                    <field name="total_amount"/>
+                                </group>
+
                             </page>
+
                         </notebook>
 
                     </sheet>
@@ -93,6 +103,9 @@
             <field name="arch" type="xml">
                 <tree string="Overtime" decoration-danger="state=='cancel'" decoration-success="state=='paid'">
                     <field name="employee_id"/>
+                    <field name="accumulate_date"/>
+                    <field name="total_amount" sum="Total Amount"/>
+                    <field name="total_days" sum="Total Days"/>
                     <field name="state"/>
                 </tree>
             </field>
