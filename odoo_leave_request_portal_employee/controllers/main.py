@@ -6,6 +6,7 @@ from odoo import http, _, fields
 from odoo.http import request
 from datetime import datetime, timedelta
 from odoo.exceptions import UserError, ValidationError
+from odoo.tools.float_utils import float_round
 # from odoo.addons.website_portal.controllers.main import website_account
 from odoo.addons.portal.controllers.portal import CustomerPortal, pager as portal_pager, get_records_pager
 
@@ -28,6 +29,7 @@ class CustomerPortal(CustomerPortal):
     def _prepare_portal_layout_values(self):
         values = super(CustomerPortal, self)._prepare_portal_layout_values()
         partner = request.env.user
+        employee = request.env['hr.employee'].sudo().search([('user_id', '=', request.env.user.id)], limit=1)
         holidays = request.env['hr.leave']
 
         if request.env.user.has_group('odoo_leave_request_portal_employee.group_employee_leave_manager'):
@@ -37,8 +39,10 @@ class CustomerPortal(CustomerPortal):
             ('user_id', 'child_of', [request.env.user.id]),
             # ('type','=','remove')
               ])
+
         values.update({
-        'holidays_count': holidays_count,
+            'holidays_count': holidays_count,
+            'employee_data': employee,
         })
         return values
     
@@ -77,8 +81,15 @@ class CustomerPortal(CustomerPortal):
         
         # content according to pager and archive selected
         holidays = holidays_obj.sudo().search(domain, order=order, limit=self._items_per_page, offset=pager['offset'])
+        holidays_balance = {}
+        for holiday in holidays:
+            if holiday.holiday_status_id.allocation_type != 'no':
+                holidays_balance[holiday.id] = _('%g remaining out of %g') % (float_round(holiday.holiday_status_id.with_context(employee_id=holiday.employee_id.id).remaining_leaves, precision_digits=2) or 0.0, float_round(holiday.holiday_status_id.with_context(employee_id=holiday.employee_id.id).max_leaves, precision_digits=2) or 0.0)
+            else:
+                holidays_balance[holiday.id] = _('No allocation')
         values.update({
             'holidays': holidays,
+            'holidays_balance': holidays_balance,
             'page_name': 'holidays',
             'sortings' : sortings,
             'sortby': sortby,
@@ -191,6 +202,9 @@ class CustomerPortal(CustomerPortal):
             if holiday:
                 try:
                     holiday.action_refuse()
+                    holiday.write({
+                        'report_note': request.params.get('description') if request.params.get('description') else False
+                    })
                 except:
                     pass
         return request.redirect('/my/leave_request')
