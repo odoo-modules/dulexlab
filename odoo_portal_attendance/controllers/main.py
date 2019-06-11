@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 
 import datetime
+import calendar
 import time
 
 from odoo import http, _
 from odoo.http import request
-from datetime import datetime, timedelta
+# from datetime import datetime, timedelta
 from datetime import date 
 from odoo import models, fields, registry, SUPERUSER_ID
 # from odoo.addons.website_portal.controllers.main import website_account
@@ -73,14 +74,34 @@ class CustomerPortal(CustomerPortal):
     def _prepare_portal_layout_values(self):
         import datetime
         values = super(CustomerPortal, self)._prepare_portal_layout_values()
-        employee = request.env['hr.employee'].search([('user_id', '=', request.env.user.id)])
+        employee = request.env['hr.employee'].search([('user_id', '=', request.env.user.id)], limit=1)
         attendance_obj = request.env['hr.attendance']
-        
-        attendance_count = attendance_obj.sudo().search_count(
-            [('employee_id','=', employee.id),
+
+        now = datetime.datetime.now()
+        year = now.year
+        month = now.month
+        num_days = calendar.monthrange(year, month)[1]
+        month_days = [datetime.date(year, month, day) for day in range(1, num_days + 1)]
+
+        attendance_count = 0
+        attendance_recs = {}
+        if employee:
+            attendance_count = attendance_obj.sudo().search_count(
+                [('employee_id','=', employee.id),
+                 ])
+            attendances = attendance_obj.sudo().search([
+                ('employee_id', '=', employee.id),
+                ('check_in_date', 'in', month_days),
              ])
+            for att in attendances:
+                if att.check_in_date:
+                    attendance_recs[att.check_in_date] = att
+
         values.update({
-        'attendance_count': attendance_count,
+            'attendance_count': attendance_count,
+            'attendance_recs': attendance_recs,
+            'month_days': month_days,
+            'now_date': now.date(),
         })
         return values
     

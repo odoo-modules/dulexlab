@@ -15,7 +15,7 @@
     	-->
         <template id="portal_my_attendance" name="Portal My Attendance: project entries" inherit_id="portal.portal_my_home" priority="30">
 <!--            <xpath expr="//div[contains(@class,'o_my_home_content')]" position="inside"-->
-                <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
 <!--                <t t-if="user.has_group('odoo_portal_attendance.portal_user_employee_attendance')"-->
                 <t t-if="request.env['res.users'].browse(request.session.uid).user_has_groups('odoo_portal_attendance.portal_user_employee_attendance')">
 <!--                    <h3 class="page-header"-->
@@ -34,6 +34,41 @@
                             <a href="/my/attendances">Your Attendances</a>
                         </li>
 <!--                    </h3-->
+                </t>
+            </xpath>
+            <xpath expr="//div[hasclass('o_portal_docs')]" position="after">
+                <style>
+                    .container {
+                        max-width: 100% !important;
+                    }
+                    .attendance_recs {
+                        background-color: #FFFFFF;
+                    }
+                </style>
+                <t t-if="month_days">
+                    <h3 class="mt-4">Employee Attendance</h3>
+                    <table class="attendance_recs table table-hover" width="100%">
+                        <thead>
+                          <tr class="active">
+                            <th width="25%">Date</th>
+                            <th width="25%">Check In Datetime</th>
+                            <th width="25%">Check Out Datetime</th>
+                          </tr>
+                        </thead>
+                        <t t-foreach="month_days" t-as="day">
+                            <tr t-att-style="'background-color:#e65050;' if ((day &lt; now_date) and (day not in attendance_recs)) else ''">
+                                <td width="15%">
+                                    <span t-esc="str(day)"/>
+                                </td>
+                                <td width="15%">
+                                    <span t-if="day in attendance_recs" t-field="attendance_recs[day].check_in"/>
+                                </td>
+                                <td width="15%">
+                                    <span t-if="day in attendance_recs" t-field="attendance_recs[day].check_out"/>
+                                </td>
+                            </tr>
+                        </t>
+                    </table>
                 </t>
             </xpath>
         </template>

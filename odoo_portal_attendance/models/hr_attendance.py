@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from odoo import models, fields
+from odoo import models, fields, api
 
 class HrAttendance(models.Model):
     _inherit = 'hr.attendance'
@@ -11,3 +11,11 @@ class HrAttendance(models.Model):
         copy=True, 
         required=False
     )
+
+    check_in_date = fields.Date(compute='_get_checkin_date')
+
+    @api.multi
+    @api.depends('check_in')
+    def _get_checkin_date(self):
+        for rec in self:
+            rec.check_in_date = rec.check_in.date()

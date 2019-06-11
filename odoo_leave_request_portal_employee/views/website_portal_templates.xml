@@ -51,7 +51,7 @@
                 </style>
                 <t t-if="employee_data">
                     <h3 class="mt-4">Employee Data</h3>
-                    <div class="container mb64 employee-data">
+                    <div class="container employee-data">
                         <div class="row mt-4">
                             <div class="col-lg-6 col-md-6">
                                 <span style="font-weight: bold; font-size: 18px;">English Name: </span>
