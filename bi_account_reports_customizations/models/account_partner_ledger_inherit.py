@@ -91,7 +91,11 @@ class ReportPartnerLedgerInherit(models.AbstractModel):
                     if line.invoice_id:
                         inv_partner = line.invoice_id.partner_id.name
                     elif line.payment_id:
-                        inv_partner = line.payment_id.partner_id.name
+                        inv = self.env['account.invoice'].search([('payment_move_line_ids', 'in', line.id)], limit=1)
+                        if inv:
+                            inv_partner = inv.partner_id.name
+                        else:
+                            inv_partner = line.payment_id.partner_id.name
                     else:
                         inv_partner = line.partner_id.name
                     domain_columns = [line.journal_id.code, line.account_id.code, self._format_aml_name(line),

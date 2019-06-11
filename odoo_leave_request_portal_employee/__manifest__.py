@@ -161,6 +161,9 @@ For more details please watch Video or contact us before buy.
                 'resource',
                 'mail',
                 'calendar',
+
+                # added to use some customized employee fields in portal employee data section
+                'bi_hr_modification',
                 ],
     'data': [
         'security/holiday_security.xml',

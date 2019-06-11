@@ -9,6 +9,9 @@
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='address_id']" position="before">
                     <field name="name_ar"/>
+                    <field name="emp_code"/>
+                    <field name="job_desc"/>
+                    <field name="hiring_date"/>
                 </xpath>
             </field>
         </record>

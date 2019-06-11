@@ -37,6 +37,70 @@
                     </li>
                 </t>
             </xpath>
+            <xpath expr="//div[hasclass('o_portal_docs')]" position="after">
+                <style>
+                    .container {
+                        max-width: 100% !important;
+                    }
+                    .employee-data {
+                        border: 1px solid rgba(0, 0, 0, 0.125);
+                        margin-top: 15px;
+                        padding: 0.75rem 1.25rem !important;
+                        background-color: #FFFFFF;
+                    }
+                </style>
+                <t t-if="employee_data">
+                    <h3 class="mt-4">Employee Data</h3>
+                    <div class="container mb64 employee-data">
+                        <div class="row mt-4">
+                            <div class="col-lg-6 col-md-6">
+                                <span style="font-weight: bold; font-size: 18px;">English Name: </span>
+                                <span t-esc="employee_data.name"/>
+                            </div>
+                            <div class="col-lg-6 col-md-6">
+                                <span style="font-weight: bold; font-size: 18px;">Arabic Name: </span>
+                                <span t-esc="employee_data.name_ar"/>
+                            </div>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col-lg-6 col-md-6">
+                                <span style="font-weight: bold; font-size: 18px;">Job title: </span>
+                                <span t-esc="employee_data.job_title"/>
+                            </div>
+                            <div class="col-lg-6 col-md-6">
+                                <span style="font-weight: bold; font-size: 18px;">Department: </span>
+                                <span t-field="employee_data.department_id"/>
+                            </div>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col-lg-6 col-md-6">
+                                <span style="font-weight: bold; font-size: 18px;">Date of hiring: </span>
+                                <span t-esc="employee_data.hiring_date"/>
+                            </div>
+                            <div class="col-lg-6 col-md-6">
+                                <span style="font-weight: bold; font-size: 18px;">Location: </span>
+                                <span t-esc="employee_data.work_location"/>
+                            </div>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col-lg-6 col-md-6">
+                                <span style="font-weight: bold; font-size: 18px;">Employee code: </span>
+                                <span t-esc="employee_data.emp_code"/>
+                            </div>
+                            <div class="col-lg-6 col-md-6">
+                                <span style="font-weight: bold; font-size: 18px;">Manager: </span>
+                                <span t-field="employee_data.parent_id"/>
+                            </div>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col-lg-6 col-md-6">
+                                <span style="font-weight: bold; font-size: 18px;">Job Description: </span>
+                                <span t-esc="employee_data.job_desc"/>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </xpath>
         </template>
 
         <template id="display_leave_request" name="Display Leave Request">
@@ -51,6 +115,9 @@
                     padding: 12px 20px 12px 40px;
                     border: 1px solid #ddd;
                     margin-bottom: 12px;
+                    }
+                    .container {
+                        max-width: 100% !important;
                     }
                 </style>
                 <h3 class="page-header">
@@ -78,8 +145,9 @@
                 <table class="table table-hover o_my_status_table">
                     <thead>
                         <tr class="active">
-                            <th>Leave Type</th>
                             <th>Employee</th>
+                            <th>Leave Type</th>
+                            <th>Employee Balance</th>
                             <th>Description</th>
                             <th>Start Date</th>
                             <th>End date</th>
@@ -88,15 +156,19 @@
                             <th></th>
                             <th></th>
                             <th></th>
+                            <th></th>
                         </tr>
                     </thead>
                     <t t-foreach="holidays" t-as="holiday">
                         <tr>
                             <td class="text-left">
-                                <span t-field="holiday.holiday_status_id"/>
+                                <span t-field="holiday.employee_id"/>
                             </td>
                             <td class="text-left">
-                                <span t-field="holiday.employee_id"/>
+                                <span t-field="holiday.holiday_status_id"/>
+                            </td>
+                            <td>
+                                <span t-esc="holidays_balance[holiday.id]"/>
                             </td>
                             <td>
                                 <span t-field="holiday.name"/>
@@ -112,6 +184,12 @@
                             </td>
                             <td>
                                 <span t-field="holiday.state"/>
+                            </td>
+                            <td>
+                                <t t-if="holiday.state == 'refuse'">
+                                    <span t-if="holiday.report_note" style="font-weight: bold;">Refuse reason: </span>
+                                    <span t-if="holiday.report_note" t-field="holiday.report_note"/>
+                                </t>
                             </td>
                             <td>
                                 <t t-if="holiday.state == 'draft'">
@@ -133,14 +211,27 @@
                             </td>
                             <td>
                                 <t t-if="request.env['res.users'].browse(request.session.uid).user_has_groups('odoo_leave_request_portal_employee.group_employee_leave_manager')&amp;(holiday.state == 'confirm')">
-                                    <a class="btn btn-info"
-                                       t-att-href="'/leave_refuse?id=%s' % (holiday.id)"
-                                       groups="odoo_leave_request_portal_employee.group_employee_leave_manager">
-                                        Refuse
-                                    </a>
+                                    <form action="/leave_refuse" method="post"
+                                          enctype="multipart/form-data"
+                                          data-model_name="crm.leave"
+                                          data-success_page="/my/home"
+                                          data-editable-form="false">
+                                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                        <input type="hidden" name="id" t-att-value="holiday.id"/>
+                                        <div class="form-group row form-field">
+                                            <div class="col-lg-8 col-md-8">
+                                                <input type="text" class="form-control" name="description" placeholder="Refuse Reason" required="1"/>
+                                            </div>
+                                            <div class="col-md-4 col-lg-4">
+                                                <button type="submit"
+                                                        class="btn btn-info">
+                                                    Refuse
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
                                 </t>
                             </td>
-
                         </tr>
                     </t>
                 </table>
