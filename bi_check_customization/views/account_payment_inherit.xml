@@ -10,5 +10,17 @@
             </xpath>
         </field>
     </record>
+    <record id="view_register_payment_form_view_inherit" model="ir.ui.view">
+        <field name="name">account.register.payment.form.view</field>
+        <field name="model">account.payment</field>
+        <field name="inherit_id" ref="account.view_account_payment_invoice_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='communication']" position="after">
+                <field name="due_date" required="1"/>
+            </xpath>
+
+        </field>
+    </record>
+
 </odoo>
 

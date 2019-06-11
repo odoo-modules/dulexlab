@@ -4,7 +4,7 @@ from odoo import models, fields, api
 class InheritedAccountInvoice(models.Model):
     _inherit = 'account.invoice'
 
-    area = fields.Many2one('new.area', string="Area")
+    area = fields.Many2one('new.area', string="Area", )
     team_supervisor = fields.Many2one('res.users', srting="Team Supervisor")
     team_leader = fields.Many2one('res.users', srting="Team Leader")
     driver_name = fields.Many2one('driver.name', string="Driver Name")
