@@ -23,6 +23,8 @@ class EmployeeOverTime(models.Model):
         string="Reason", default='none')
     attend_id = fields.Many2one('hr.attendance')
     checkout_date = fields.Datetime('Checkout Date', related='attend_id.check_out', store=True)
+    overtime_type = fields.Selection([('working_days', 'Working Day'), ('days_off', 'Days Off')],
+                                     default='working_days', reqired=1)
 
     @api.model
     def create(self, values):
