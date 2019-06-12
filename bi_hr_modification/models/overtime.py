@@ -14,6 +14,7 @@ class EmployeeOverTime(models.Model):
         [('draft', 'Draft'), ('approved', 'Approved'), ('confirmed', 'Confirmed'), ('cancel', 'Canceled')],
         default='draft', copy=False, track_visibility='onchange')
     employee_id = fields.Many2one('hr.employee', string='Employee', track_visibility='onchange')
+    emp_code = fields.Char(string='Employee Code', related='employee_id.emp_code', store=1, track_visibility='onchange')
     image_medium = fields.Binary(related='employee_id.image_medium')
     expect_sign_out = fields.Float('Expect Sing out', track_visibility='onchange')
     act_sign_out = fields.Float('Actual Sing out', track_visibility='onchange')
