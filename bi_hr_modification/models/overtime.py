@@ -30,18 +30,31 @@ class EmployeeOverTime(models.Model):
     @api.model
     def create(self, values):
         res = super(EmployeeOverTime, self).create(values)
-        if res.employee_id.parent_id.address_home_id:
-            ovt = str(datetime.timedelta(hours=res.diff)).rsplit(':', 1)[0]
+        ovt = str(datetime.timedelta(hours=res.diff)).rsplit(':', 1)[0]
+        mail_data = {'subject': 'New Overtime Created ',
+                     'body_html': 'Dears' + ',<br/>' +
+                                  'New overtime record has been created to employee ' + res.employee_id.name + " , Overtime hours " + ovt + "<br/>",
+                     'recipient_ids': [(6, 0, [res.employee_id.parent_id.address_home_id.id])],
+                     'author_id': self.env.ref('base.partner_admin').id,
+                     }
 
-            mail_data = {'subject': 'New Overtime Created ',
-                         'body_html': 'Dear ' + res.employee_id.parent_id.name + ',<br/>' +
-                                      'New overtime record has been created to employee ' + res.employee_id.name + " , Overtime hours " + ovt + "<br/>",
-                         'recipient_ids': [(6, 0, [res.employee_id.parent_id.address_home_id.id])],
-                         'author_id': self.env.ref('base.partner_admin').id,
-                         }
+        if res.overtime_type == 'days_off':
+            res_ids = []
+            if res.employee_id.parent_id.address_home_id.id:
+                res_ids.append(res.employee_id.parent_id.address_home_id.id)
 
-            mail = self.env['mail.mail'].create(mail_data)
-            mail.send()
+            for user in self.env['res.users'].search([('partner_id', '!=', False)]):
+                print(user.name)
+                print(user.partner_id.name)
+                print(user.partner_id.id)
+                if user.has_group('hr.group_hr_manager') :
+                    res_ids.append(user.partner_id.id)
+
+            if res_ids:
+                mail_data['recipient_ids'] = [(6, 0, res_ids)]
+
+        mail = self.env['mail.mail'].create(mail_data)
+        mail.send()
         return res
 
     @api.multi
