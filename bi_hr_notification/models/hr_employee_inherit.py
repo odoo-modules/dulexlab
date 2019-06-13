@@ -9,3 +9,8 @@ class HrEmployeeInherit(models.Model):
 
     id_expiry_date = fields.Date('Identification Expiry Date')
     id_next_notification = fields.Date(copy=False)
+
+    @api.model
+    def employee_leaves_notification(self):
+        for val in self:
+            print('s')

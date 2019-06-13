@@ -44,9 +44,6 @@ class EmployeeOverTime(models.Model):
                 res_ids.append(res.employee_id.parent_id.address_home_id.id)
 
             for user in self.env['res.users'].search([('partner_id', '!=', False)]):
-                print(user.name)
-                print(user.partner_id.name)
-                print(user.partner_id.id)
                 if user.has_group('hr.group_hr_manager') :
                     res_ids.append(user.partner_id.id)
 
