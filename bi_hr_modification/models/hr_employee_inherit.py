@@ -10,5 +10,14 @@ class HrEmployeeInherit(models.Model):
     last_accumulate_date = fields.Date('Last Accumulate Date')
     name_ar = fields.Char('Arabic Name')
     emp_code = fields.Char('Code')
-    job_desc = fields.Text('Job Description')
     hiring_date = fields.Date('Hiring Date')
+
+    @api.model
+    def name_search(self, name, args=None, operator='ilike', limit=100):
+        args = args or []
+        domain = []
+        if name:
+            domain = ['|', '|', '|', '|', ('name', operator, name), ('emp_code', operator, name),
+                      ('name_ar', operator, name), ('barcode', operator, name), ('work_email', operator, name)]
+        employee = self.search(domain + args, limit=limit)
+        return employee.name_get()

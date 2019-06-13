@@ -14,6 +14,7 @@ class EmployeeOverTime(models.Model):
         [('draft', 'Draft'), ('approved', 'Approved'), ('confirmed', 'Confirmed'), ('cancel', 'Canceled')],
         default='draft', copy=False, track_visibility='onchange')
     employee_id = fields.Many2one('hr.employee', string='Employee', track_visibility='onchange')
+    emp_code = fields.Char(string='Employee Code', related='employee_id.emp_code', store=1, track_visibility='onchange')
     image_medium = fields.Binary(related='employee_id.image_medium')
     expect_sign_out = fields.Float('Expect Sing out', track_visibility='onchange')
     act_sign_out = fields.Float('Actual Sing out', track_visibility='onchange')
@@ -23,22 +24,34 @@ class EmployeeOverTime(models.Model):
         string="Reason", default='none')
     attend_id = fields.Many2one('hr.attendance')
     checkout_date = fields.Datetime('Checkout Date', related='attend_id.check_out', store=True)
+    overtime_type = fields.Selection([('working_days', 'Working Day'), ('days_off', 'Days Off')],
+                                     default='working_days', reqired=1)
 
     @api.model
     def create(self, values):
         res = super(EmployeeOverTime, self).create(values)
-        if res.employee_id.parent_id.address_home_id:
-            ovt = str(datetime.timedelta(hours=res.diff)).rsplit(':', 1)[0]
+        ovt = str(datetime.timedelta(hours=res.diff)).rsplit(':', 1)[0]
+        mail_data = {'subject': 'New Overtime Created ',
+                     'body_html': 'Dears' + ',<br/>' +
+                                  'New overtime record has been created to employee ' + res.employee_id.name + " , Overtime hours " + ovt + "<br/>",
+                     'recipient_ids': [(6, 0, [res.employee_id.parent_id.address_home_id.id])],
+                     'author_id': self.env.ref('base.partner_admin').id,
+                     }
 
-            mail_data = {'subject': 'New Overtime Created ',
-                         'body_html': 'Dear ' + res.employee_id.parent_id.name + ',<br/>' +
-                                      'New overtime record has been created to employee ' + res.employee_id.name + " , Overtime hours " + ovt + "<br/>",
-                         'recipient_ids': [(6, 0, [res.employee_id.parent_id.address_home_id.id])],
-                         'author_id': self.env.ref('base.partner_admin').id,
-                         }
+        if res.overtime_type == 'days_off':
+            res_ids = []
+            if res.employee_id.parent_id.address_home_id.id:
+                res_ids.append(res.employee_id.parent_id.address_home_id.id)
 
-            mail = self.env['mail.mail'].create(mail_data)
-            mail.send()
+            for user in self.env['res.users'].search([('partner_id', '!=', False)]):
+                if user.has_group('hr.group_hr_manager') :
+                    res_ids.append(user.partner_id.id)
+
+            if res_ids:
+                mail_data['recipient_ids'] = [(6, 0, res_ids)]
+
+        mail = self.env['mail.mail'].create(mail_data)
+        mail.send()
         return res
 
     @api.multi
