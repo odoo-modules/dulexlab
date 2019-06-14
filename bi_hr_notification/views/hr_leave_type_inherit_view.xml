@@ -9,6 +9,7 @@
                 <xpath expr="//group[@name='calendar']" position="after">
                     <group name="calendar" string="Notification">
                         <field name="employee_notification"/>
+                        <field name="groups_ids" widget="many2many_tags"/>
                     </group>
                 </xpath>
             </field>

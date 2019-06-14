@@ -9,6 +9,7 @@ class HrLeaveTypeInherit(models.Model):
     _inherit = 'hr.leave.type'
 
     employee_notification = fields.Integer('Employee Notification')
+    groups_ids = fields.Many2many('res.groups', string='Groups')
 
 
 class HrLeavesInherit(models.Model):
@@ -32,13 +33,14 @@ class HrLeavesInherit(models.Model):
                 total_leaves = sum([rec.number_of_hours_display for rec in leave_objs])
 
             if record.holiday_status_id.employee_notification and total_leaves >= record.holiday_status_id.employee_notification:
-                res_ids = []
-                for user in self.env['res.users'].search([('partner_id', '!=', False)]):
-                    if user.has_group('hr.group_hr_manager'):
-                        res_ids.append(user.partner_id.id)
+                partner_ids = []
+                for group in record.holiday_status_id.groups_ids:
+                    for user in group.users:
+                        if user.partner_id.id not in partner_ids:
+                            partner_ids.append(user.partner_id.id)
 
                 if record.employee_id.parent_id.address_home_id:
-                    res_ids.append(record.employee_id.parent_id.address_home_id.id)
+                    partner_ids.append(record.employee_id.parent_id.address_home_id.id)
 
                 if total_leaves:
                     vals = {'subject': 'Employee Leave Notification',
@@ -46,7 +48,7 @@ class HrLeavesInherit(models.Model):
                                          'Notification for <strong>' + record.employee_id.name + "</strong>,<br/>"
                                          + record.holiday_status_id.name + "<strong> (" + str(total_leaves)
                                          + ") </strong><br/>",
-                            'recipient_ids': [(6, 0, res_ids)],
+                            'recipient_ids': [(6, 0, partner_ids)],
                             'author_id': self.env.ref('base.partner_admin').id,
                             }
                     mail = self.env['mail.mail'].create(vals)
