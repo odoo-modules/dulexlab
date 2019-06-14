@@ -26,6 +26,8 @@
                             <h2>
                                 <field name="employee_id" required="1" options="{'no_create': True}"
                                        attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                <label for="emp_code" string=" / "/>
+                                <field name="emp_code"/>
                             </h2>
                         </div>
                         <notebook>
@@ -73,10 +75,10 @@
             <field name="arch" type="xml">
                 <tree string="Overtime" decoration-danger="state=='cancel'" decoration-success="state=='confirmed'">
                     <field name="employee_id"/>
+                    <field name="emp_code"/>
                     <field name="checkout_date"/>
                     <field name="reason"/>
                     <field name="diff"/>
-                    <field name="emp_code"/>
                     <field name="state"/>
                 </tree>
             </field>
