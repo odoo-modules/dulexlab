@@ -24,13 +24,14 @@ class EmployeeOverTime(models.Model):
         string="Reason", default='none')
     attend_id = fields.Many2one('hr.attendance')
     checkout_date = fields.Datetime('Checkout Date', related='attend_id.check_out', store=True)
-    overtime_type = fields.Selection([('working_days', 'Working Day'), ('days_off', 'Days Off')],
-                                     default='working_days', reqired=1)
+    overtime_type = fields.Selection([('working_days', 'Working Day'), ('days_off', 'Days Off'),
+                                      ('public_holiday', 'Public Holiday')], default='working_days', reqired=1)
 
     @api.model
     def create(self, values):
         res = super(EmployeeOverTime, self).create(values)
         ovt = str(datetime.timedelta(hours=res.diff)).rsplit(':', 1)[0]
+
         mail_data = {'subject': 'New Overtime Created ',
                      'body_html': 'Dears' + ',<br/>' +
                                   'New overtime record has been created to employee ' + res.employee_id.name + " , Overtime hours " + ovt + "<br/>",
@@ -44,14 +45,15 @@ class EmployeeOverTime(models.Model):
                 res_ids.append(res.employee_id.parent_id.address_home_id.id)
 
             for user in self.env['res.users'].search([('partner_id', '!=', False)]):
-                if user.has_group('hr.group_hr_manager') :
+                if user.has_group('hr.group_hr_manager'):
                     res_ids.append(user.partner_id.id)
 
             if res_ids:
                 mail_data['recipient_ids'] = [(6, 0, res_ids)]
 
-        mail = self.env['mail.mail'].create(mail_data)
-        mail.send()
+        if res.employee_id.parent_id.address_home_id.id:
+            mail = self.env['mail.mail'].create(mail_data)
+            mail.send()
         return res
 
     @api.multi
