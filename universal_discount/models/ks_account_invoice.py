@@ -47,7 +47,8 @@ class KsGlobalDiscountInvoice(models.Model):
                 rec.ks_amount_discount = rec.ks_global_discount_rate if rec.amount_untaxed > 0 else 0
             elif rec.ks_global_discount_type == "percent":
                 if rec.ks_global_discount_rate != 0.0:
-                    rec.ks_amount_discount = (rec.amount_untaxed + rec.amount_tax) * rec.ks_global_discount_rate / 100
+                    rec.ks_amount_discount = rec.amount_untaxed * rec.ks_global_discount_rate / 100
+                    # rec.ks_amount_discount = (rec.amount_untaxed + rec.amount_tax) * rec.ks_global_discount_rate / 100
                 else:
                     rec.ks_amount_discount = 0
             rec.amount_total = rec.amount_tax + rec.amount_untaxed - rec.ks_amount_discount

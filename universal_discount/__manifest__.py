@@ -32,7 +32,7 @@
     'category': 'Sales Management',
     'version': '1.1.1',
     'license': 'LGPL-3',
-    'depends': ['base', 'sale', 'purchase', 'sale_management'],
+    'depends': ['base', 'sale', 'purchase', 'sale_management', 'sale_stock', 'bi_account_invoice_layout'],
 
     'data': [
         'views/ks_sale_order.xml',

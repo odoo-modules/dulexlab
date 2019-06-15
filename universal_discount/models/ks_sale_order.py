@@ -60,3 +60,8 @@ class KsGlobalDiscountSales(models.Model):
             if self.ks_global_discount_rate < 0 or self.ks_global_discount_rate > self.amount_untaxed:
                 raise ValidationError(
                     'You cannot enter discount amount greater than actual cost or value lower than 0.')
+
+    @api.onchange('pricelist_id')
+    def get_ks_global_discount_rate(self):
+        for val in self:
+            val.ks_global_discount_rate = val.pricelist_id.cd_disc
