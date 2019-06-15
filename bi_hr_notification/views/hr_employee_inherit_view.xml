@@ -9,6 +9,15 @@
                 <xpath expr="//field[@name='identification_id']" position="after">
                     <field name="id_expiry_date"/>
                 </xpath>
+                <xpath expr="//field[@name='notes']" position="before">
+                    <group>
+                        <group name="notify" string="Notification">
+                            <field name="linked_absence"/>
+                            <field name="unlinked_absence"/>
+                            <field name="groups_ids" widget="many2many_tags"/>
+                        </group>
+                    </group>
+                </xpath>
             </field>
         </record>
     </data>

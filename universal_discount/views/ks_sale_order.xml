@@ -1,0 +1,42 @@
+<odoo>
+    <data>
+
+        <record id="normal_sale_order_form_inherited" model="ir.ui.view">
+            <field name="name">bi.discount.sale_order.form.inherited</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale_stock.view_order_form_inherit_sale_stock"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='warehouse_id']" position="replace"/>
+                <xpath expr="//field[@name='partner_shipping_id']" position="after">
+                    <field name="warehouse_id" options="{'no_create': True}"
+                           groups="stock.group_stock_multi_locations"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="ks_discount_sale_order_form_inherited" model="ir.ui.view">
+            <field name="name">ks.discount.sale_order.form.inherited</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//field[@name='user_id']" position="replace"/>
+                <xpath expr="//field[@name='validity_date']" position="after">
+                    <field name="user_id"/>
+                </xpath>
+                <xpath expr="//field[@name='payment_term_id']" position="after">
+                    <field name="ks_enable_discount" invisible="1"/>
+                    <field name="ks_global_discount_type" attrs="{'invisible':[('ks_enable_discount','!=',True),('ks_amount_discount','=',0)],
+                                                                                         'readonly':[('ks_enable_discount','!=',True),('ks_amount_discount','!=',0)]}"/>
+
+                    <field name="ks_global_discount_rate" class="oe_read_only"
+                           attrs="{'invisible':[('ks_enable_discount','!=',True),('ks_amount_discount','=',0)],'readonly':[('ks_enable_discount','!=',True),('ks_amount_discount','!=',0)]}"/>
+                </xpath>
+                <xpath expr="//field[@name='amount_tax']" position="after">
+                    <field name="ks_amount_discount"
+                           attrs="{'invisible':[('ks_enable_discount','!=',True),('ks_amount_discount','=',0)]}"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
