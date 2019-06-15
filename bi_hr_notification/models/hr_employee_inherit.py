@@ -17,6 +17,7 @@ class HrEmployeeInherit(models.Model):
 
     linked_absence = fields.Integer('Linked Absence')
     unlinked_absence = fields.Integer('Un-linked Absence')
+    groups_ids = fields.Many2many('res.groups', string='Groups')
 
     @api.model
     def attendance_notification(self):
@@ -27,9 +28,14 @@ class HrEmployeeInherit(models.Model):
             recipient_ids = []
             today_date = date.today()
             year_from = time.strftime('%Y-01-01')
-
+            # ----------------- recipients ------------------#
             if employee.parent_id.address_home_id.id and (employee.parent_id.address_home_id.id not in recipient_ids):
                 recipient_ids.append(employee.parent_id.address_home_id.id)
+
+            for group in employee.groups_ids:
+                for user in group.users:
+                    if user.partner_id.id not in recipient_ids:
+                        recipient_ids.append(user.partner_id.id)
 
             # Todo Linked Absence
             if employee.linked_absence:

@@ -14,6 +14,7 @@
                         <group name="notify" string="Notification">
                             <field name="linked_absence"/>
                             <field name="unlinked_absence"/>
+                            <field name="groups_ids" widget="many2many_tags"/>
                         </group>
                     </group>
                 </xpath>
