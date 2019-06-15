@@ -13,6 +13,9 @@ class HrEmployeeInherit(models.Model):
     id_next_notification = fields.Date(copy=False)
     emp_code = fields.Char('Code')
 
+    linked_absence = fields.Integer('Linked Absence')
+    unlinked_absence = fields.Integer('Un-linked Absence')
+
     @api.model
     def attendance_notification(self):
         for employee in self.search([]):
@@ -36,9 +39,11 @@ class HrEmployeeInherit(models.Model):
                 d_frm_obj = datetime.strptime(str(leave_obj.date_to), DEFAULT_SERVER_DATETIME_FORMAT)
                 d_to_obj = datetime.strptime(str(today), DEFAULT_SERVER_DATETIME_FORMAT)
                 diff = (d_to_obj - d_frm_obj).days
-                if diff > 5:
+
+                if employee.unlinked_absence and (diff > employee.unlinked_absence):
                     table_data += "<tr><td style='width:33%;padding:10px;border:1px solid gray'>" + employee.name + "</td><td style='width:33%;padding:10px;border:1px solid gray'>" + str(
-                        employee.emp_code or ' ') + "</td><td style='width:33%;padding:10px;border:1px solid gray'>" + str(diff) + "/days</td></tr>"
+                        employee.emp_code or ' ') + "</td><td style='width:33%;padding:10px;border:1px solid gray'>" + str(
+                        diff) + "/days</td></tr>"
                     recipient_ids.append(employee.parent_id.address_home_id.id)
                     if recipient_ids:
                         mail_data = {'subject': 'linked absence mail notification',

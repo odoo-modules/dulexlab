@@ -11,7 +11,6 @@
     'depends': ['base', 'hr', 'hr_payroll'],
     'data': [
         'views/hr_employee_inherit_view.xml',
-        'views/hr_leave_type_inherit_view.xml',
         'views/notification_cron.xml',
         'views/bi_conf_settings_view.xml',
     ],
