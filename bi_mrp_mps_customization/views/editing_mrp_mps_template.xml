@@ -9,11 +9,6 @@
                 <t t-esc="format_float(item['to_supply'], {'precision': 2})"/>
             </span>
         </xpath>
-        <xpath expr="//span[@class='text-right active']" position="replace">
-            <td class="text-right active table-success">
-                <t t-esc="format_float(item['to_supply'], {'precision': 2})"/>
-            </td>
-        </xpath>
         <xpath expr="//input[@class='text-right o_mps_save_input_supply']" position="replace">
             <t t-jquery="input[class*='text-right o_mps_save_input_supply']" t-operation="replace">
                 <input t-if="false" type="text" data-name="to_supply"
@@ -24,6 +19,12 @@
                        class="text-right o_mps_save_input_supply"
                        title="double click in order to empty"/>
             </t>
+        </xpath>
+        <xpath expr="//td[@class='text-right active']" position="replace">
+            <td class="text-right active" style="background-color: #00A09D; color: white;font-weight: bold;">
+                <t t-esc="format_float(item['to_supply'], {'precision': 2})"/>
+<!--                rgba(135,90,123, 0.5); -->
+            </td>
         </xpath>
     </template>
     <template id="mrp_mps_report_backend" inherit_id="web.assets_backend" active="True">
