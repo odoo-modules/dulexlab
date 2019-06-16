@@ -9,6 +9,11 @@
                 <t t-esc="format_float(item['to_supply'], {'precision': 2})"/>
             </span>
         </xpath>
+        <xpath expr="//span[@class='text-right active']" position="replace">
+            <td class="text-right active table-success">
+                <t t-esc="format_float(item['to_supply'], {'precision': 2})"/>
+            </td>
+        </xpath>
         <xpath expr="//input[@class='text-right o_mps_save_input_supply']" position="replace">
             <t t-jquery="input[class*='text-right o_mps_save_input_supply']" t-operation="replace">
                 <input t-if="false" type="text" data-name="to_supply"
@@ -23,7 +28,8 @@
     </template>
     <template id="mrp_mps_report_backend" inherit_id="web.assets_backend" active="True">
         <xpath expr="." position="inside">
-            <script type="text/javascript" src="/bi_mrp_mps_customization/static/src/js/mrp_mps_report_widget.js"></script>
+            <script type="text/javascript"
+                    src="/bi_mrp_mps_customization/static/src/js/mrp_mps_report_widget.js"></script>
         </xpath>
     </template>
 </odoo>
