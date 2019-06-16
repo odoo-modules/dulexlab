@@ -1,4 +1,7 @@
 from odoo import api, fields, models
+from math import ceil
+from datetime import datetime, timedelta
+import calendar
 
 
 class SaleForecast(models.Model):
@@ -17,14 +20,52 @@ class SaleForecast(models.Model):
         else:
             domain += [('mode', '=', 'manual')]
         forecasts = self.search(domain, order="date")
-        print("XXx")
         if field == 'forecast_qty':
             qty_period = sum(forecasts.mapped('forecast_qty'))
-            new_quantity = quantity - qty_period
-            if forecasts:
-                forecasts[0].write({'forecast_qty': forecasts[0].forecast_qty + new_quantity})
-            else:
-                self.create({'date': date, 'product_id': product_id, 'forecast_qty': new_quantity})
+            if period == 'day':
+                new_quantity = quantity - qty_period
+                if forecasts:
+                    forecasts[0].write({'forecast_qty': forecasts[0].forecast_qty + new_quantity})
+                else:
+                    self.create({'date': date, 'product_id': product_id, 'forecast_qty': new_quantity})
+            elif period == 'week':
+                new_quantity = quantity
+                new_quantity_per_day = new_quantity / 6
+                new_quantity_per_day = ceil(new_quantity_per_day)
+                start_date = datetime.strptime(date, '%Y-%m-%d')
+                for i in range(0, 7, 1):
+                    if calendar.day_name[start_date.weekday()] != 'Friday':
+                        new_date = start_date + timedelta(days=i)
+                        forecast = self.search(
+                            [('product_id', '=', product_id), ('date', '=', str(new_date.date())),
+                             ('mode', '=', 'auto')])
+                        qty = (new_quantity_per_day if new_quantity >= new_quantity_per_day else (
+                            new_quantity if new_quantity > 0 else 0))
+                        if forecast:
+                            forecast.forecast_qty = qty
+                        else:
+                            self.create({'date': str(new_date.date()), 'product_id': product_id, 'forecast_qty': qty,
+                                         'mode': 'auto'})
+                    new_quantity -= new_quantity_per_day
+            elif period == 'month':
+                new_quantity = quantity
+                new_quantity_per_day = new_quantity / 24
+                new_quantity_per_day = ceil(new_quantity_per_day)
+                start_date = datetime.strptime(date, '%Y-%m-%d')
+                for i in range(0, 28, 1):
+                    if calendar.day_name[start_date.weekday()] != 'Friday':
+                        new_date = start_date + timedelta(days=i)
+                        forecast = self.search(
+                            [('product_id', '=', product_id), ('date', '=', str(new_date.date())),
+                             ('mode', '=', 'auto')])
+                        qty = (new_quantity_per_day if new_quantity >= new_quantity_per_day else (
+                            new_quantity if new_quantity > 0 else 0))
+                        if forecast:
+                            forecast.forecast_qty = qty
+                        else:
+                            self.create({'date': str(new_date.date()), 'product_id': product_id, 'forecast_qty': qty,
+                                         'mode': 'auto'})
+                    new_quantity -= new_quantity_per_day
         if field == 'to_supply':
             if quantity is False:
                 # If you put it back to manual, then delete the to_supply

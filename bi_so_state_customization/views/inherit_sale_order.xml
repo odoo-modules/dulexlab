@@ -12,10 +12,13 @@
                 <xpath expr="//header" position="inside">
                     <button name="set_state_to_pending" id="set_state_to_pending"
                             string="Pending" class="btn-primary" type="object"
-                            attrs="{'invisible': [('state','in',['pend', 'sale', 'cancel'])]}"/>
+                            attrs="{'invisible': [('state','in',['pend', 'sale', 'cancel', 'done'])]}"/>
                 </xpath>
                 <xpath expr="//button[@name='action_confirm']" position="attributes">
                     <attribute name="attrs">{'invisible': [('state', 'not in', ['sent','pend'])]}</attribute>
+                </xpath>
+                <xpath expr="//button[@name='action_cancel']" position="attributes">
+                    <attribute name="attrs">{'invisible': [('state', 'in', ['cancel', 'done'])]}</attribute>
                 </xpath>
             </field>
         </record>
