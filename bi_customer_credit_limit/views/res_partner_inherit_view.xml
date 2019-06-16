@@ -9,12 +9,17 @@
                 <xpath expr="//group[@name='accounting_entries']" position="after">
                     <group string="Credit Limit">
                         <field name="use_credit_limit" attrs="{'invisible': [('customer', '!=', True)]}"/>
-                        <field name="credit_limit_type"
-                               attrs="{'invisible': [('use_credit_limit', '!=', True)],'required': [('use_credit_limit', '=', True)]}"/>
+                        <field name="credit_limit_amount"
+                               attrs="{'invisible': [('use_credit_limit', '!=', True)]}"/>
+
                         <field name="allowed_amount"
-                               attrs="{'invisible': [('credit_limit_type', '!=', 'amount')],'required': [('credit_limit_type', '=', 'amount')]}"/>
+                               attrs="{'invisible': [('credit_limit_amount', '=', False)],'required': [('credit_limit_amount', '=', True)]}"/>
+
+                        <field name="credit_limit_open_invoices"
+                               attrs="{'invisible': [('use_credit_limit', '!=', True)]}"/>
+
                         <field name="allowed_invoice_numbers"
-                               attrs="{'invisible': [('credit_limit_type', '!=', 'open_invoices')],'required': [('credit_limit_type', '=', 'open_invoices')]}"/>
+                               attrs="{'invisible': [('credit_limit_open_invoices', '=',False)],'required': [('credit_limit_open_invoices', '=', True)]}"/>
 
                     </group>
                 </xpath>
