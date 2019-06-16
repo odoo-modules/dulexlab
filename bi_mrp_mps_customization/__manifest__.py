@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "Bi MRP MPS Report Customizations",
+    'name': "BI MRP MPS Report Customizations",
     'summary': """MPS Report Customization""",
     'description': """
         1- Prevent writing in (To Receive / To Supply / Produce) section in MPS report.\n
