@@ -34,12 +34,10 @@ class HrAttendanceInherit(models.Model):
                 for wsl in employee_obj.resource_calendar_id.attendance_ids:
                     wsl_day_name = dict(wsl._fields['dayofweek'].selection).get(
                         wsl.dayofweek)  # get value selection field
-                    print(wsl_day_name)
                     if wsl_day_name == check_out.strftime("%A"):
                         if check_out_hours > str(wsl.hour_to):
                             t, s = check_out_hours.split(":")
                             act_sign_out = round(float(t) + (float(s) / 60), 2)
-                            print('qqqqqqq', act_sign_out)
                             if act_sign_out > 0:
                                 vals = {'employee_id': employee_obj.id,
                                         'reason': 'none',
@@ -66,8 +64,6 @@ class HrAttendanceInherit(models.Model):
                 if check_out.strftime("%A") not in working_days:
                     act_sign_out = round(float(hours) + (float(minutes) / 60), 2)
                     if act_sign_out > 0:
-                        print('wwwwwwww', act_sign_out)
-
                         vals = {'employee_id': employee_obj.id,
                                 'reason': 'none',
                                 'expect_sign_out': False,
