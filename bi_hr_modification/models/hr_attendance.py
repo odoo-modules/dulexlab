@@ -30,7 +30,7 @@ class HrAttendanceInherit(models.Model):
             check_out_hours = (attend_checkout_date + timedelta(hours=user_time_zone_offset)).strftime('%H:%M')
 
             # Todo -- IN -- Working schedule line
-            for wsl in employee_obj.contract_id.resource_calendar_id.attendance_ids:
+            for wsl in employee_obj.resource_calendar_id.attendance_ids:
                 wsl_day_name = dict(wsl._fields['dayofweek'].selection).get(wsl.dayofweek)  # get value selection field
                 if wsl_day_name == check_out.strftime("%A"):
                     if check_out_hours > str(wsl.hour_to):
@@ -45,7 +45,7 @@ class HrAttendanceInherit(models.Model):
 
             # Todo -- NOT IN -- Working schedule !!!
             working_days = []
-            for day in employee_obj.contract_id.resource_calendar_id.attendance_ids:
+            for day in employee_obj.resource_calendar_id.attendance_ids:
                 day_name = dict(wsl._fields['dayofweek'].selection).get(day.dayofweek)
                 if day_name not in working_days:
                     working_days.append(day_name)
