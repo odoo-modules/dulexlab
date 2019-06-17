@@ -32,17 +32,22 @@ class HrAttendanceInherit(models.Model):
             if employee_obj.resource_calendar_id.attendance_ids:
                 # Todo -- IN -- Working schedule line
                 for wsl in employee_obj.resource_calendar_id.attendance_ids:
-                    wsl_day_name = dict(wsl._fields['dayofweek'].selection).get(wsl.dayofweek)  # get value selection field
+                    wsl_day_name = dict(wsl._fields['dayofweek'].selection).get(
+                        wsl.dayofweek)  # get value selection field
+                    print(wsl_day_name)
                     if wsl_day_name == check_out.strftime("%A"):
                         if check_out_hours > str(wsl.hour_to):
                             t, s = check_out_hours.split(":")
-                            vals = {'employee_id': employee_obj.id,
-                                    'reason': 'none',
-                                    'expect_sign_out': round(wsl.hour_to, 2),
-                                    'attend_id': res.id,
-                                    'overtime_type': 'working_days',
-                                    'act_sign_out': round(float(t) + (float(s) / 60), 2)}
-                            overtime_obj.sudo().create(vals)
+                            act_sign_out = round(float(t) + (float(s) / 60), 2)
+                            print('qqqqqqq', act_sign_out)
+                            if act_sign_out > 0:
+                                vals = {'employee_id': employee_obj.id,
+                                        'reason': 'none',
+                                        'expect_sign_out': round(wsl.hour_to, 2),
+                                        'attend_id': res.id,
+                                        'overtime_type': 'working_days',
+                                        'act_sign_out': act_sign_out}
+                                overtime_obj.sudo().create(vals)
 
                 # Todo -- NOT IN -- Working schedule !!!
                 working_days = []
@@ -59,24 +64,31 @@ class HrAttendanceInherit(models.Model):
                 minutes = difference.minutes
 
                 if check_out.strftime("%A") not in working_days:
+                    act_sign_out = round(float(hours) + (float(minutes) / 60), 2)
+                    if act_sign_out > 0:
+                        print('wwwwwwww', act_sign_out)
+
+                        vals = {'employee_id': employee_obj.id,
+                                'reason': 'none',
+                                'expect_sign_out': False,
+                                'attend_id': res.id,
+                                'overtime_type': 'days_off',
+                                'act_sign_out': round(float(hours) + (float(minutes) / 60), 2)}
+                        overtime_obj.sudo().create(vals)
+
+            # Todo -- Public Holiday
+            leaves_obj = res.get_leaves(res.employee_id)
+            if leaves_obj:
+                act_sign_out = round(float(hours) + (float(minutes) / 60), 2)
+                if act_sign_out > 0:
+
                     vals = {'employee_id': employee_obj.id,
                             'reason': 'none',
                             'expect_sign_out': False,
                             'attend_id': res.id,
-                            'overtime_type': 'days_off',
-                            'act_sign_out': round(float(hours) + (float(minutes) / 60), 2)}
+                            'overtime_type': 'public_holiday',
+                            'act_sign_out': act_sign_out}
                     overtime_obj.sudo().create(vals)
-
-            # Todo -- Public Holiday
-            leaves_obj = res.get_leaves(res.employee_id.id)
-            if leaves_obj:
-                vals = {'employee_id': employee_obj.id,
-                        'reason': 'none',
-                        'expect_sign_out': False,
-                        'attend_id': res.id,
-                        'overtime_type': 'public_holiday',
-                        'act_sign_out': round(float(hours) + (float(minutes) / 60), 2)}
-                overtime_obj.sudo().create(vals)
 
         return res
 
@@ -86,15 +98,14 @@ class HrAttendanceInherit(models.Model):
             if attendance.check_out:
                 leave_list = []
                 Range = namedtuple('Range', ['start', 'end'])
-                leave_objs = self.env['hr.leave'].search(
-                    [('state', '=', 'validate'), ('employee_id', '=', employee_id),
-                     ('holiday_status_id.request_unit', '=', 'day'), ], order='request_date_from desc')
+                leave_objs = employee_id.resource_calendar_id.global_leave_ids
                 for leave in leave_objs:
-                    r1 = Range(start=leave.date_from.date(), end=leave.date_to.date())
-                    r2 = Range(start=attendance.check_in.date(), end=attendance.check_out.date())
+                    r1 = Range(start=leave.date_from, end=leave.date_to)
+                    r2 = Range(start=attendance.check_in, end=attendance.check_out)
                     latest_start = max(r1.start, r2.start)
                     earliest_end = min(r1.end, r2.end)
-                    delta = (earliest_end - latest_start).days + 1
+                    delta = (earliest_end - latest_start)
+                    delta = round((delta.days * 24 + delta.seconds / 3600), 2)
                     overlap = max(0, delta)
                     if overlap and (leave not in leave_list):
                         leave_list.append(leave)
