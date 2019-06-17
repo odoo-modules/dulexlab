@@ -29,42 +29,43 @@ class HrAttendanceInherit(models.Model):
             user_time_zone_offset = datetime.now(user_time_zone).utcoffset().total_seconds() / 60 / 60
             check_out_hours = (attend_checkout_date + timedelta(hours=user_time_zone_offset)).strftime('%H:%M')
 
-            # Todo -- IN -- Working schedule line
-            for wsl in employee_obj.contract_id.resource_calendar_id.attendance_ids:
-                wsl_day_name = dict(wsl._fields['dayofweek'].selection).get(wsl.dayofweek)  # get value selection field
-                if wsl_day_name == check_out.strftime("%A"):
-                    if check_out_hours > str(wsl.hour_to):
-                        t, s = check_out_hours.split(":")
-                        vals = {'employee_id': employee_obj.id,
-                                'reason': 'none',
-                                'expect_sign_out': round(wsl.hour_to, 2),
-                                'attend_id': res.id,
-                                'overtime_type': 'working_days',
-                                'act_sign_out': round(float(t) + (float(s) / 60), 2)}
-                        overtime_obj.sudo().create(vals)
+            if employee_obj.resource_calendar_id.attendance_ids:
+                # Todo -- IN -- Working schedule line
+                for wsl in employee_obj.resource_calendar_id.attendance_ids:
+                    wsl_day_name = dict(wsl._fields['dayofweek'].selection).get(wsl.dayofweek)  # get value selection field
+                    if wsl_day_name == check_out.strftime("%A"):
+                        if check_out_hours > str(wsl.hour_to):
+                            t, s = check_out_hours.split(":")
+                            vals = {'employee_id': employee_obj.id,
+                                    'reason': 'none',
+                                    'expect_sign_out': round(wsl.hour_to, 2),
+                                    'attend_id': res.id,
+                                    'overtime_type': 'working_days',
+                                    'act_sign_out': round(float(t) + (float(s) / 60), 2)}
+                            overtime_obj.sudo().create(vals)
 
-            # Todo -- NOT IN -- Working schedule !!!
-            working_days = []
-            for day in employee_obj.contract_id.resource_calendar_id.attendance_ids:
-                day_name = dict(wsl._fields['dayofweek'].selection).get(day.dayofweek)
-                if day_name not in working_days:
-                    working_days.append(day_name)
+                # Todo -- NOT IN -- Working schedule !!!
+                working_days = []
+                for day in employee_obj.resource_calendar_id.attendance_ids:
+                    day_name = dict(wsl._fields['dayofweek'].selection).get(day.dayofweek)
+                    if day_name not in working_days:
+                        working_days.append(day_name)
 
-            check_in = fields.Datetime.from_string(res.check_in)
-            check_out = fields.Datetime.from_string(res.check_out)
-            difference = relativedelta(check_out, check_in)
-            days = difference.days
-            hours = (days * 24) + difference.hours
-            minutes = difference.minutes
+                check_in = fields.Datetime.from_string(res.check_in)
+                check_out = fields.Datetime.from_string(res.check_out)
+                difference = relativedelta(check_out, check_in)
+                days = difference.days
+                hours = (days * 24) + difference.hours
+                minutes = difference.minutes
 
-            if check_out.strftime("%A") not in working_days:
-                vals = {'employee_id': employee_obj.id,
-                        'reason': 'none',
-                        'expect_sign_out': False,
-                        'attend_id': res.id,
-                        'overtime_type': 'days_off',
-                        'act_sign_out': round(float(hours) + (float(minutes) / 60), 2)}
-                overtime_obj.sudo().create(vals)
+                if check_out.strftime("%A") not in working_days:
+                    vals = {'employee_id': employee_obj.id,
+                            'reason': 'none',
+                            'expect_sign_out': False,
+                            'attend_id': res.id,
+                            'overtime_type': 'days_off',
+                            'act_sign_out': round(float(hours) + (float(minutes) / 60), 2)}
+                    overtime_obj.sudo().create(vals)
 
             # Todo -- Public Holiday
             leaves_obj = res.get_leaves(res.employee_id.id)

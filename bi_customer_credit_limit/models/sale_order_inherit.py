@@ -10,7 +10,7 @@ class SaleOrder(models.Model):
     def action_confirm(self):
         self.ensure_one()
         if self.partner_id.use_credit_limit:
-            if self.partner_id.credit_limit_type == 'amount':
+            if self.partner_id.credit_limit_amount:
                 partner_allowed_credit_limit_amount = self.partner_id.allowed_amount
                 partner_open_invoices = self.env['account.invoice'].search(
                     [('partner_id', '=', self.partner_id.id), ('state', '=', 'open')])
@@ -19,7 +19,7 @@ class SaleOrder(models.Model):
                     raise ValidationError(_('Customer %s exceed his credit limit amount %s %s.' % (
                         self.partner_id.name, self.partner_id.allowed_amount, self.currency_id.symbol)))
 
-            elif self.partner_id.credit_limit_type == 'open_invoices':
+            if self.partner_id.credit_limit_open_invoices:
                 partner_allowed_invoice_numbers = self.partner_id.allowed_invoice_numbers
                 all_partner_open_invoices = self.env['account.invoice'].search_count(
                     [('partner_id', '=', self.partner_id.id), ('state', '=', 'open')])
