@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- views -->
+    <record id="view_account_journal_form_inherit" model="ir.ui.view">
+        <field name="name">account.journal.form.inherit</field>
+        <field name="model">account.journal</field>
+        <field name="inherit_id" ref="account.view_account_journal_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='account_control_ids']" position="after">
+                <field name="responsible_user"/>
+            </xpath>
+        </field>
+    </record>
+
+<!--    <record id="add_to_view_field_in_account_journal_kanban" model="ir.ui.view">-->
+<!--        <field name="name">add.to.view.field.in.account.journal.kanban</field>-->
+<!--        <field name="model">account.journal</field>-->
+<!--        <field name="inherit_id" ref="account.account_journal_dashboard_kanban_view"/>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <xpath expr="//field[@name='name']" position="after">-->
+<!--                <field name="to_view" invisible="1"/>-->
+<!--                <field name="to_view_s" invisible="1"/>-->
+<!--            </xpath>-->
+<!--        </field>-->
+<!--    </record>-->
+
+<!--    <record id="account.open_account_journal_dashboard_kanban" model="ir.actions.act_window">-->
+<!--        <field name="domain">[('belongs_to_company', '=', True), ('to_view_s', '=', True)]</field>-->
+<!--    </record>-->
+
+</odoo>

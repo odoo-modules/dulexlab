@@ -5,13 +5,14 @@ from odoo import models, fields, api
 class InheritedSaleOrder(models.Model):
     _inherit = 'sale.order'
 
-    user_id = fields.Many2one('res.users', string='Salesperson', index=True, track_visibility='onchange', required=True)
+    user_id = fields.Many2one('res.users', string='Salesperson', index=True, track_visibility='onchange', required=True, default="")
     team_id = fields.Many2one('crm.team', related='user_id.sale_team_id')
     area = fields.Many2one('new.area', string="Area", related='user_id.area', readonly=False)
     team_supervisor = fields.Many2one('res.users', related='team_id.team_supervisor', srting="Team Supervisor")
     team_leader = fields.Many2one('res.users', related='team_id.user_id', srting="Team Leader")
-    driver_name = fields.Many2one('driver.name', string="Driver Name", required=True)
-    car_number = fields.Many2one('car.number', string="Car Number")
+    # vehicle_id = fields.Many2one('fleet.vehicle')
+    driver_name = fields.Many2one('res.partner', related='car_number.driver_id', readonly=False, string="Driver Name", required=True)
+    car_number = fields.Many2one('fleet.vehicle', string="Car Number")
 
     @api.multi
     def _prepare_invoice(self):
