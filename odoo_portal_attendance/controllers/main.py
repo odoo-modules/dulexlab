@@ -70,6 +70,17 @@ class CustomerPortal(CustomerPortal):
                 'attendance_count': attendance_count,
         })
         return response
+
+
+    def check_work_days(self, month_days, employee):
+        if month_days:
+            work_days_list = employee.list_work_time_per_day(month_days[0], month_days[-1])
+            work_days = []
+            for dt in work_days_list:
+                work_days.append(dt[0])
+            return work_days
+        return month_days
+
     
     def _prepare_portal_layout_values(self):
         import datetime
@@ -81,7 +92,7 @@ class CustomerPortal(CustomerPortal):
         year = now.year
         month = now.month
         num_days = calendar.monthrange(year, month)[1]
-        month_days = [datetime.date(year, month, day) for day in range(1, num_days + 1)]
+        month_days = [datetime.datetime(year, month, day) for day in range(1, num_days + 1)]
 
         attendance_count = 0
         attendance_recs = {}
@@ -89,6 +100,9 @@ class CustomerPortal(CustomerPortal):
             attendance_count = attendance_obj.sudo().search_count(
                 [('employee_id','=', employee.id),
                  ])
+
+            month_days = self.check_work_days(month_days, employee)
+
             attendances = attendance_obj.sudo().search([
                 ('employee_id', '=', employee.id),
                 ('check_in_date', 'in', month_days),

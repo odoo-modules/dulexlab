@@ -56,7 +56,7 @@
                           </tr>
                         </thead>
                         <t t-foreach="month_days" t-as="day">
-                            <tr t-att-style="'background-color:#e65050;' if ((day &lt; now_date) and (day not in attendance_recs)) else ''">
+                            <tr t-att-style="'background-color:#e65050;' if (((day &lt; now_date) and (day not in attendance_recs)) or (day in attendance_recs and not attendance_recs[day].check_out)) else ''">
                                 <td width="15%">
                                     <span t-esc="str(day)"/>
                                 </td>
