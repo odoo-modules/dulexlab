@@ -9,4 +9,4 @@ class InheritedAccountInvoice(models.Model):
     team_supervisor = fields.Many2one('res.users', srting="Team Supervisor")
     team_leader = fields.Many2one('res.users', srting="Team Leader")
     driver_name = fields.Many2one('res.partner', string="Driver Name")
-    car_number = fields.Many2one('car.number', string="Car Number")
+    car_number = fields.Many2one('fleet.vehicle', string="Car Number")

@@ -16,8 +16,8 @@
                     <field name="team_leader"/>
                     <field name="team_supervisor"/>
                     <field name="area"/>
-                    <field name="driver_name"/>
                     <field name="car_number"/>
+                    <field name="driver_name"/>
                 </xpath>
             </field>
         </record>

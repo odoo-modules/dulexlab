@@ -12,8 +12,8 @@
                     <field name="team_leader"/>
                     <field name="team_supervisor"/>
                     <field name="area" widget="many2one" options="{'no_create': False}"/>
-                    <field name="driver_name"/>
                     <field name="car_number"/>
+                    <field name="driver_name"/>
                 </xpath>
             </field>
         </record>
