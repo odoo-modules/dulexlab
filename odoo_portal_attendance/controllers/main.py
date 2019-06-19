@@ -74,7 +74,10 @@ class CustomerPortal(CustomerPortal):
 
     def check_work_days(self, month_days, employee):
         if month_days:
-            work_days_list = employee.list_work_time_per_day(month_days[0], month_days[-1])
+            start = datetime.datetime.combine(month_days[0], datetime.time.min)
+            end = datetime.datetime.combine(month_days[-1], datetime.time.max)
+
+            work_days_list = employee.list_work_time_per_day(start, end)
             work_days = []
             for dt in work_days_list:
                 work_days.append(dt[0])
@@ -92,7 +95,7 @@ class CustomerPortal(CustomerPortal):
         year = now.year
         month = now.month
         num_days = calendar.monthrange(year, month)[1]
-        month_days = [datetime.datetime(year, month, day) for day in range(1, num_days + 1)]
+        month_days = [datetime.date(year, month, day) for day in range(1, num_days + 1)]
 
         attendance_count = 0
         attendance_recs = {}
