@@ -38,7 +38,7 @@ class PickingsMerge(models.TransientModel):
         return driver
 
     all_pickings = fields.Many2many(comodel_name='stock.picking', default=_get_pickings)
-    driver_id = fields.Many2one('driver.name', 'Driver', default=_get_driver)
+    driver_id = fields.Many2one('res.partner', 'Driver', default=_get_driver)
     date = fields.Date(string="Date", default=fields.Date.today())
 
     @api.multi

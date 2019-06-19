@@ -8,7 +8,7 @@
     'author': "BI Solutions Development Team",
     'category': 'Sale',
     'version': '0.1',
-    'depends': ['sale_stock', 'sale', 'stock', 'account', 'base'],
+    'depends': ['sale_stock', 'sale', 'stock', 'account', 'fleet', 'base'],
     'data': [
         'security/groups.xml',
         'security/ir.model.access.csv',

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="mrp_mps_report_inventory" inherit_id="mrp_mps.report_inventory">
+        <xpath expr="//span[@class='o_mps_auto_mode']" position="replace">
+            <span class="o_mps_auto_mode"
+                  t-att-data-product="product[0].id" t-att-data-date="item['date']"
+                  t-att-data-date_to="item['date_to']"
+                  t-att-data-value="format_float(item['to_supply'], {'precision': 2})">
+                <t t-esc="format_float(item['to_supply'], {'precision': 2})"/>
+            </span>
+        </xpath>
+        <xpath expr="//input[@class='text-right o_mps_save_input_supply']" position="replace">
+            <t t-jquery="input[class*='text-right o_mps_save_input_supply']" t-operation="replace">
+                <input t-if="false" type="text" data-name="to_supply"
+                       t-att-value="format_float(item['to_supply'], {'precision': 2})"
+                       t-att-data-product="product[0].id" t-att-data-date="item['date']"
+                       t-att-data-date_to="item['date_to']"
+                       style="background-color: #fffdbb"
+                       class="text-right o_mps_save_input_supply"
+                       title="double click in order to empty"/>
+            </t>
+        </xpath>
+        <xpath expr="//td[@class='text-right active']" position="replace">
+            <td class="text-right active" style="background-color: #00A09D; color: white;font-weight: bold;">
+                <t t-esc="format_float(item['to_supply'], {'precision': 2})"/>
+<!--                rgba(135,90,123, 0.5); -->
+            </td>
+        </xpath>
+    </template>
+    <template id="mrp_mps_report_backend" inherit_id="web.assets_backend" active="True">
+        <xpath expr="." position="inside">
+            <script type="text/javascript"
+                    src="/bi_mrp_mps_customization/static/src/js/mrp_mps_report_widget.js"></script>
+        </xpath>
+    </template>
+</odoo>
