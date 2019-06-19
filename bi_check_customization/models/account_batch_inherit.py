@@ -13,6 +13,8 @@ class BiAccountBatchPaymentInherit(models.Model):
                                     column2='partner_id', string="Partners", compute='get_lines_data', store=True)
 
     memos_lines = fields.Text('Memo', compute='get_lines_data', store=True)
+    journal_id = fields.Many2one('account.journal', string='Journal', domain=[('type', '=', 'bank')], required=True, readonly=True, states={'draft': [('readonly', False)]})
+    bank_id = fields.Many2one('account.journal', string='Bank', domain=[('type', '=', 'bank')], required=True, readonly=True, states={'draft': [('readonly', False)]})
 
     @api.depends('payment_ids')
     def get_lines_data(self):
