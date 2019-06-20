@@ -38,11 +38,7 @@ class StandardReportXlsx(models.AbstractModel):
                 and t1.product_id = %s
                 group by t1.product_id)
 
-                select product_template.name, source.openin,
-                dist.openout,
-                (coalesce(source.openin,0) - coalesce(dist.openout,0)) as openBlance
-                ,qtyin.qtyin,qtyout.qtyout,
-                (coalesce(source.openin,0) - coalesce(dist.openout,0)) + coalesce(qtyin.qtyin,0) - +coalesce(qtyout.qtyout,0) as endblance
+                select (coalesce(source.openin,0) - coalesce(dist.openout,0)) as openBlance
                 from dist full join source on dist.product_id = source.product_id
                 full join qtyin on qtyin.product_id = source.product_id
                 full join qtyout on qtyout.product_id = source.product_id
@@ -59,7 +55,7 @@ class StandardReportXlsx(models.AbstractModel):
     def get_lines(self, data):
         locations = tuple(data['locations'])
         self.env.cr.execute(
-            """select reference, product_uom_qty, t1.location_id from stock_move as t1
+            """select reference, product_uom_qty, t1.location_id, t1.location_dest_id from stock_move as t1
                 where (t1.location_dest_id in %s or t1.location_id in %s)
                 and t1.date BETWEEN %s AND %s
                 and t1.state = 'done'
@@ -122,35 +118,35 @@ class StandardReportXlsx(models.AbstractModel):
 
         sheet.write(3, 0, "Product", format21)
         sheet.merge_range('B4:E4', data['product_name'], format21)
-        sheet.write(4, 0, "Open Balance", format21)
-        sheet.write(4, 1, "Reference", format21)
+        sheet.write(4, 0, "Reference", format21)
+        sheet.write(4, 1, "Open Balance", format21)
         sheet.write(4, 2, "Qty In", format21)
         sheet.write(4, 3, "Qty Out", format21)
         sheet.write(4, 4, "End Balance", format21)
 
-        sheet.write(5, 0, balances[0][3], format21_unbolded)
-        sheet.write(5, 1, '', format21_unbolded)
+        sheet.write(5, 0, '', format21_unbolded)
+        sheet.write(5, 1, f'{balances[0][0]:.3f}', format21)
         sheet.write(5, 2, '', format21_unbolded)
         sheet.write(5, 3, '', format21_unbolded)
-        sheet.write(5, 4, balances[0][3], format21_unbolded)
+        sheet.write(5, 4, '', format21_unbolded)
 
         count = 6
-        open_balance = balances[0][3]
-        end_balance = balances[0][3]
+        open_balance = balances[0][0]
+        end_balance = balances[0][0]
         for line in lines:
-            qty_in = (0 if line[2] in data['locations'] else line[1])
+            qty_in = (line[1] if line[3] in data['locations'] else 0)
             qty_out = (line[1] if line[2] in data['locations'] else 0)
-            end_balance = end_balance + (-line[1] if line[2] in data['locations'] else line[1])
-            sheet.write(count, 0, open_balance, format21_unbolded)
-            sheet.write(count, 1, line[0], format21_unbolded)
-            sheet.write(count, 2, qty_in, format21_unbolded)
-            sheet.write(count, 3, qty_out, format21_unbolded)
-            sheet.write(count, 4, end_balance, format21_unbolded)
+            end_balance = end_balance + qty_in - qty_out
+            sheet.write(count, 0, line[0], format21_unbolded)
+            sheet.write(count, 1, f'{open_balance:.3f}', format21_unbolded)
+            sheet.write(count, 2, f'{qty_in:.3f}', format21_unbolded)
+            sheet.write(count, 3, f'{qty_out:.3f}', format21_unbolded)
+            sheet.write(count, 4, f'{end_balance:.3f}', format21_unbolded)
             open_balance = end_balance
             count += 1
 
-        sheet.write(count, 0, balances[0][6], format21_unbolded)
+        sheet.write(count, 0, '', format21_unbolded)
         sheet.write(count, 1, '', format21_unbolded)
         sheet.write(count, 2, '', format21_unbolded)
         sheet.write(count, 3, '', format21_unbolded)
-        sheet.write(count, 4, balances[0][6], format21_unbolded)
+        sheet.write(count, 4, f'{end_balance:.3f}', format21)

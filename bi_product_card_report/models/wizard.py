@@ -27,10 +27,10 @@ class StockReport(models.TransientModel):
     def export_xls(self):
         data = dict()
         data['product'] = self.product.id
+        data['locations'] = list()
         if self.locations:
             data['locations'] = self.locations.ids
         elif self.warehouses:
-            data['locations'] = list()
             for warehouse in self.warehouses:
                 data['locations'] += self.env['stock.location'].search(
                     [('location_id', '=', warehouse.view_location_id.id)]).ids
