@@ -11,6 +11,7 @@
     'depends': ['account'],
     'data': [
         'security/account_security.xml',
+        'security/ir.model.access.csv',
         'views/account_journal_views.xml'
     ],
     'installable': True,

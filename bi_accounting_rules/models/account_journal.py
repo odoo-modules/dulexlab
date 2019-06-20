@@ -12,7 +12,6 @@ class AccountJournal(models.Model):
     @api.multi
     def to_view_value(self):
         for record in self:
-            print("XX")
             if self.user_has_groups('bi_accounting_rules.account_treasury_group_manager') \
                or self.env.user.id == 2                              \
                or record.responsible_user.id == self.env.user.id:
