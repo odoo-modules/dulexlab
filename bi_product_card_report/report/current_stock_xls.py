@@ -16,7 +16,6 @@ class StandardReportXlsx(models.AbstractModel):
                 and t1.state = 'done'
                 and t1.product_id = %s
                 group by t1.product_id ),
-
                 dist as (select t1.product_id, sum(t1.product_uom_qty) as openout from stock_move as t1
                 where (t1.location_id in %s)
                 and t1.date < %s
