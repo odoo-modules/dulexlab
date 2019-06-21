@@ -6,7 +6,7 @@ import time
 from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
 from dateutil.relativedelta import relativedelta
 from collections import namedtuple
-
+import ast
 
 class HrEmployeeInherit(models.Model):
     _inherit = 'hr.employee'
@@ -17,7 +17,6 @@ class HrEmployeeInherit(models.Model):
 
     linked_absence = fields.Integer('Linked Absence')
     unlinked_absence = fields.Integer('Un-linked Absence')
-    groups_ids = fields.Many2many('res.groups', string='Groups')
 
     @api.model
     def attendance_notification(self):
@@ -28,11 +27,14 @@ class HrEmployeeInherit(models.Model):
             recipient_ids = []
             today_date = date.today()
             year_from = time.strftime('%Y-01-01')
+            absence_days_groups_ids = ast.literal_eval(
+                (self.env['ir.config_parameter'].sudo().get_param('absence_days_groups_ids')))
+
             # ----------------- recipients ------------------#
             if employee.parent_id.address_home_id.id and (employee.parent_id.address_home_id.id not in recipient_ids):
                 recipient_ids.append(employee.parent_id.address_home_id.id)
 
-            for group in employee.groups_ids:
+            for group in self.env['res.groups'].search([('id', 'in', absence_days_groups_ids)]):
                 for user in group.users:
                     if user.partner_id.id not in recipient_ids:
                         recipient_ids.append(user.partner_id.id)
@@ -54,7 +56,7 @@ class HrEmployeeInherit(models.Model):
                     d_frm_obj = leave_objs[0].date_to.date()
                 diff = (d_to_obj - d_frm_obj).days
 
-                if employee.linked_absence and (diff >= employee.linked_absence):
+                if employee.linked_absence and (diff == employee.linked_absence):
                     table_data += "<tr><td style='width:33%;padding:10px;border:1px solid gray'>" + employee.name + "</td><td style='width:33%;padding:10px;border:1px solid gray'>" + str(
                         employee.emp_code or ' ') + "</td><td style='width:33%;padding:10px;border:1px solid gray'>" + str(
                         diff) + "/days</td></tr>"
@@ -92,7 +94,7 @@ class HrEmployeeInherit(models.Model):
                                                              check_to=increment_check_out)
                         if not emp_att_obj and not check_leaves:
                             unlinked += 1
-                if unlinked > employee.unlinked_absence:
+                if unlinked == employee.unlinked_absence:
                     table_header = "<table style='width: 100%;padding:10px;'><tbody><tr><td style='width:33%;padding:10px;border:1px solid gray'>Employee Name</td><td style='width:33%;padding:10px;border:1px solid gray'>Employee Code</td><td style='width:33%;padding:10px;border:1px solid gray'>Un-linked Absence days</td></tr>"
                     table_data += "<tr><td style='width:33%;padding:10px;border:1px solid gray'>" + employee.name + "</td><td style='width:33%;padding:10px;border:1px solid gray'>" + str(
                         employee.emp_code or ' ') + "</td><td style='width:33%;padding:10px;border:1px solid gray'>" + str(
