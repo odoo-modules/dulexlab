@@ -20,11 +20,9 @@ class HrAttendanceInherit(models.Model):
         check_out = res['check_out']
 
         if check_out:
-            check_out = datetime.strptime(str(check_out), DATETIME_FORMAT)  # convert into datetime format
+            wsl_day_list = []
             attend_checkout_date = fields.Datetime.from_string(res.check_out)
-
             user = self.env['res.users'].search([('id', '=', self.env.uid)])
-
             user_time_zone = pytz.timezone(user.partner_id.tz) or pytz.utc
             user_time_zone_offset = datetime.now(user_time_zone).utcoffset().total_seconds() / 60 / 60
             check_out_hours = (attend_checkout_date + timedelta(hours=user_time_zone_offset)).strftime('%H:%M')
@@ -37,33 +35,29 @@ class HrAttendanceInherit(models.Model):
             hours = (days * 24) + difference.hours
             minutes = difference.minutes
 
+            for wsl in employee_obj.resource_calendar_id.attendance_ids:
+                # get value selection field
+                if dict(wsl._fields['dayofweek'].selection).get(wsl.dayofweek) not in wsl_day_list:
+                    wsl_day_list.append(dict(wsl._fields['dayofweek'].selection).get(wsl.dayofweek))
+
             if not public_hoilday_obj:
-                if employee_obj.resource_calendar_id.attendance_ids:
-                    # Todo -- IN -- Working schedule line
-                    for wsl in employee_obj.resource_calendar_id.attendance_ids:
-                        wsl_day_name = dict(wsl._fields['dayofweek'].selection).get(
-                            wsl.dayofweek)  # get value selection field
-                        if wsl_day_name == check_out.strftime("%A"):
-                            if check_out_hours > str(wsl.hour_to):
-                                t, s = check_out_hours.split(":")
-                                act_sign_out = round(float(t) + (float(s) / 60), 2)
-                                if act_sign_out > 0:
-                                    vals = {'employee_id': employee_obj.id,
-                                            'reason': 'none',
-                                            'expect_sign_out': round(wsl.hour_to, 2),
-                                            'attend_id': res.id,
-                                            'overtime_type': 'working_days',
-                                            'act_sign_out': act_sign_out}
-                                    overtime_obj.sudo().create(vals)
+                # Todo ---- IN ---- Working schedule line
+                if wsl_day_list:
+                    if check_out.strftime("%A") in wsl_day_list:
+                        h, m = check_out_hours.split(":")
+                        act_sign_out = round(float(h) + (float(m) / 60), 2)
 
-                    # Todo -- NOT IN -- Working schedule !!!
-                    working_days = []
-                    for day in employee_obj.resource_calendar_id.attendance_ids:
-                        day_name = dict(wsl._fields['dayofweek'].selection).get(day.dayofweek)
-                        if day_name not in working_days:
-                            working_days.append(day_name)
+                        if act_sign_out > wsl.hour_to:
+                            vals = {'employee_id': employee_obj.id,
+                                    'reason': 'none',
+                                    'expect_sign_out': round(wsl.hour_to, 2),
+                                    'attend_id': res.id,
+                                    'overtime_type': 'working_days',
+                                    'act_sign_out': act_sign_out}
+                            overtime_obj.sudo().create(vals)
 
-                    if check_out.strftime("%A") not in working_days:
+                    # Todo ---- NOT IN ---- Working schedule
+                    if check_out.strftime("%A") not in wsl_day_list:
                         act_sign_out = round(float(hours) + (float(minutes) / 60), 2)
                         if act_sign_out > 0:
                             vals = {'employee_id': employee_obj.id,
@@ -78,7 +72,6 @@ class HrAttendanceInherit(models.Model):
             if public_hoilday_obj:
                 act_sign_out = round(float(hours) + (float(minutes) / 60), 2)
                 if act_sign_out > 0:
-
                     vals = {'employee_id': employee_obj.id,
                             'reason': 'none',
                             'expect_sign_out': False,
