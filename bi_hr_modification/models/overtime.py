@@ -50,9 +50,9 @@ class EmployeeOverTime(models.Model):
                          'recipient_ids': [(6, 0, recipient_ids)],
                          'author_id': self.env.ref('base.partner_admin').id,
                          }
-
-            mail = self.env['mail.mail'].create(mail_data)
-            mail.send()
+            if recipient_ids:
+                mail = self.env['mail.mail'].create(mail_data)
+                mail.send()
         return res
 
     @api.multi
