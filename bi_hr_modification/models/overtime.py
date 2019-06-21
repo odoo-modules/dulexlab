@@ -43,7 +43,7 @@ class EmployeeOverTime(models.Model):
             for user in group.users:
                 if user.partner_id.id not in recipient_ids:
                     recipient_ids.append(user.partner_id.id)
-        if ovt > 0:
+        if ovt:
             mail_data = {'subject': 'New Overtime Created ',
                          'body_html': 'Dears' + ',<br/>' +
                                       'New overtime record has been created to employee ' + res.employee_id.name + " , Overtime hours " + ovt + "<br/>",
