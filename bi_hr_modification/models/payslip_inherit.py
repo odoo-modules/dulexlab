@@ -103,7 +103,7 @@ class HRPayslip(models.Model):
                 delta = (earliest_end - latest_start).days + 1
                 overlap = max(0, delta)
                 if overlap > 0:
-                    leaves_days += (overlap + 1)
+                    leaves_days += overlap
 
             # Todo Check Global Leaves
             for g_leave in global_leave_objs:
