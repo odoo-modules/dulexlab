@@ -20,7 +20,6 @@ class HRPayslip(models.Model):
             payslip.get_absence_days()
             payslip.get_accumulate_leaves()
         super(HRPayslip, self).compute_sheet()
-        # return True
 
     @api.multi
     def get_absence_days(self):
@@ -31,7 +30,6 @@ class HRPayslip(models.Model):
             absence_days = 0
             day_lst = []
             leaves_days = rec.check_leaves(rec.employee_id)
-
             for attendance in rec.employee_id.resource_calendar_id.attendance_ids:
                 if dict(attendance._fields['dayofweek'].selection).get(attendance.dayofweek) not in day_lst:
                     day_lst.append(dict(attendance._fields['dayofweek'].selection).get(attendance.dayofweek))
