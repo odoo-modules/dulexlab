@@ -33,7 +33,12 @@ class CustomerPortal(CustomerPortal):
         holidays = request.env['hr.leave']
 
         if request.env.user.has_group('odoo_leave_request_portal_employee.group_employee_leave_manager'):
-            holidays_count = holidays.sudo().search_count([])
+            employee = request.env['hr.employee'].sudo().search([('user_id', '=', request.env.user.id)], limit=1)
+            if employee:
+                holidays_count = holidays.sudo().search_count(['|', ('user_id', 'child_of', [request.env.user.id]),
+                          ('employee_id.parent_id', '=', employee.id)])
+            else:
+                holidays_count = holidays.sudo().search_count([])
         else:
             holidays_count = holidays.sudo().search_count([
             ('user_id', 'child_of', [request.env.user.id]),
@@ -57,6 +62,9 @@ class CustomerPortal(CustomerPortal):
 
         if request.env.user.has_group('odoo_leave_request_portal_employee.group_employee_leave_manager'):
             domain = []
+            employee = request.env['hr.employee'].sudo().search([('user_id', '=', request.env.user.id)], limit=1)
+            if employee:
+                domain = ['|', ('user_id', 'child_of', [request.env.user.id]), ('employee_id.parent_id', '=', employee.id)]
         else:
             domain = [
                 ('user_id', 'child_of', [request.env.user.id]),

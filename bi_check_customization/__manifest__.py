@@ -17,5 +17,6 @@
         'wizard/batch_under_collection_wizard.xml',
         'views/account_payment_inherit.xml',
         'views/payment_batch_inherit.xml',
+        'views/account_batch_inherit_view.xml',
     ],
 }

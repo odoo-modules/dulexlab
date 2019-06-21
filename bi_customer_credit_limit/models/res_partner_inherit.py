@@ -24,7 +24,6 @@ class ResPartner(models.Model):
     def check_credit_limit_invoice_numbers(self):
         for rec in self:
             if rec.credit_limit_open_invoices and rec.allowed_invoice_numbers <= 0:
-                print("bbbbbbbbbbbbbbbbb")
                 raise ValidationError(_('Allowed invoice number must be greater than zero.'))
 
     @api.onchange('credit_limit_amount')
