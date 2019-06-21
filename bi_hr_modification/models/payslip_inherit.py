@@ -4,6 +4,7 @@ from odoo.exceptions import ValidationError
 from datetime import datetime
 from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT as DATETIME_FORMAT
 from dateutil.relativedelta import relativedelta
+from collections import namedtuple
 
 
 class HRPayslip(models.Model):
@@ -29,11 +30,7 @@ class HRPayslip(models.Model):
             days = 0
             absence_days = 0
             day_lst = []
-
-            leaves_obj = self.env['hr.leave'].search(
-                [('employee_id', '=', rec.employee_id.id), ('date_from', '>=', rec.date_from),
-                 ('date_to', '<=', rec.date_to), ('state', '=', 'validate')])
-            leaves_days = sum([leave.number_of_days_display for leave in leaves_obj])
+            leaves_days = rec.check_leaves(rec.employee_id)
 
             for attendance in rec.employee_id.resource_calendar_id.attendance_ids:
                 if dict(attendance._fields['dayofweek'].selection).get(attendance.dayofweek) not in day_lst:
@@ -88,3 +85,33 @@ class HRPayslip(models.Model):
             for acc in accumulate_objs:
                 acc.state = 'cancel'
         return res
+
+    @api.multi
+    def check_leaves(self, employee_id):
+        for rec in self:
+            leave_obj = self.env['hr.leave'].search([('employee_id', '=', employee_id.id), ('state', '=', 'validate')])
+            Range = namedtuple('Range', ['start', 'end'])
+            leaves_days = 0
+            global_leave_days = 0
+            global_leave_objs = employee_id.resource_calendar_id.global_leave_ids
+            r2 = Range(start=rec.date_from, end=rec.date_to)
+
+            for leave in leave_obj:
+                r1 = Range(start=leave.date_from.date(), end=leave.date_to.date())
+                latest_start = max(r1.start, r2.start)
+                earliest_end = min(r1.end, r2.end)
+                delta = (earliest_end - latest_start).days + 1
+                overlap = max(0, delta)
+                if overlap > 0:
+                    leaves_days += (overlap + 1)
+
+            # Todo Check Global Leaves
+            for g_leave in global_leave_objs:
+                r1 = Range(start=g_leave.date_from.date(), end=g_leave.date_to.date())
+                latest_start = max(r1.start, r2.start)
+                earliest_end = min(r1.end, r2.end)
+                delta = (earliest_end - latest_start).days + 1
+                g_overlap = max(0, delta)
+                if g_overlap:
+                    global_leave_days += delta
+            return leaves_days + global_leave_days
