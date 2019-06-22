@@ -27,6 +27,7 @@ class HRPayslip(models.Model):
             start_date = fields.Date.from_string(rec.date_from)
             end_date = fields.Date.from_string(rec.date_to)
             days = 0
+            attendance_days = 0
             absence_days = 0
             leaves_days = 0
             global_leaves_days = 0
@@ -46,20 +47,26 @@ class HRPayslip(models.Model):
                     attendance_obj = self.env['hr.attendance'].search(
                         [('employee_id', '=', rec.employee_id.id), ('check_in', '<', last_date),
                          ('check_in', '>=', start_date)])
+                    if attendance_obj:
+                        attendance_days += 1
 
                     if not attendance_obj:
                         check_leaves = rec.check_leaves(employee_id=rec.employee_id, date_from=start_date,
                                                         date_to=last_date)
                         if check_leaves:
-                            if check_leaves['global']:
-                                global_leaves_days += check_leaves['global']
                             if check_leaves['legal']:
                                 legal_leaves_days += check_leaves['legal']
+
+                            elif check_leaves['global']:
+                                global_leaves_days += check_leaves['global']
 
                         else:
                             absence_days += 1
                 start_date = last_date
 
+            rec.legal_days = legal_leaves_days
+            rec.global_days = global_leaves_days
+            rec.attendance_days = attendance_days
             rec.absence_days = abs(absence_days)
             rec.absence_amount = (rec.contract_id.wage / 30) * rec.absence_days
 
@@ -115,6 +122,7 @@ class HRPayslip(models.Model):
 
         # Todo Check Global Leaves
         for g_leave in global_leave_objs:
+            r2 = Range(start=date_from, end=date_from)  # todo >>>>> must start && end date must be equal
             r1 = Range(start=g_leave.date_from.date(), end=g_leave.date_to.date())
             latest_start = max(r1.start, r2.start)
             earliest_end = min(r1.end, r2.end)
