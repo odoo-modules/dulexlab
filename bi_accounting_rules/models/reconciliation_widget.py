@@ -1,9 +1,6 @@
     # -*- coding: utf-8 -*-
 
 from odoo import api, fields, models, _
-from odoo.exceptions import UserError
-from odoo.osv import expression
-from odoo.tools import pycompat
 from odoo.tools.misc import formatLang
 
 
@@ -57,25 +54,6 @@ class AccountReconciliation(models.AbstractModel):
 
             target_currency = target_currency or company_currency
 
-            # Use case:
-            # Let's assume that company currency is in USD and that we have the 3 following move lines
-            #      Debit  Credit  Amount currency  Currency
-            # 1)    25      0            0            NULL
-            # 2)    17      0           25             EUR
-            # 3)    33      0           25             YEN
-            #
-            # If we ask to see the information in the reconciliation widget in company currency, we want to see
-            # The following information
-            # 1) 25 USD (no currency information)
-            # 2) 17 USD [25 EUR] (show 25 euro in currency information, in the little bill)
-            # 3) 33 USD [25 YEN] (show 25 yen in currency information)
-            #
-            # If we ask to see the information in another currency than the company let's say EUR
-            # 1) 35 EUR [25 USD]
-            # 2) 25 EUR (no currency information)
-            # 3) 50 EUR [25 YEN]
-            # In that case, we have to convert the debit-credit to the currency we want and we show next to it
-            # the value of the amount_currency or the debit-credit if no amount currency
             if target_currency == company_currency:
                 if line_currency == target_currency:
                     amount = amount
