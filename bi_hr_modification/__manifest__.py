@@ -15,6 +15,7 @@
         'views/hr_contract_inherit_view.xml',
         'views/hr_employee_inherit_view.xml',
         'views/hr_employee_overtime.xml',
+        'views/bi_conf_settings_view.xml',
         'views/payslip_inherit.xml',
         'views/accumulate_leaves.xml',
         'views/hr_leave_allocation.xml',
