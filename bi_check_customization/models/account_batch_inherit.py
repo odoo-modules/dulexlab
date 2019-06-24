@@ -10,16 +10,29 @@ class BiAccountBatchPaymentInherit(models.Model):
          ('reconciled', 'Reconciled')], readonly=True, default='draft', copy=False)
 
     partners_ids = fields.Many2many('res.partner', relation='partners_account_batch_rel', column1='batch_id',
-                                    column2='partner_id', string="Partners", compute='get_lines_data', store=True)
+                                    column2='partner_id', string="Partners", compute='get_lines_data')
 
     memos_lines = fields.Text('Memo', compute='get_lines_data', store=True)
-    journal_id = fields.Many2one('account.journal', string='Journal', domain=[('type', '=', 'bank')], required=True, readonly=True, states={'draft': [('readonly', False)]})
-    bank_id = fields.Many2one('account.journal', string='Bank', domain=[('type', '=', 'bank')], required=True, readonly=True, states={'draft': [('readonly', False)]})
+    journal_id = fields.Many2one('account.journal', string='Journal', domain=[('type', '=', 'bank')],
+                                 required=True, readonly=True,
+                                 states={
+                                     'draft': [('readonly', False)],
+                                 })
+    bank_id = fields.Many2one('account.journal', string='Bank', domain=[('type', '=', 'bank')],
+                              required=True, readonly=True,
+                              states={
+                                  'draft': [('readonly', False)],
+                                  'sent': [('readonly', False)],
+                                  'under_collection': [('readonly', False)]
+                              })
+    partner_name = fields.Many2one('res.partner', string="Partner")
 
     @api.depends('payment_ids')
     def get_lines_data(self):
         for record in self:
             record.partners_ids = record.payment_ids.mapped('partner_id.id')
+            if record.payment_ids:
+                record.write({'partner_name': record.payment_ids[0].partner_id.id})
 
             memos = []
             s = ', '

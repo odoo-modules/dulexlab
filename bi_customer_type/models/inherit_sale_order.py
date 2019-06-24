@@ -11,11 +11,7 @@ class InheritSaleOrder(models.Model):
     @api.one
     @api.depends('partner_id')
     def _get_customer_type(self):
-
         if self.customer_type:
-
             self.assigned = True
-
         else:
-
             self.customer_type = False

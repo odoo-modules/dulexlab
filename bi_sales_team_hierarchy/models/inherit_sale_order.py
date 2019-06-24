@@ -6,6 +6,14 @@ from odoo.exceptions import UserError
 class InheritSaleOrder(models.Model):
     _inherit = 'sale.order'
 
+    @api.multi
+    @api.onchange('partner_id')
+    def onchange_partner_id(self):
+        user = self.user_id.id
+        super(InheritSaleOrder, self).onchange_partner_id()
+        print(user)
+        self.user_id = user or False
+
     user_id = fields.Many2one('res.users', string='Salesperson', index=True, track_visibility='onchange', required=True)
     team_id = fields.Many2one('crm.team', related='user_id.sale_team_id')
     area = fields.Many2one('new.area', string="Area", related='user_id.area', readonly=False)
