@@ -73,7 +73,7 @@
             <xpath expr="//filter[@name='group_by_journal_id']" position="replace">
                 <filter name="group_by_journal_id" string="Journal" context="{'group_by':'journal_id'}"/>
                 <filter name="group_by_bank_id" string="Bank" context="{'group_by':'bank_id'}"/>
-                <filter name="group_by_partner_id" string="Partner" context="{'group_by':'partner_name'}"/>
+                <filter name="group_by_partner_name" string="Partner" context="{'group_by':'partner_name'}"/>
             </xpath>
         </field>
     </record>

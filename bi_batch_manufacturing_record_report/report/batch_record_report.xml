@@ -1,56 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <template id="external_layout_standard_batch_mo">
+        <div class="article o_report_layout_standard"  t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id" t-att-data-oe-lang="o and o.env.context.get('lang')">
+            <t t-call="web.address_layout"/>
+            <t t-raw="0"/>
+        </div>
+
+        <div class="footer o_standard_footer">
+            <div class="text-center" style="border-top: 1px solid black;">
+                <table style="width:100%;">
+                    <tr>
+                        <td style="border: 1px solid black; font-weight:bold; background-color:#bfbfbf; width:33%; text-align:center; vertical-align: middle;">BATCH NO:<br/> <t t-esc="doc.name"/></td>
+                        <td style="border: 1px solid black; font-weight:bold; background-color:#bfbfbf; width:33%; text-align:center; vertical-align: middle;">MANUFACTURING DATE:<br/> <t t-esc='doc.create_date.date()'/></td>
+                        <td style="border: 1px solid black; font-weight:bold; background-color:#bfbfbf; width:33%; text-align:center; vertical-align: middle;">EXPIRY DATE:<br/> <t t-esc='(doc.create_date + relativedelta(months=doc.product_id.validity_period or 0)).date()'/></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </template>
+
+    <template id="external_layout_batch_mo" >
+        <t t-if="not o" t-set="o" t-value="doc"/>
+
+        <t t-if="not company">
+            <!-- Multicompany -->
+            <t t-if="company_id">
+                <t t-set="company" t-value="company_id"/>
+            </t>
+            <t t-elif="o and 'company_id' in o">
+                <t t-set="company" t-value="o.company_id.sudo()"/>
+            </t>
+            <t t-else="else">
+                <t t-set="company" t-value="res_company"/>
+            </t>
+        </t>
+
+        <t t-call="bi_batch_manufacturing_record_report.external_layout_standard_batch_mo"><t t-raw="0"/></t>
+
+    </template>
 
     <template id="batch_manufacturing_record_template">
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="doc">
-                <t t-call="web.external_layout">
+                <t t-call="bi_batch_manufacturing_record_report.external_layout_batch_mo">
                     <div class="page">
                         <table>
                             <tr>
                                 <td style="border: 1px solid black; width:20%; text-align:center;"><img style="pointer-events: none;" src="/bi_batch_manufacturing_record_report/static/src/img/dulex_logo.png"/></td>
-                                <td colspan="4" style="border: 1px solid black; width:65%; font-size:25px; font-weight:bold; text-align:center;">BATCH MANUFACTURING RECORD</td>
+                                <td colspan="4" style="border: 1px solid black; width:65%; font-size:25px; font-weight:bold; text-align:center; vertical-align:middle;">BATCH MANUFACTURING RECORD</td>
                                 <td style="border: 1px solid black; width:15%; font-size:16px; font-weight:bold; text-align:center;"> FIRST EDITION PAGE 1 OF 5</td>
                             </tr>
                             <tr>
-                                <td style="border: 1px solid black; width:20%; font-weight:bold; text-align:center;">DEPARTMENT: PRODUCTION</td>
-                                <td colspan="4" style="border: 1px solid black; width:65%; font-size:36px; font-weight:bold; text-align:center;">TITLE:<br/> <t t-esc="doc.product_id.name"/></td>
-                                <td style="border: 1px solid black; width:15%; font-size:20px; font-weight:bold; text-align:center;"> BATCH RECORD: <br/>HEHE </td>
+                                <td style="border: 1px solid black; width:20%; font-size:16px; font-weight:bold; text-align:center;">DEPARTMENT: PRODUCTION</td>
+                                <td colspan="4" style="border: 1px solid black; width:65%; font-size:20px; font-weight:bold; text-align:center;">TITLE:<br/> <t t-esc="doc.product_id.name"/></td>
+                                <td style="border: 1px solid black; width:15%; font-size:16px; font-weight:bold; text-align:center;"> BATCH RECORD: <br/> <t t-esc="doc.name"/></td>
                             </tr>
                             <tr>
                                 <td style="border: 1px solid black; width:20%; font-weight:bold; text-align:center;"/>
-                                <td style="border: 1px solid black; width:15%; font-size:36px; font-weight:bold; text-align:center;">NAME</td>
-                                <td style="border: 1px solid black; width:15%; font-size:36px; font-weight:bold; text-align:center;">SIGNATURE</td>
-                                <td style="border: 1px solid black; width:20%; font-size:36px; font-weight:bold; text-align:center;">DATE</td>
-                                <td style="border: 1px solid black; width:10%; font-size:36px; font-weight:bold; text-align:center;"/>
-                                <td style="border: 1px solid black; width:15%; font-size:20px; font-weight:bold; text-align:center;"> REVISION NO:<br/> 0 </td>
+                                <td style="border: 1px solid black; width:15%; font-size:15px; font-weight:bold; text-align:center; vertical-align:middle;">NAME</td>
+                                <td style="border: 1px solid black; width:15%; font-size:15px; font-weight:bold; text-align:center; vertical-align:middle;">SIGNATURE</td>
+                                <td style="border: 1px solid black; width:20%; font-size:15px; font-weight:bold; text-align:center; vertical-align:middle;">DATE</td>
+                                <td style="border: 1px solid black; width:10%; font-size:15px; font-weight:bold; text-align:center;"/>
+                                <td style="border: 1px solid black; width:15%; font-size:14px; font-weight:bold; text-align:center;"> REVISION NO:<br/> 0 </td>
                             </tr>
                             <tr>
-                                <td style="border: 1px solid black; width:20%; font-weight:bold; text-align:center;">PREPARED BY:</td>
-                                <td style="border: 1px solid black; width:15%; font-size:36px; font-weight:bold; text-align:center;"> PRODUCTION<br/>MANAGER</td>
+                                <td style="border: 1px solid black; width:20%; font-size:16px; font-weight:bold; text-align:center;">PREPARED BY:</td>
+                                <td style="border: 1px solid black; width:15%; font-size:16px; font-weight:bold; text-align:center;"> PRODUCTION<br/>MANAGER</td>
                                 <td style="border: 1px solid black; width:15%; font-size:36px; font-weight:bold; text-align:center;"/>
                                 <td style="border: 1px solid black; width:20%; font-size:36px; font-weight:bold; text-align:center;"/>
                                 <td style="border: 1px solid black; width:10%; font-size:36px; font-weight:bold; text-align:center;"/>
                                 <td style="border: 1px solid black; width:15%; font-size:20px; font-weight:bold; text-align:center;"/>
                             </tr>
                             <tr>
-                                <td style="border: 1px solid black; width:20%; font-weight:bold; text-align:center;">APPROVED BY:</td>
-                                <td style="border: 1px solid black; width:15%; font-size:36px; font-weight:bold; text-align:center;"> Q.A  MANAGER</td>
-                                <td style="border: 1px solid black; width:15%; font-size:36px; font-weight:bold; text-align:center;"/>
-                                <td style="border: 1px solid black; width:20%; font-size:36px; font-weight:bold; text-align:center;"/>
-                                <td style="border: 1px solid black; width:10%; font-size:36px; font-weight:bold; text-align:center;"/>
-                                <td style="border: 1px solid black; width:15%; font-size:20px; font-weight:bold; text-align:center;">EFFECTIVE DATE:<br/> <t t-esc="doc.product_id.effective_date"/></td>
+                                <td style="border: 1px solid black; width:20%; font-size:16px; font-weight:bold; text-align:center;">APPROVED BY:</td>
+                                <td style="border: 1px solid black; width:15%; font-size:16px; font-weight:bold; text-align:center;"> Q.A  MANAGER</td>
+                                <td style="border: 1px solid black; width:15%; font-size:16px; font-weight:bold; text-align:center;"/>
+                                <td style="border: 1px solid black; width:20%; font-size:16px; font-weight:bold; text-align:center;"/>
+                                <td style="border: 1px solid black; width:10%; font-size:16px; font-weight:bold; text-align:center;"/>
+                                <td style="border: 1px solid black; width:15%; font-size:14px; font-weight:bold; text-align:center;">EFFECTIVE DATE:<br/> <t t-esc="doc.product_id.effective_date"/></td>
                             </tr>
                         </table>
-                        <br/><br/>
+                        <br/>
                         <table>
                             <tr>
-                                <td colspan="3" style="font-size:36px; font-weight:bold; border: 1px solid black; text-align:left;">1. Production Details</td>
+                                <td colspan="3" style="font-size:20px; font-weight:bold; border: 1px solid black; text-align:left;">1. Production Details</td>
                             </tr>
                             <tr>
                                 <td style="width:33%; padding: 2px; font-weight:bold; border: 1px solid black; text-align:left;">Description</td>
-                                <td style="width:33%; padding: 2px; font-weight:bold; border: 1px solid black; text-align:left;">Name: <t t-esc="doc.product_id.color"/></td>
-                                <td style="width:33%; padding: 2px; font-weight:bold; border: 1px solid black; text-align:left;">Color: <t t-esc="doc.product_id.color"/> </td>
+                                <td style="width:33%; padding: 2px; font-weight:bold; border: 1px solid black; text-align:left;">Name: <t t-esc="doc.product_id.name"/></td>
+                                <td style="width:33%; padding: 2px; font-weight:bold; border: 1px solid black; text-align:left;">Color: <t t-esc="doc.product_id.product_color"/> </td>
                             </tr>
                             <tr>
                                 <td style="width:33%; padding: 2px; font-weight:bold; border: 1px solid black; text-align:left;">Batch Quantity</td>
@@ -59,22 +97,22 @@
                             </tr>
                             <tr>
                                 <td style="width:33%; padding: 2px; font-weight:bold; border: 1px solid black; text-align:left;">Packaging</td>
-                                <td colspan="2" style="width:33%; padding: 2px; border: 1px solid black; text-align:left;"><t t-esc="doc.product_id.packaging_desc"/></td>
+                                <td colspan="2" style="width:33%; padding: 2px; font-weight:bold; border: 1px solid black; text-align:left;"><t t-esc="doc.product_id.packaging_desc"/></td>
                             </tr>
                             <tr>
                                 <td style="width:33%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left;">Storage Conditions</td>
-                                <td colspan="2" style="width:33%; border: 1px solid black; padding: 2px; text-align:left;">Ambient - Conditions , Store in tight container protected from light and moisture.</td>
+                                <td colspan="2" style="width:33%; border: 1px solid black; padding: 2px; font-weight:bold; text-align:left;">Ambient - Conditions , Store in tight container protected from light and moisture.</td>
                             </tr>
                         </table>
-                        <br/><br/>
+                        <br/>
                         <table>
                             <tr>
-                                <td colspan="6" style="font-size:36; font-weight:bold; border: 1px solid black; width:20%; text-align:left;">2. Production Batch Record Issuance</td>
+                                <td colspan="6" style="font-size:20px; font-weight:bold; border: 1px solid black; width:20%; text-align:left;">2. Production Batch Record Issuance</td>
                             </tr>
                             <tr>
-                                <td colspan="6" style="font-size:10; font-weight:bold; padding: 2px; border: 1px solid black; width:20%; text-align:left;">Issued By - Issuer has reviewed the batch record to ensure that the copy is a complete, accurate copy of the master batch record.</td>
+                                <td colspan="6" style="font-size:12px; font-weight:bold; padding: 2px; border: 1px solid black; width:20%; text-align:left;">Issued By - Issuer has reviewed the batch record to ensure that the copy is a complete, accurate copy of the master batch record.</td>
                             </tr>
-                            <tr>
+                            <tr style="height:50px;">
                                 <td style="width:20%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left; text-decoration: underline;">Quality Assurance<br/></td>
                                 <td style="width:10%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left; text-decoration: underline;">Signature<br/></td>
                                 <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left;"/>
@@ -83,9 +121,9 @@
                                 <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left;"/>
                             </tr>
                             <tr>
-<!--                                <td colspan="6" style="font-size:10; padding: 2px; font-weight:bold; border: 1px solid black; width:20%; text-align:left;">Issued To - Ensure that the copy is a-complete and correct. production is responsible for the batch record following issuance.</td>-->
+                                <td colspan="6" style="font-size:12px; padding: 2px; font-weight:bold; border: 1px solid black; width:20%; text-align:left;">Issued To - Ensure that the copy is a-complete and correct. production is responsible for the batch record following issuance.</td>
                             </tr>
-                            <tr>
+                            <tr style="height:50px;">
                                 <td style="width:20%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left; text-decoration: underline;">Quality Assurance<br/></td>
                                 <td style="width:10%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left; text-decoration: underline;">Signature<br/></td>
                                 <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left;"/>
@@ -94,48 +132,50 @@
                                 <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left;"/>
                             </tr>
                         </table>
-                        <br/><br/>
+                        <br/>
                         <table>
                             <tr>
-                                <td colspan="2" style="font-size:36; font-weight:bold; border: 1px solid black; width:20%; text-align:left;">3. Reference Documents</td>
+                                <td colspan="2" style="font-size:20px; font-weight:bold; border: 1px solid black; width:20%; text-align:left;">3. Reference Documents</td>
                             </tr>
                             <tr>
-                                <td style="font-size:22; padding: 2px; font-weight:bold; border: 1px solid black; text-align:left;">SOP-001</td>
-                                <td style="font-size:22; padding: 2px; font-weight:bold; border: 1px solid black; text-align:left;">Cleaning and cleansing procedures</td>
+                                <td style="font-size:14px; padding: 2px; font-weight:bold; border: 1px solid black; text-align:left;">SOP-001</td>
+                                <td style="font-size:14px; padding: 2px; font-weight:bold; border: 1px solid black; text-align:left;">Cleaning and cleansing procedures</td>
                             </tr>
                             <tr>
-                                <td style="font-size:22; padding: 2px; font-weight:bold; border: 1px solid black; width:20%; text-align:left;">SOP-002</td>
-                                <td style="font-size:22; padding: 2px; font-weight:bold; border: 1px solid black; width:20%; text-align:left;">Mixing process procedures</td>
+                                <td style="font-size:14px; padding: 2px; font-weight:bold; border: 1px solid black; width:20%; text-align:left;">SOP-002</td>
+                                <td style="font-size:14px; padding: 2px; font-weight:bold; border: 1px solid black; width:20%; text-align:left;">Mixing process procedures</td>
                             </tr>
                             <tr>
-                                <td style="font-size:22; padding: 2px; font-weight:bold; border: 1px solid black; width:20%; text-align:left;">SOP-003</td>
-                                <td style="font-size:22; padding: 2px; font-weight:bold; border: 1px solid black; width:20%; text-align:left;">Packaging process procedures</td>
+                                <td style="font-size:14px; padding: 2px; font-weight:bold; border: 1px solid black; width:20%; text-align:left;">SOP-003</td>
+                                <td style="font-size:14px; padding: 2px; font-weight:bold; border: 1px solid black; width:20%; text-align:left;">Packaging process procedures</td>
                             </tr>
                             <tr>
-                                <td style="font-size:22; padding: 2px; font-weight:bold; border: 1px solid black; width:20%; text-align:left;">SOP-004</td>
-                                <td style="font-size:22; padding: 2px; font-weight:bold; border: 1px solid black; width:20%; text-align:left;">Procedures for tracking and batching (batch record)</td>
+                                <td style="font-size:14px; padding: 2px; font-weight:bold; border: 1px solid black; width:20%; text-align:left;">SOP-004</td>
+                                <td style="font-size:14px; padding: 2px; font-weight:bold; border: 1px solid black; width:20%; text-align:left;">Procedures for tracking and batching (batch record)</td>
                             </tr>
                             <tr>
-                                <td style="font-size:22; padding: 2px; font-weight:bold; border: 1px solid black; width:20%; text-align:left;">SOP-005</td>
-                                <td style="font-size:22; padding: 2px; font-weight:bold; border: 1px solid black; width:20%; text-align:left;">Batch and date printing process</td>
+                                <td style="font-size:14px; padding: 2px; font-weight:bold; border: 1px solid black; width:20%; text-align:left;">SOP-005</td>
+                                <td style="font-size:14px; padding: 2px; font-weight:bold; border: 1px solid black; width:20%; text-align:left;">Batch and date printing process</td>
                             </tr>
                             <tr>
-                                <td style="font-size:22; padding: 2px; font-weight:bold; border: 1px solid black; width:20%; text-align:left;">SOP-006</td>
-                                <td style="font-size:22; padding: 2px; font-weight:bold; border: 1px solid black; width:20%; text-align:left;">Procedures for operation of machines</td>
+                                <td style="font-size:14px; padding: 2px; font-weight:bold; border: 1px solid black; width:20%; text-align:left;">SOP-006</td>
+                                <td style="font-size:14px; padding: 2px; font-weight:bold; border: 1px solid black; width:20%; text-align:left;">Procedures for operation of machines</td>
                             </tr>
                             <tr>
-                                <td style="font-size:22; padding: 2px; font-weight:bold; border: 1px solid black; width:20%; text-align:left;">SOP-007</td>
-                                <td style="font-size:22; padding: 2px; font-weight:bold; border: 1px solid black; width:20%; text-align:left;">Safety instructions and machinery operation</td>
+                                <td style="font-size:14px; padding: 2px; font-weight:bold; border: 1px solid black; width:20%; text-align:left;">SOP-007</td>
+                                <td style="font-size:14px; padding: 2px; font-weight:bold; border: 1px solid black; width:20%; text-align:left;">Safety instructions and machinery operation</td>
                             </tr>
                             <tr>
-                                <td style="font-size:22; padding: 2px; font-weight:bold; border: 1px solid black; width:20%; text-align:left;">SOP-008</td>
-                                <td style="font-size:22; padding: 2px; font-weight:bold; border: 1px solid black; width:20%; text-align:left;">External manufacturing process procedures</td>
+                                <td style="font-size:14px; padding: 2px; font-weight:bold; border: 1px solid black; width:20%; text-align:left;">SOP-008</td>
+                                <td style="font-size:14px; padding: 2px; font-weight:bold; border: 1px solid black; width:20%; text-align:left;">External manufacturing process procedures</td>
                             </tr>
                             <tr>
-                                <td style="font-size:22; padding: 2px; font-weight:bold; border: 1px solid black; width:20%; text-align:left;">SOP-009</td>
-                                <td style="font-size:22; padding: 2px; font-weight:bold; border: 1px solid black; width:20%; text-align:left;">Temperature And Humidity Monitoring</td>
+                                <td style="font-size:14px; padding: 2px; font-weight:bold; border: 1px solid black; width:20%; text-align:left;">SOP-009</td>
+                                <td style="font-size:14px; padding: 2px; font-weight:bold; border: 1px solid black; width:20%; text-align:left;">Temperature And Humidity Monitoring</td>
                             </tr>
                         </table>
+                        <p style="page-break-after:always;"/>
+
                     </div>
                 </t>
             </t>
