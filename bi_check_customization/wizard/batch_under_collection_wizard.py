@@ -59,5 +59,14 @@ class UnderCollectionWizard(models.TransientModel):
                         move.post()
             if batch.state == 'under_collection':
                 batch.write({'state': 'collection'})
+            elif batch.batch_type == 'outbound':
+                batch.write({'state': 'collection'})
             else:
                 batch.write({'state': 'under_collection'})
+
+    @api.onchange('journal_id')
+    def set_accounts(self):
+        self.ensure_one()
+        if self.journal_id:
+            self.debit_account_id = self.journal_id.default_debit_account_id.id or False
+            self.credit_account_id = self.journal_id.default_credit_account_id.id or False

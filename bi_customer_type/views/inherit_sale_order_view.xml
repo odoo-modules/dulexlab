@@ -11,5 +11,16 @@
                 </xpath>
             </field>
         </record>
+        <record id="view_sale_order_search_view_inherit" model="ir.ui.view">
+            <field name="name">sale.order.inherit.search.view</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.sale_order_view_search_inherit_quotation"/>
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@name='filter_order_date']" position="replace">
+                    <filter name="group_by_customer_type" string="Customer Type"
+                            context="{'group_by':'customer_type'}"/>
+                </xpath>
+            </field>
+        </record>
     </data>
 </odoo>
