@@ -11,8 +11,13 @@ class ResConfigSettings(models.TransientModel):
 
     id_expiration_groups_ids = fields.Many2many('res.groups', 'ex_group_setting_rel', 'setting_id', 'group_id',
                                                 'ID Expiration Mail Groups', )
-    contract_expiration_groups_ids = fields.Many2many('res.groups', 'contract_group_setting_rel', 'setting_id',
-                                                      'group_id', 'Contract Expiration Mail Groups', )
+
+    contract_expiration_groups_ids = fields.Many2many(
+        comodel_name='res.groups', string='Contract Expiration Mail Groups',
+        relation='contract_expiration_grps_rel',
+        column1='sett_id',
+        column2='grp_id')
+
     absence_days_groups_ids = fields.Many2many('res.groups', 'absence_group_setting_rel', 'setting_id',
                                                'group_id', 'Absence Mail Groups')
     id_reminder_after = fields.Integer('', default=30)
@@ -53,7 +58,7 @@ class ResConfigSettings(models.TransientModel):
             )
         if absence_days_groups_ids:
             res.update(
-                contract_expiration_groups_ids=ast.literal_eval(absence_days_groups_ids),
+                absence_days_groups_ids=ast.literal_eval(absence_days_groups_ids),
             )
 
         res.update(
