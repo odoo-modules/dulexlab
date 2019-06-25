@@ -10,6 +10,8 @@ class SaleOrder(models.Model):
     customer_po = fields.Char(string='Customer PO')
     purchase_order_count = fields.Integer(string='No Of Purchases', compute='get_order_count')
     manufacture_order_count = fields.Integer(string='No Of Manufactures', compute='get_order_count')
+    po_created = fields.Boolean(string='PO Created')
+    mo_created = fields.Boolean(string='MO Created')
 
     @api.multi
     def get_order_count(self):
@@ -159,6 +161,7 @@ class SaleOrder(models.Model):
 
     @api.multi
     def action_confirm(self):
+        res = super(SaleOrder, self).action_confirm()
         for order in self:
             product_grouped_dict = {}
             for line in order.order_line:
@@ -169,11 +172,15 @@ class SaleOrder(models.Model):
             for product in product_grouped_dict:
                 if product_grouped_dict[product]['qty'] > product.virtual_available:
                     procurement_method = order.get_procurement_method(product)
-                    if procurement_method == 'buy':
+
+                    if procurement_method == 'buy' and not order.po_created:
                         order.create_po_procurement_order(product, product_grouped_dict[product]['qty'])
-                    elif procurement_method == 'manufacture':
+                        order.po_created = True
+                    elif procurement_method == 'manufacture' and not order.mo_created:
                         order.create_mo_procurement_order(product, product_grouped_dict[product]['qty'])
-        return super(SaleOrder, self).action_confirm()
+                        order.mo_created = True
+
+        return res
 
     @api.multi
     def create_mo_procurement_order(self, product_id, qty, from_mo=False):
