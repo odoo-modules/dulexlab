@@ -11,10 +11,10 @@ class InheritSaleOrder(models.Model):
     def onchange_partner_id(self):
         user = self.user_id.id
         super(InheritSaleOrder, self).onchange_partner_id()
-        print(user)
         self.user_id = user or False
 
-    user_id = fields.Many2one('res.users', string='Salesperson', index=True, track_visibility='onchange', required=True)
+    user_id = fields.Many2one('res.users', string='Salesperson', index=True, track_visibility='onchange',
+                              required=True, default=False)
     team_id = fields.Many2one('crm.team', related='user_id.sale_team_id')
     area = fields.Many2one('new.area', string="Area", related='user_id.area', readonly=False)
     team_supervisor = fields.Many2one('res.users', related='team_id.team_supervisor', srting="Team Supervisor")

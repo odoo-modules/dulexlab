@@ -7,5 +7,5 @@ class ProductTemplate(models.Model):
 
     product_color = fields.Char(string="Color")
     effective_date = fields.Date(string="Effective Date")
-    validity_period = fields.Integer(string="Validity Period (Months)")
+    validity_period = fields.Integer(string="Validity Period (Months)", default=1)
     packaging_desc = fields.Char(string="Packaging Desc.")
