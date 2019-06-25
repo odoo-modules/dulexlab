@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <!--Report-->
+    <template id="report_quality_alert_document">
+        <t t-call="web.external_layout">
+            <t t-set="o" t-value="doc.with_context({'lang': 'en_US'})"/>
+            <div class="page">
+                <div class="col-xs-12">
+                    <center>
+                        <h3>
+                            <b style="font-family: Times New Roman;">Quality Alert Report</b>
+                        </h3>
+                    </center>
+                </div>
+                <br/>
+                <div class="row col-xs-12">
+                    <h5>
+                        <b>Name:</b>
+                        <span t-field="o.name"/>
+                    </h5>
+                </div>
+                <div>
+                    <div t-if="o.title">
+                        <strong>Title:</strong>
+                        <span t-field="o.title"/>
+                    </div>
+                    <div t-if="o.product_tmpl_id">
+                        <strong>Product:</strong>
+                        <span t-field="o.product_tmpl_id"/>
+                    </div>
+                    <div t-if="o.lot_id">
+                        <strong>Lot:</strong>
+                        <span t-field="o.lot_id"/>
+                    </div>
+                    <div t-if="o.team_id">
+                        <strong>Team:</strong>
+                        <span t-field="o.team_id"/>
+                    </div>
+                    <div t-if="o.user_id">
+                        <strong>Responsible:</strong>
+                        <span t-field="o.user_id"/>
+                    </div>
+                    <div t-if="o.tag_ids">
+                        <strong>Tags:</strong>
+                        <span t-field="o.tag_ids"/>
+                    </div>
+                </div>
+                <br/>
+                <div class="col-xs-12">
+                    <h5>
+                        <strong>Description:</strong>
+                        <span t-field="o.description"/>
+                    </h5>
+                </div>
+                <br/>
+                <div class="col-xs-12 pull-right">
+                    <h7>
+                        <strong>
+                            <u>Quality Signature:</u>
+                        </strong>
+                    </h7>
+                </div>
+            </div>
+        </t>
+    </template>
+    <!--TEMPLATE [JOURNAL ENTRY REPORT]-->
+    <template id="report_quality_alert">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="bi_print_quality_alert_report.report_quality_alert_document"/>
+            </t>
+        </t>
+    </template>
+
+    <report id="action_report_quality_alert"
+            model="quality.alert"
+            string="Quality Alert Report"
+            report_type="qweb-pdf"
+            name="bi_print_quality_alert_report.report_quality_alert"
+            file="bi_print_quality_alert_report.report_quality_alert"
+            attachment_use="True"
+    />
+    <!--FORM QUALITY ALERT-->
+    <record id="view_quality_alert_form_inherit" model="ir.ui.view">
+        <field name="name">quality.alert.inherit.form</field>
+        <field name="model">quality.alert</field>
+        <field name="inherit_id" ref="quality_control.quality_alert_view_form"/>
+        <field name="arch" type="xml">
+            <header>
+                <button name="print_quality_alert" string="Print" type="object" help="Print in Pdf"/>
+            </header>
+        </field>
+    </record>
+
+</odoo>
