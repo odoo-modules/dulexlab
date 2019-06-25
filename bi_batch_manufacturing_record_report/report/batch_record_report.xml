@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <template id="external_layout_standard_batch_mo">
+        <div class="header">
+            <table>
+                <tr>
+                    <td style="border: 1px solid black; width:20%; text-align:center; padding-top:5px;"><img style="pointer-events: none;" src="/bi_batch_manufacturing_record_report/static/src/img/dulex_logo.png" height="45"/></td>
+                    <td colspan="4" style="border: 1px solid black; width:65%; font-size:25px; font-weight:bold; text-align:center; vertical-align:middle;">BATCH MANUFACTURING RECORD</td>
+                    <td style="border: 1px solid black; width:15%; font-size:16px; font-weight:bold; text-align:center;"> FIRST EDITION PAGE <span class="page"/> OF 5</td>
+                </tr>
+            </table>
+        </div>
+
         <div class="article o_report_layout_standard"  t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id" t-att-data-oe-lang="o and o.env.context.get('lang')">
             <t t-call="web.address_layout"/>
             <t t-raw="0"/>
@@ -44,12 +54,8 @@
             <t t-foreach="docs" t-as="doc">
                 <t t-call="bi_batch_manufacturing_record_report.external_layout_batch_mo">
                     <div class="page">
-                        <table>
-                            <tr>
-                                <td style="border: 1px solid black; width:20%; text-align:center;"><img style="pointer-events: none;" src="/bi_batch_manufacturing_record_report/static/src/img/dulex_logo.png"/></td>
-                                <td colspan="4" style="border: 1px solid black; width:65%; font-size:25px; font-weight:bold; text-align:center; vertical-align:middle;">BATCH MANUFACTURING RECORD</td>
-                                <td style="border: 1px solid black; width:15%; font-size:16px; font-weight:bold; text-align:center;"> FIRST EDITION PAGE 1 OF 5</td>
-                            </tr>
+                        <!--PAGE 1-->
+                         <table >
                             <tr>
                                 <td style="border: 1px solid black; width:20%; font-size:16px; font-weight:bold; text-align:center;">DEPARTMENT: PRODUCTION</td>
                                 <td colspan="4" style="border: 1px solid black; width:65%; font-size:20px; font-weight:bold; text-align:center;">TITLE:<br/> <t t-esc="doc.product_id.name"/></td>
@@ -61,7 +67,7 @@
                                 <td style="border: 1px solid black; width:15%; font-size:15px; font-weight:bold; text-align:center; vertical-align:middle;">SIGNATURE</td>
                                 <td style="border: 1px solid black; width:20%; font-size:15px; font-weight:bold; text-align:center; vertical-align:middle;">DATE</td>
                                 <td style="border: 1px solid black; width:10%; font-size:15px; font-weight:bold; text-align:center;"/>
-                                <td style="border: 1px solid black; width:15%; font-size:14px; font-weight:bold; text-align:center;"> REVISION NO:<br/> 0 </td>
+                                <td style="border: 1px solid black; width:15%; font-size:14px; font-weight:bold; text-align:center;"> REVISION NO:<br/>&amp;nbsp;</td>
                             </tr>
                             <tr>
                                 <td style="border: 1px solid black; width:20%; font-size:16px; font-weight:bold; text-align:center;">PREPARED BY:</td>
@@ -87,7 +93,7 @@
                             </tr>
                             <tr>
                                 <td style="width:33%; padding: 2px; font-weight:bold; border: 1px solid black; text-align:left;">Description</td>
-                                <td style="width:33%; padding: 2px; font-weight:bold; border: 1px solid black; text-align:left;">Name: <t t-esc="doc.product_id.name"/></td>
+                                <td style="width:33%; padding: 2px; font-weight:bold; border: 1px solid black; text-align:left;">Name: <t t-esc="doc.product_id.product_tmpl_id.name"/></td>
                                 <td style="width:33%; padding: 2px; font-weight:bold; border: 1px solid black; text-align:left;">Color: <t t-esc="doc.product_id.product_color"/> </td>
                             </tr>
                             <tr>
@@ -175,7 +181,337 @@
                             </tr>
                         </table>
                         <p style="page-break-after:always;"/>
-
+                        <!--PAGE 2-->
+                        <br/>
+                        <table>
+                            <tr>
+                                <td colspan="6" style="font-size:20px; font-weight:bold; border: 1px solid black; width:20%; text-align:left;">4. Raw Materials</td>
+                            </tr>
+                            <tr>
+                                <td style="width:30%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; vertical-align: middle;">Description</td>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; vertical-align: middle;">Quantity<br/>Required<br/></td>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; vertical-align: middle;">LoT No.</td>
+                                <td style="width:20%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; vertical-align: middle;">Manufacturing/Expiry<br/>Date</td>
+                                <td style="width:10%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; vertical-align: middle;">Performed<br/>By /Date</td>
+                                <td style="width:10%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; vertical-align: middle;">Verified<br/>By /Date</td>
+                            </tr>
+                            <t t-foreach="doc.move_raw_ids" t-as="bom_line">
+                                <tr>
+                                    <td style="width:30%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left;"><t t-esc="bom_line.product_id.name"/> </td>
+                                    <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center;"><t t-esc="bom_line.product_uom_qty"/> (<t t-esc="bom_line.product_uom.name"/>)</td>
+                                    <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center;"/>
+                                    <td style="width:20%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center;"/>
+                                    <td style="width:10%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center;"/>
+                                    <td style="width:10%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center;"/>
+                                </tr>
+                            </t>
+                            <tr>
+                                <td style="width:30%; font-weight:bold; background-color:#bfbfbf; padding: 2px; border: 1px solid black; text-align:center; font-size:20px;">Total</td>
+                                <td style="width:15%; font-weight:bold; background-color:#bfbfbf; padding: 2px; border: 1px solid black; text-align:center; font-size:20px;">X</td>
+                            </tr>
+                        </table>
+                        <br/><br/>
+                        <table>
+                            <tr>
+                                <td colspan="6" style="font-size:20px; font-weight:bold; border: 1px solid black; width:20%; text-align:left;">5. Processing Equipments</td>
+                            </tr>
+                            <tr>
+                                <td style="width:30%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; vertical-align: middle;">Equipment Description</td>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; vertical-align: middle;">ID No.</td>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; vertical-align: middle;">Previous<br/>Calibration</td>
+                                <td style="width:20%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; vertical-align: middle;">Calibration Required</td>
+                                <td style="width:10%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; vertical-align: middle;">Performed<br/>By /Date</td>
+                                <td style="width:10%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; vertical-align: middle;">Verified<br/>By /Date</td>
+                            </tr>
+                            <tr>
+                                <td style="width:30%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center;">Weighing Balance 1 (KG)</td>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center;">wb-01</td>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center;"/>
+                                <td style="width:20%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center;"/>
+                                <td style="width:10%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center;"/>
+                                <td style="width:10%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center;"/>
+                            </tr>
+                            <tr>
+                                <td style="width:30%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center;">Weighing Balance 500 (KG)</td>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center;">wb-02</td>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center;"/>
+                                <td style="width:20%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center;"/>
+                                <td style="width:10%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center;"/>
+                                <td style="width:10%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center;"/>
+                            </tr>
+                            <tr>
+                                <td style="width:30%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center;">V-Mixer</td>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center;">mx-01</td>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center;"/>
+                                <td style="width:20%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left;"/>
+                                <td style="width:10%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left;"/>
+                                <td style="width:10%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left;"/>
+                            </tr>
+                            <tr>
+                                <td style="width:30%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center;">Stainless Steel Container</td>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center;">cs-01</td>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left;"/>
+                                <td style="width:20%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left;"/>
+                                <td style="width:10%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left;"/>
+                                <td style="width:10%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left;"/>
+                            </tr>
+                            <tr>
+                                <td style="width:30%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center;">Mechanical Sieve (Mesh No.:12)</td>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center;">sm-01</td>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left;"/>
+                                <td style="width:20%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left;"/>
+                                <td style="width:10%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left;"/>
+                                <td style="width:10%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left;"/>
+                            </tr>
+                        </table>
+                        <p style="page-break-after:always;"/>
+                        <!--Page 3-->
+                        <table>
+                            <tr>
+                                <td colspan="3" style="width:30%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left;">6. Area Clearance According To SOP (001)</td>
+                            </tr>
+                            <tr>
+                                <td style="width:70%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; vertical-align:middle;">Step</td>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center;">PERFORMED<br/>BY /DATE</td>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center;">VERIFIED<br/>BY /DATE</td>
+                            </tr>
+                            <tr style="height:80px;">
+                                <td style="width:70%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left; vertical-align:middle;">1- GMP  PROCESSING AREA(S) ROOM</td>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center;"/>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center;"/>
+                            </tr>
+                            <tr style="height:80px;">
+                                <td style="width:70%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left; vertical-align:middle;">2- REVIEW THE GMP PROCESSING AREA LOGBOOK(S) AND ENSURE THAT THE LOGBOOK</td>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center;"/>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center;"/>
+                            </tr>
+                            <tr style="height:80px;">
+                                <td style="width:70%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left; vertical-align:middle;">3- REVIEW ALL APPLICABLE GMP PROCESSING AREA LOG BOOK (S) AND VERIFY THAT CLEANING HAS BEEN PERFORMED ACCORDING TO FACILITY CLEANING PROCEDURES SOP - DATE CLEANING COMPLETE </td>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center;"/>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center;"/>
+                            </tr>
+                            <tr style="height:80px;">
+                                <td style="width:70%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left; vertical-align:middle;">4- REVIEW SECTION 4: RAW MATERIALS AND ENSURE THAT IS COMPLETE ACCURATE AND THAT ALL NECESSARY MATERIALS ARE PRESENT FOR THE GMP OPERATION</td>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center;"/>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center;"/>
+                            </tr>
+                            <tr style="height:80px;">
+                                <td style="width:70%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left; vertical-align:middle;">5- ENSURE THAT ALL GMP MATERIALS ARE RELEASED APPROVED AND HAVE SUFFICIENT TIME TO THE EXPIRY DATE</td>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center;"/>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center;"/>
+                            </tr>
+                            <tr style="height:80px;">
+                                <td style="width:70%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left; vertical-align:middle;">6- REVIEW SECTION 5 :PROCESSING EQUIPMENT AND ENSURE THAT  IT IS COMPLETE ACCURATE AND THAT ALL NECESSARY EQUIPMENT IS PRESENT CLEANED AND CALIBRATED AS APPROPRIATE</td>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center;"/>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center;"/>
+                            </tr>
+                            <tr style="height:80px;">
+                                <td style="width:70%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left; vertical-align:middle;">7- REVIEW THE LOGBOOK FOR EACH PIECE OF EQUIPMENT AND ENSURE THAT THE LOGBOOKS ARE CORRECTLY FILLED OUT</td>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center;"/>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center;"/>
+                            </tr>
+                            <tr style="height:80px;">
+                                <td style="width:70%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left; vertical-align:middle;">8- VERIFY THAT THE PRODUCTION AREA DOES NOT CONTAIN ANY ITEMS FROM PREVIOUS BATCHES OR CLEANING ACTIVITIES AND THAT NO ITEMS UNRELATED TO THE CURRENT BATCH ARE PRESENT</td>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center;"/>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center;"/>
+                            </tr>
+                            <tr style="height:80px;">
+                                <td style="width:70%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left; vertical-align:middle;">9-AREA CLEARANCE COMPLETE Q A SHALL COMPLETE THE AREA CLEARACE SIGN (SOP. ATTACHMENT 1) AND AFFIX IT TO THE GMP PROCESSING AREA ENTRANCE</td>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center;"/>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center;"/>
+                            </tr>
+                        </table>
+                        <p style="page-break-after:always;"/>
+                        <!--Page 4-->
+                        <table>
+                            <tr>
+                                <td colspan="6" style="width:30%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left;">7. Production Procedure</td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" style="width:70%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; vertical-align:middle;">Processing Step</td>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center;">PERFORMED<br/>BY /DATE</td>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center;">VERIFIED<br/>BY /DATE</td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" style="width:70%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left;">A- DISPENSING &amp; RAW MATERIAL PREPARATION (LOCATION - MIXING ROOM) ACCORDING TO SOP(002)</td>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left;"/>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left;"/>
+                            </tr>
+                            <tr>
+                                <td colspan="4" style="width:70%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left; font-size:12px;">1- ENSURE ROOM TEMPERATURE IS WITHIN 16-20 C AND HUMIDITY IS LESS THAN 50%</td>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left;"/>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left;"/>
+                            </tr>
+                            <tr>
+                                <td colspan="4" style="width:70%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left; font-size:12px;">2- WEIGH THE ALL RAW MATERIALS (R M ) AS MENTIONED IN PART 4 SEPARATELY INTO A-SUITABLE CONTAINER /PACKAGES IN <br/>LABEL EACH OF THE CONTANER /PACKAGES WITH <br/> (A) NAME OF RM. <br/>(B) LOT NO.&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;(C) manufacturing/expiry date.</td>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left;"/>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left;"/>
+                            </tr>
+                            <tr>
+                                <td colspan="6" style="font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; font-size:15px;"/>
+                            </tr>
+                            <tr>
+                                <td colspan="4" style="width:70%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left;">B- MIXING (LOCATION - MIXING ROOM) ACCORDING TO SOP (002) ,(006) ,(007)</td>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left;"/>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left;"/>
+                            </tr>
+                            <tr>
+                                <td colspan="4"  style="width:70%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left; font-size:12px;">1- ENSURE ROOM TEMPRATURE IS WITHIN 16.20 C AND HUMIDITY IS LESS THAN 50%</td>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left;"/>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left;"/>
+                            </tr>
+                            <tr>
+                                <td style="width:20%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left; font-size:12px;">Temperature:</td>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left;"/>
+                                <td style="width:20%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left; font-size:12px;">Humidity:</td>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left;"/>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left;"/>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left;"/>
+                            </tr>
+                            <tr>
+                                <td colspan="4" style="width:70%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left; font-size:12px;">2- TRANSFER ALL THE CONTENTS TO V MIXER.<br/>&amp;nbsp;&amp;nbsp; A- put the main materials weighted in the mixer first.<br/>&amp;nbsp;&amp;nbsp; B- put the secondary materials from the lab after finishing put of the main materrials.</td>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left;"/>
+                                <td style="width:25%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left;"/>
+                            </tr>
+                            <tr>
+                                <td colspan="4" style="width:70%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left; font-size:12px;">3- MIX POWDER IN THE V MIXER FOR 30 MINUTES WHICH IS THE STANDARD TIME FOR MIXING.</td>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left;"/>
+                                <td style="width:25%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left;"/>
+                            </tr>
+                            <tr>
+                                <td style="width:20%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left; font-size:12px;">Time Start:</td>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left;"/>
+                                <td style="width:20%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left; font-size:12px;">Time Stop:</td>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left;"/>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left;"/>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left;"/>
+                            </tr>
+                            <tr>
+                                <td colspan="4" style="width:70%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left; font-size:12px;">4- LABEL THE PLASTIC BARREL WITH<br/>&amp;nbsp;&amp;nbsp; A- NAME OF RM.<br/>&amp;nbsp;&amp;nbsp; B- LOT NO.&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;C- manufacturing/expiry date.</td>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left;"/>
+                                <td style="width:25%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left;"/>
+                            </tr>
+                            <tr>
+                                <td colspan="6" style="font-weight:bold; padding: 2px; border: 1px solid black; text-align:left; font-size:15px;"/>
+                            </tr>
+                            <tr>
+                                <td colspan="4" style="width:70%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left;">C- LABELING THE BAGS  ACCORDING TO SOP (005)</td>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left;"/>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left;"/>
+                            </tr>
+                            <tr>
+                                <td colspan="6" style="font-weight:bold; padding: 2px; border: 1px solid black; text-align:left; font-size:15px;"/>
+                            </tr>
+                            <tr>
+                                <td colspan="4" style="width:70%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left;">D- PACKAGING POWDER INTO PACKAGES ACCORDING TO SOP (008)</td>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left;"/>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left;"/>
+                            </tr>
+                        </table>
+                        <br/>
+                        <table>
+                            <tr>
+                                <td colspan="3" style="width:30%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left;">8. Sampling , Material Transfer &amp; Storage</td>
+                            </tr>
+                        </table>
+                        <br/>
+                        <table>
+                            <tr>
+                                <td colspan="5" style="width:30%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left;">9. Yield Calculation</td>
+                            </tr>
+                            <tr style="height: 40px;">
+                                <td rowspan="2" style="width:20%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; vertical-align:middle;">Yield = </td>
+                                <td rowspan="2" style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; vertical-align:middle;">100%   *</td>
+                                <td rowspan="2" style="width:35%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; vertical-align:middle; font-size:12px;">WEIGHT OF BACK /WEIGHT OF RAW MATERIALS</td>
+                                <td rowspan="2" style="width:10%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; vertical-align:middle; font-size:12px;">SPECIFICATION<br/>(99-100%)</td>
+                                <td style="width:10%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; vertical-align:middle;"> &amp;nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td style="height: 35px; width:30%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; vertical-align:middle;">&amp;nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td rowspan="2" style="width:20%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; vertical-align:middle; background-color:#bfbfbf;">Yield = </td>
+                                <td rowspan="2" style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; vertical-align:middle; background-color:#bfbfbf;">100%   *</td>
+                                <td style="width:35%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; vertical-align:middle; background-color:#bfbfbf; font-size:12px;">NO OF GOOG AND REJECTED AND SAMPLES AND RETURNED</td>
+                                <td rowspan="2" style="width:10%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; vertical-align:middle; background-color:#bfbfbf; font-size:12px;">SPECIFICATION<br/>(99-100%)</td>
+                                <td style="width:10%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; vertical-align:middle;">&amp;nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td style="width:35%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; vertical-align:middle; background-color:#bfbfbf; font-size:12px;">NO OF GOODS RECEIVED AT THE START OF PROCESS</td>
+                                <td style="width:10%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; vertical-align:middle;">&amp;nbsp;</td>
+                            </tr>
+                        </table>
+                        <p style="page-break-after:always;"/>
+                        <!--Page 5-->
+                        <table>
+                            <tr>
+                                <td colspan="6" style="font-weight:bold; padding: 2px; border: 1px solid black; text-align:center;">10. POST - PRODUCTION BATCH RECORD REVIEW</td>
+                            </tr>
+                            <tr>
+                                <td colspan="6" style="font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; font-size:14px;">FOR COMPLETENESS AND ACCURACY. ALL PACKAGES ARE COMPLETE AND ALL ENTRIES CONFIRM TO GOOD DOCUMENTATION PRACTICES</td>
+                            </tr>
+                            <tr style="height: 40px;">
+                                <td style="width:20%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; vertical-align:middle;">&amp;nbsp;</td>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; vertical-align:middle;">&amp;nbsp;</td>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; vertical-align:middle; font-size:13px;">Name</td>
+                                <td style="width:20%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; vertical-align:middle; font-size:13px;">Signature</td>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; vertical-align:middle; font-size:13px;">Date</td>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; vertical-align:middle;">&amp;nbsp;</td>
+                            </tr>
+                            <tr style="height: 40px;">
+                                <td style="width:20%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; vertical-align:middle;">&amp;nbsp;</td>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; vertical-align:middle; font-size:13px;">Production</td>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; vertical-align:middle;">&amp;nbsp;</td>
+                                <td style="width:20%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; vertical-align:middle;">&amp;nbsp;</td>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; vertical-align:middle;">&amp;nbsp;</td>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; vertical-align:middle;">&amp;nbsp;</td>
+                            </tr>
+                            <tr style="height: 40px;">
+                                <td style="width:20%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; vertical-align:middle;">&amp;nbsp;</td>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; vertical-align:middle; font-size:13px;">Quality Assurance</td>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; vertical-align:middle;">&amp;nbsp;</td>
+                                <td style="width:20%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; vertical-align:middle;">&amp;nbsp;</td>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; vertical-align:middle;">&amp;nbsp;</td>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; vertical-align:middle;">&amp;nbsp;</td>
+                            </tr>
+                        </table>
+                        <br/><br/>
+                        <table>
+                            <tr>
+                                <td colspan="6" style="font-weight:bold; padding: 2px; border: 1px solid black; text-align:center;">11- PRODUCT RELEASE</td>
+                            </tr>
+                            <tr>
+                                <td colspan="6" style="font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; font-size:14px;">THE MATERIAL PRODUCED THROUGH THE EXECUTION OF THIS BATCH RECORD SHALL BE DISPOSITIONED BY QA ACCORDING TO PRODUCT RELEASE PROCEDURE (SOP)</td>
+                            </tr>
+                            <tr>
+                                <td colspan="6" style="font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; font-size:14px;">THE DISPOSITION SHALL BE RECORDED BELOW </td>
+                            </tr>
+                            <tr style="height: 40px;">
+                                <td style="width:20%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; vertical-align:middle;">&amp;nbsp;</td>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; vertical-align:middle;">&amp;nbsp;</td>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; vertical-align:middle; font-size:12px;">Name</td>
+                                <td style="width:20%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; vertical-align:middle; font-size:12px;">Signature</td>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; vertical-align:middle; font-size:13px;">Date</td>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; vertical-align:middle;">&amp;nbsp;</td>
+                            </tr>
+                            <tr style="height: 40px;">
+                                <td style="width:20%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; vertical-align:middle;">&amp;nbsp;</td>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; vertical-align:middle; font-size:13px;">Production</td>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; vertical-align:middle;">&amp;nbsp;</td>
+                                <td style="width:20%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; vertical-align:middle;">&amp;nbsp;</td>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; vertical-align:middle;">&amp;nbsp;</td>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; vertical-align:middle;">&amp;nbsp;</td>
+                            </tr>
+                            <tr style="height: 40px;">
+                                <td style="width:20%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; vertical-align:middle;">&amp;nbsp;</td>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; vertical-align:middle; font-size:13px;">Quality Assurance</td>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; vertical-align:middle;">&amp;nbsp;</td>
+                                <td style="width:20%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; vertical-align:middle;">&amp;nbsp;</td>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; vertical-align:middle;">&amp;nbsp;</td>
+                                <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; vertical-align:middle;">&amp;nbsp;</td>
+                            </tr>
+                        </table>
+                        <br/>
                     </div>
                 </t>
             </t>
