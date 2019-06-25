@@ -123,15 +123,23 @@ class StandardReportXlsx(models.AbstractModel):
         sheet.write(4, 3, "Qty Out", format21)
         sheet.write(4, 4, "End Balance", format21)
 
+        print(balances)
         sheet.write(5, 0, '', format21_unbolded)
-        sheet.write(5, 1, f'{balances[0][0]:.3f}', format21)
+        if balances:
+            sheet.write(5, 1, f'{balances[0][0]:.3f}', format21)
+        else:
+            sheet.write(5, 1, f'{0:.3f}', format21)
         sheet.write(5, 2, '', format21_unbolded)
         sheet.write(5, 3, '', format21_unbolded)
         sheet.write(5, 4, '', format21_unbolded)
 
         count = 6
-        open_balance = balances[0][0]
-        end_balance = balances[0][0]
+        if balances:
+            open_balance = balances[0][0]
+            end_balance = balances[0][0]
+        else:
+            open_balance = 0
+            end_balance = 0
         for line in lines:
             qty_in = (line[1] if line[3] in data['locations'] else 0)
             qty_out = (line[1] if line[2] in data['locations'] else 0)
