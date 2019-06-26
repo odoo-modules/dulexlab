@@ -101,11 +101,11 @@
                             </tr>
                             <tr>
                                 <td style="width:33%; padding: 2px; font-weight:bold; border: 1px solid black; text-align:left;">Batch Quantity</td>
-                                <td style="width:33%; padding: 2px; font-weight:bold; border: 1px solid black; text-align:left;">Batch Size:
+                                <td style="width:33%; padding: 2px; font-weight:bold; border: 1px solid black; text-align:left;">Batch Size: <t t-esc="doc.product_qty"/></td>
+                                <td style="width:33%; padding: 2px; font-weight:bold; border: 1px solid black; text-align:left;">Approx No. Unit:
                                     <t t-if="doc.parent_mo_id"> <t t-esc="doc.parent_mo_id.product_qty"/></t>
                                     <t t-if="!doc.parent_mo_id"> &amp;nbsp;</t>
                                 </td>
-                                <td style="width:33%; padding: 2px; font-weight:bold; border: 1px solid black; text-align:left;">Approx No. Unit: 2000 </td>
                             </tr>
                             <tr>
                                 <td style="width:33%; padding: 2px; font-weight:bold; border: 1px solid black; text-align:left;">Packaging</td>
