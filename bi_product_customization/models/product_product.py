@@ -9,3 +9,4 @@ class ProductProduct(models.Model):
     effective_date = fields.Date(string="Effective Date", related="product_tmpl_id.effective_date")
     validity_period = fields.Integer(string="Validity Period (Months)", related="product_tmpl_id.validity_period")
     packaging_desc = fields.Char(string="Packaging Desc.", related="product_tmpl_id.packaging_desc")
+    packaging_qty = fields.Integer(string="Packaging Qty.", related="product_tmpl_id.packaging_qty")

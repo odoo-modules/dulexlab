@@ -9,7 +9,9 @@
     'category': 'Manufacturing',
     'version': '0.1',
     'depends': ['mrp'],
-    'data': [],
+    'data': [
+        'views/mrp_production.xml',
+    ],
     'installable': True,
     'auto_install': False,
     'sequence': 1

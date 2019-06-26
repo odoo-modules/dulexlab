@@ -27,6 +27,9 @@ class PickingsMerge(models.TransientModel):
                     products[line.product_id.name]['amount'] = line.product_uom_qty
 
                 products[line.product_id.name]['uom'] = line.product_uom.name
+                products[line.product_id.name]['count'] = line.product_id.packaging_qty
+        for product in products:
+            products[product]['count_printed'] = products[product]['amount'] / products[product]['count']
         return products
 
     @api.model

@@ -11,6 +11,7 @@
                     <field name="effective_date"/>
                     <field name="validity_period"/>
                     <field name="packaging_desc"/>
+                    <field name="packaging_qty"/>
                 </xpath>
             </field>
         </record>
