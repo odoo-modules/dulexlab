@@ -195,8 +195,10 @@
                                 <td style="width:10%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; vertical-align: middle;">Performed<br/>By /Date</td>
                                 <td style="width:10%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center; vertical-align: middle;">Verified<br/>By /Date</td>
                             </tr>
+                            <t t-set="total_qty" t-value="0.0"/>
                             <t t-foreach="doc.move_raw_ids" t-as="bom_line">
                                 <tr>
+                                    <t t-set="total_qty" t-value="total_qty + bom_line.product_uom_qty"/>
                                     <td style="width:30%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:left;"><t t-esc="bom_line.product_id.name"/> </td>
                                     <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center;"><t t-esc="bom_line.product_uom_qty"/> (<t t-esc="bom_line.product_uom.name"/>)</td>
                                     <td style="width:15%; font-weight:bold; padding: 2px; border: 1px solid black; text-align:center;"/>
@@ -207,7 +209,7 @@
                             </t>
                             <tr>
                                 <td style="width:30%; font-weight:bold; background-color:#bfbfbf; padding: 2px; border: 1px solid black; text-align:center; font-size:20px;">Total</td>
-                                <td style="width:15%; font-weight:bold; background-color:#bfbfbf; padding: 2px; border: 1px solid black; text-align:center; font-size:20px;">X</td>
+                                <td style="width:15%; font-weight:bold; background-color:#bfbfbf; padding: 2px; border: 1px solid black; text-align:center; font-size:20px;"><t t-esc="total_qty"/></td>
                             </tr>
                         </table>
                         <br/><br/>
