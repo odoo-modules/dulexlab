@@ -8,6 +8,7 @@ from dateutil.relativedelta import relativedelta
 from collections import namedtuple
 import ast
 
+
 class HrEmployeeInherit(models.Model):
     _inherit = 'hr.employee'
 
@@ -26,9 +27,12 @@ class HrEmployeeInherit(models.Model):
             table_end = '</tbody></table>'
             recipient_ids = []
             today_date = date.today()
-            year_from = time.strftime('%Y-01-01')
+            year_from = date.today().replace(day=1, month=1)
             absence_days_groups_ids = ast.literal_eval(
                 (self.env['ir.config_parameter'].sudo().get_param('absence_days_groups_ids')))
+            get_param = self.env['ir.config_parameter'].sudo().get_param
+            unlinked_days = int(get_param('unlinked_days'))
+            linked_days = int(get_param('linked_days'))
 
             # ----------------- recipients ------------------#
             if employee.parent_id.address_home_id.id and (employee.parent_id.address_home_id.id not in recipient_ids):
@@ -40,13 +44,14 @@ class HrEmployeeInherit(models.Model):
                         recipient_ids.append(user.partner_id.id)
 
             # Todo Linked Absence
-            if employee.linked_absence:
+            if linked_days:
                 attendance_obj = self.env['hr.attendance'].search([('employee_id', '=', employee.id),
+                                                                   ('check_out', '!=', False),
                                                                    ('check_out', '>=', year_from),
                                                                    ('check_out', '<', today_date)],
                                                                   order='check_out desc', limit=1)
 
-                last_check_out = attendance_obj.check_out.date() or year_from
+                last_check_out = attendance_obj.check_out.date() if attendance_obj else year_from
                 leave_objs = employee.check_leaves(employee_id=employee.id, check_from=last_check_out,
                                                    check_to=today_date)
                 d_frm_obj = last_check_out
@@ -56,7 +61,8 @@ class HrEmployeeInherit(models.Model):
                     d_frm_obj = leave_objs[0].date_to.date()
                 diff = (d_to_obj - d_frm_obj).days
 
-                if employee.linked_absence and (diff == employee.linked_absence):
+                if linked_days and (diff == linked_days):
+
                     table_data += "<tr><td style='width:33%;padding:10px;border:1px solid gray'>" + employee.name + "</td><td style='width:33%;padding:10px;border:1px solid gray'>" + str(
                         employee.emp_code or ' ') + "</td><td style='width:33%;padding:10px;border:1px solid gray'>" + str(
                         diff) + "/days</td></tr>"
@@ -70,7 +76,7 @@ class HrEmployeeInherit(models.Model):
                         mail = self.env['mail.mail'].create(mail_data)
                         mail.send()
             # Todo Un-Linked Absence
-            if employee.unlinked_absence:
+            if unlinked_days:
                 days = 0
                 start_date = date.today().replace(day=1, month=1)
                 increment_date = start_date
@@ -94,7 +100,8 @@ class HrEmployeeInherit(models.Model):
                                                              check_to=increment_check_out)
                         if not emp_att_obj and not check_leaves:
                             unlinked += 1
-                if unlinked == employee.unlinked_absence:
+
+                if unlinked == unlinked_days:
                     table_header = "<table style='width: 100%;padding:10px;'><tbody><tr><td style='width:33%;padding:10px;border:1px solid gray'>Employee Name</td><td style='width:33%;padding:10px;border:1px solid gray'>Employee Code</td><td style='width:33%;padding:10px;border:1px solid gray'>Un-linked Absence days</td></tr>"
                     table_data += "<tr><td style='width:33%;padding:10px;border:1px solid gray'>" + employee.name + "</td><td style='width:33%;padding:10px;border:1px solid gray'>" + str(
                         employee.emp_code or ' ') + "</td><td style='width:33%;padding:10px;border:1px solid gray'>" + str(
