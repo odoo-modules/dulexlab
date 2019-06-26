@@ -11,5 +11,21 @@
                 </xpath>
             </field>
         </record>
+
+        <record id="view_account_invoice_report_search_view_inherit" model="ir.ui.view">
+            <field name="name">account.invoice.report.search.view</field>
+            <field name="model">account.invoice.report</field>
+            <field name="inherit_id" ref="account.view_account_invoice_report_search"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='user_id']" position="after">
+                    <field name="customer_type"/>
+                </xpath>
+
+                <xpath expr="//group/filter[@name='category_product']" position="after">
+                    <filter name="partner_type" string="Customer Type" domain="[]" context="{'group_by':'customer_type'}"/>
+                </xpath>
+            </field>
+        </record>
+
     </data>
 </odoo>

@@ -8,6 +8,9 @@
             <xpath expr="//field[@name='communication']" position="after">
                 <field name="due_date" required="1"/>
             </xpath>
+            <xpath expr="//button[@name='post']" position="attributes">
+                <attribute name="groups">bi_check_customization.action_confirm_payment_group</attribute>
+            </xpath>
         </field>
     </record>
     <record id="view_register_payment_form_view_inherit" model="ir.ui.view">

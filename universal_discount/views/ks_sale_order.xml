@@ -19,11 +19,6 @@
             <field name="model">sale.order</field>
             <field name="inherit_id" ref="sale.view_order_form"/>
             <field name="arch" type="xml">
-
-                <xpath expr="//field[@name='user_id']" position="replace"/>
-                <xpath expr="//field[@name='validity_date']" position="after">
-                    <field name="user_id"/>
-                </xpath>
                 <xpath expr="//field[@name='payment_term_id']" position="after">
                     <field name="ks_enable_discount" invisible="1"/>
                     <field name="ks_global_discount_type" attrs="{'invisible':[('ks_enable_discount','!=',True),('ks_amount_discount','=',0)],

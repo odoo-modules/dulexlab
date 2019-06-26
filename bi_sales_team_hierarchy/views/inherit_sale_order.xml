@@ -6,12 +6,18 @@
             <field name="model">sale.order</field>
             <field name="inherit_id" ref="sale.view_order_form"/>
             <field name="arch" type="xml">
+                <xpath expr="//field[@name='validity_date']" position="after">
+                    <field name="user_id" required="1"/>
+                    <field name="car_number"/>
+                    <field name="driver_name" options="{'no_create': False}"/>
+                </xpath>
                 <xpath expr="//notebook//page[@name='other_information']//field[@name='team_id']" position="after">
                     <field name="team_leader"/>
                     <field name="team_supervisor"/>
                     <field name="area" widget="many2one" options="{'no_create': False}"/>
-                    <field name="car_number"/>
-                    <field name="driver_name" options="{'no_create': False}"/>
+                </xpath>
+                <xpath expr="//notebook//page[@name='other_information']//field[@name='team_id']" position="attributes">
+                    <attribute name="required">1</attribute>
                 </xpath>
                 <!--<xpath expr="//notebook//page[@name='other_information']//field[@name='team_id']" position="attributes">-->
                 <!--<attribute name="domain">[('team_id','=',member_ids.name)]</attribute>-->

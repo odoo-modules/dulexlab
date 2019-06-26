@@ -2,6 +2,7 @@
 from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError
 import datetime
+import ast
 
 
 class EmployeeOverTime(models.Model):
@@ -31,29 +32,27 @@ class EmployeeOverTime(models.Model):
     def create(self, values):
         res = super(EmployeeOverTime, self).create(values)
         ovt = str(datetime.timedelta(hours=res.diff)).rsplit(':', 1)[0]
-
-        mail_data = {'subject': 'New Overtime Created ',
-                     'body_html': 'Dears' + ',<br/>' +
-                                  'New overtime record has been created to employee ' + res.employee_id.name + " , Overtime hours " + ovt + "<br/>",
-                     'recipient_ids': [(6, 0, [res.employee_id.parent_id.address_home_id.id])],
-                     'author_id': self.env.ref('base.partner_admin').id,
-                     }
-
-        if res.overtime_type == 'days_off':
-            res_ids = []
-            if res.employee_id.parent_id.address_home_id.id:
-                res_ids.append(res.employee_id.parent_id.address_home_id.id)
-
-            for user in self.env['res.users'].search([('partner_id', '!=', False)]):
-                if user.has_group('hr.group_hr_manager'):
-                    res_ids.append(user.partner_id.id)
-
-            if res_ids:
-                mail_data['recipient_ids'] = [(6, 0, res_ids)]
+        overtime_groups_ids = ast.literal_eval(
+            (self.env['ir.config_parameter'].sudo().get_param('overtime_groups_ids')))
+        recipient_ids = []
 
         if res.employee_id.parent_id.address_home_id.id:
-            mail = self.env['mail.mail'].create(mail_data)
-            mail.send()
+            recipient_ids.append(res.employee_id.parent_id.address_home_id.id)
+
+        for group in self.env['res.groups'].search([('id', 'in', overtime_groups_ids)]):
+            for user in group.users:
+                if user.partner_id.id not in recipient_ids:
+                    recipient_ids.append(user.partner_id.id)
+        if ovt:
+            mail_data = {'subject': 'New Overtime Created ',
+                         'body_html': 'Dears' + ',<br/>' +
+                                      'New overtime record has been created to employee ' + res.employee_id.name + " , Overtime hours " + ovt + "<br/>",
+                         'recipient_ids': [(6, 0, recipient_ids)],
+                         'author_id': self.env.ref('base.partner_admin').id,
+                         }
+            if recipient_ids:
+                mail = self.env['mail.mail'].create(mail_data)
+                mail.send()
         return res
 
     @api.multi

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="product_product_adding_new_fields" model="ir.ui.view">
+            <field name="name">product.product.adding.new.fields</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group[@name='group_general']" postion="inside">
+                    <field name="product_color"/>
+                    <field name="effective_date"/>
+                    <field name="validity_period"/>
+                    <field name="packaging_desc"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

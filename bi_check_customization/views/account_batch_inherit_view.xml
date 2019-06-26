@@ -8,6 +8,37 @@
             <xpath expr="//field[@name='name']" position="after">
                 <field name="bank_id"/>
             </xpath>
+            <xpath expr="//field[@name='state']" position="replace">
+                <field name="state" widget="statusbar" statusbar_visible="draft,sent,collection"/>
+<!--                <field name="state" widget="statusbar"-->
+<!--                       statusbar_visible="draft,sent,under_collection,collection"-->
+<!--                       attrs="{'invisible': [('batch_type', '=', 'outbound')]}"/>-->
+            </xpath>
+            <xpath expr="//button[@name='print_batch_payment']" position="before">
+                <button name="%(under_collection_batch_payment_action)d" type='action' class="oe_highlight"
+                        string='Under Collection' attrs="{'invisible': ['|', ('batch_type', '=', 'outbound'), ('state', '!=', 'sent')]}"/>
+                <button name="%(under_collection_batch_payment_action)d" type='action' class="oe_highlight"
+                        string='Collection' attrs="{'invisible': ['|', ('batch_type', '=', 'outbound'), ('state', '!=', 'under_collection')]}"/>
+                <button name="%(under_collection_batch_payment_action)d" type='action' class="oe_highlight"
+                        string='Collection' attrs="{'invisible': ['|', ('batch_type', '=', 'inbound'), ('state', '!=', 'sent')]}"/>
+            </xpath>
+            <xpath expr="//form/sheet/group[1]" position="before">
+                <div class="oe_button_box">
+                    <button name="action_account_entries" type="object" class="oe_stat_button"
+                            icon="fa-pencil-square-o"
+                            string="Entries">
+                    </button>3-sales team in sales order mandatory
+
+                </div>
+            </xpath>
+            <xpath expr="//field[@name='payment_ids']/form/group[1]/group[2]/field[@name='payment_date']"
+                   position="after">
+                <field name="due_date" required="1"/>
+
+            </xpath>
+            <xpath expr="//field[@name='payment_ids']/tree/field[@name='payment_date']" position="after">
+                <field name="due_date" required="1"/>
+            </xpath>
 
         </field>
     </record>
@@ -19,6 +50,10 @@
         <field name="arch" type="xml">
             <xpath expr="//field[@name='journal_id']" position="after">
                 <field name="bank_id"/>
+                <field name="partner_name" invisible="1"/>
+                <field name="partners_ids" widget="many2many_tags" string="Partners"/>
+                <field name="memos_lines" string="Memo"/>
+
             </xpath>
 
         </field>
@@ -29,9 +64,16 @@
         <field name="model">account.batch.payment</field>
         <field name="inherit_id" ref="account_batch_payment.view_batch_payment_search"/>
         <field name="arch" type="xml">
+            <xpath expr="//field[@name='journal_id']" position="after">
+                <field name="partner_name" string="Partners" invisible="1"/>
+                <field name="partners_ids" string="Partners"/>
+                <field name="memos_lines" string="Memo"/>
+            </xpath>
+
             <xpath expr="//filter[@name='group_by_journal_id']" position="replace">
                 <filter name="group_by_journal_id" string="Journal" context="{'group_by':'journal_id'}"/>
-                <filter name="group_by_journal_id" string="Bank" context="{'group_by':'bank_id'}"/>
+                <filter name="group_by_bank_id" string="Bank" context="{'group_by':'bank_id'}"/>
+                <filter name="group_by_partner_name" string="Partner" context="{'group_by':'partner_name'}"/>
             </xpath>
         </field>
     </record>
