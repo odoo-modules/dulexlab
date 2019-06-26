@@ -54,7 +54,7 @@ class StandardReportXlsx(models.AbstractModel):
     def get_lines(self, data):
         locations = tuple(data['locations'])
         self.env.cr.execute(
-            """select reference, product_uom_qty, t1.location_id, t1.location_dest_id from stock_move as t1
+            """select reference, product_uom_qty, t1.location_id, t1.location_dest_id, t1.date, t2.name from stock_move as t1 left join res_partner as t2 on t1.partner_id = t2.id
                 where (t1.location_dest_id in %s or t1.location_id in %s)
                 and t1.date BETWEEN %s AND %s
                 and t1.state = 'done'
@@ -116,22 +116,25 @@ class StandardReportXlsx(models.AbstractModel):
         sheet.set_column(4, 4, 15)
 
         sheet.write(3, 0, "Product", format21)
-        sheet.merge_range('B4:E4', data['product_name'], format21)
+        sheet.merge_range('B4:G4', data['product_name'], format21)
         sheet.write(4, 0, "Reference", format21)
-        sheet.write(4, 1, "Open Balance", format21)
-        sheet.write(4, 2, "Qty In", format21)
-        sheet.write(4, 3, "Qty Out", format21)
-        sheet.write(4, 4, "End Balance", format21)
+        sheet.write(4, 1, "Date", format21)
+        sheet.write(4, 2, "Partner", format21)
+        sheet.write(4, 3, "Open Balance", format21)
+        sheet.write(4, 4, "Qty In", format21)
+        sheet.write(4, 5, "Qty Out", format21)
+        sheet.write(4, 6, "End Balance", format21)
 
-        print(balances)
         sheet.write(5, 0, '', format21_unbolded)
-        if balances:
-            sheet.write(5, 1, f'{balances[0][0]:.3f}', format21)
-        else:
-            sheet.write(5, 1, f'{0:.3f}', format21)
+        sheet.write(5, 1, '', format21_unbolded)
         sheet.write(5, 2, '', format21_unbolded)
-        sheet.write(5, 3, '', format21_unbolded)
+        if balances:
+            sheet.write(5, 3, f'{balances[0][0]:.3f}', format21)
+        else:
+            sheet.write(5, 3, f'{0:.3f}', format21)
         sheet.write(5, 4, '', format21_unbolded)
+        sheet.write(5, 5, '', format21_unbolded)
+        sheet.write(5, 6, '', format21_unbolded)
 
         count = 6
         if balances:
@@ -141,14 +144,17 @@ class StandardReportXlsx(models.AbstractModel):
             open_balance = 0
             end_balance = 0
         for line in lines:
+            x = line[4]
             qty_in = (line[1] if line[3] in data['locations'] else 0)
             qty_out = (line[1] if line[2] in data['locations'] else 0)
             end_balance = end_balance + qty_in - qty_out
             sheet.write(count, 0, line[0], format21_unbolded)
-            sheet.write(count, 1, f'{open_balance:.3f}', format21_unbolded)
-            sheet.write(count, 2, f'{qty_in:.3f}', format21_unbolded)
-            sheet.write(count, 3, f'{qty_out:.3f}', format21_unbolded)
-            sheet.write(count, 4, f'{end_balance:.3f}', format21_unbolded)
+            sheet.write(count, 1, str(line[4].date()), format21_unbolded)
+            sheet.write(count, 2, line[5], format21_unbolded)
+            sheet.write(count, 3, f'{open_balance:.3f}', format21_unbolded)
+            sheet.write(count, 4, f'{qty_in:.3f}', format21_unbolded)
+            sheet.write(count, 5, f'{qty_out:.3f}', format21_unbolded)
+            sheet.write(count, 6, f'{end_balance:.3f}', format21_unbolded)
             open_balance = end_balance
             count += 1
 
@@ -156,4 +162,6 @@ class StandardReportXlsx(models.AbstractModel):
         sheet.write(count, 1, '', format21_unbolded)
         sheet.write(count, 2, '', format21_unbolded)
         sheet.write(count, 3, '', format21_unbolded)
-        sheet.write(count, 4, f'{end_balance:.3f}', format21)
+        sheet.write(count, 4, '', format21_unbolded)
+        sheet.write(count, 5, '', format21_unbolded)
+        sheet.write(count, 6, f'{end_balance:.3f}', format21)

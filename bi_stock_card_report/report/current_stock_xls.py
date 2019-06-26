@@ -15,25 +15,21 @@ class StandardReportXlsx(models.AbstractModel):
                 and t1.date < %s
                 and t1.state = 'done'
                 group by t1.product_id ),
-
                 dist as (select t1.product_id, sum(t1.product_uom_qty) as openout from stock_move as t1
                 where (t1.location_id =%s )
                 and t1.date < %s
                 and t1.state = 'done'
                 group by t1.product_id),
-
                 qtyin as (select t1.product_id, sum(t1.product_uom_qty) as qtyin from stock_move as t1
                 where (t1.location_dest_id = %s )
                 and t1.date BETWEEN %s AND %s
                 and t1.state = 'done'
                 group by t1.product_id ),
-
                 qtyout as (select t1.product_id, sum(t1.product_uom_qty) as qtyout from stock_move as t1
                 where (t1.location_id = %s)
                 and t1.date BETWEEN %s AND %s
                 and t1.state = 'done'
                 group by t1.product_id)
-
                 select product_template.name, source.openin,
                 dist.openout,
                 (coalesce(source.openin,0) - coalesce(dist.openout,0)) as openBlance

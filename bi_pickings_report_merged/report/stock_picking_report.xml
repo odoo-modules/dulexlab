@@ -67,6 +67,9 @@
                                         <strong>Quantity</strong>
                                     </th>
                                     <th>
+                                        <strong>Count</strong>
+                                    </th>
+                                    <th>
                                         <strong>UoM</strong>
                                     </th>
                                 </tr>
@@ -80,6 +83,9 @@
                                         </td>
                                         <td>
                                             <span t-esc="products[product]['amount']"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="products[product]['count_printed']"/>
                                         </td>
                                         <td>
                                             <span t-esc="products[product]['uom']"/>

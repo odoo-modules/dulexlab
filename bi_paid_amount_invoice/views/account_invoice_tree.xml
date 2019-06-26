@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="account_invoice_tree_add_paid_amount" model="ir.ui.view">
+            <field name="name">account.invoice.tree.add.paid.amount</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_tree_with_onboarding"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='amount_total_signed']" position="after">
+                    <field name="paid_amount" sum="Amount Paid"/>
+                </xpath>
+            </field>
+        </record>
+        <record id="vendor_bill_tree_add_paid_amount" model="ir.ui.view">
+            <field name="name">vendor.bill.invoice.tree.add.paid.amount</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_supplier_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='amount_total_signed']" position="after">
+                    <field name="paid_amount" sum="Amount Paid"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
