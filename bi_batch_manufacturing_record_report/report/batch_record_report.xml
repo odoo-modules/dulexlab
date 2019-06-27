@@ -58,8 +58,12 @@
                          <table >
                             <tr>
                                 <td style="border: 1px solid black; width:20%; font-size:16px; font-weight:bold; text-align:center;">DEPARTMENT: PRODUCTION</td>
-                                <td colspan="4" style="border: 1px solid black; width:65%; font-size:20px; font-weight:bold; text-align:center;">TITLE:<br/> <t t-esc="doc.product_id.name"/></td>
-                                <td style="border: 1px solid black; width:15%; font-size:16px; font-weight:bold; text-align:center;"> BATCH RECORD: <br/> <t t-esc="doc.name"/></td>
+                                <td colspan="4" style="border: 1px solid black; width:65%; font-size:20px; font-weight:bold; text-align:center;">TITLE:
+                                    <br/>
+                                    <t t-if="doc.parent_mo_id"> <t t-esc="doc.parent_mo_id.product_id.product_tmpl_id.name"/> </t>
+                                    <t t-if="not doc.parent_mo_id"> &amp;nbsp;</t>
+                                </td>
+                                <td style="border: 1px solid black; width:15%; font-size:16px; font-weight:bold; text-align:center;">BATCH RECORD: <br/> <t t-esc="doc.name"/></td>
                             </tr>
                             <tr>
                                 <td style="border: 1px solid black; width:20%; font-weight:bold; text-align:center;"/>
@@ -67,11 +71,11 @@
                                 <td style="border: 1px solid black; width:15%; font-size:15px; font-weight:bold; text-align:center; vertical-align:middle;">SIGNATURE</td>
                                 <td style="border: 1px solid black; width:20%; font-size:15px; font-weight:bold; text-align:center; vertical-align:middle;">DATE</td>
                                 <td style="border: 1px solid black; width:10%; font-size:15px; font-weight:bold; text-align:center;"/>
-                                <td style="border: 1px solid black; width:15%; font-size:14px; font-weight:bold; text-align:center;"> REVISION NO:<br/>&amp;nbsp;</td>
+                                <td style="border: 1px solid black; width:15%; font-size:14px; font-weight:bold; text-align:center;">REVISION NO:<br/>&amp;nbsp;</td>
                             </tr>
                             <tr>
                                 <td style="border: 1px solid black; width:20%; font-size:16px; font-weight:bold; text-align:center;">PREPARED BY:</td>
-                                <td style="border: 1px solid black; width:15%; font-size:16px; font-weight:bold; text-align:center;"> PRODUCTION<br/>MANAGER</td>
+                                <td style="border: 1px solid black; width:15%; font-size:16px; font-weight:bold; text-align:center;">PRODUCTION<br/>MANAGER</td>
                                 <td style="border: 1px solid black; width:15%; font-size:36px; font-weight:bold; text-align:center;"/>
                                 <td style="border: 1px solid black; width:20%; font-size:36px; font-weight:bold; text-align:center;"/>
                                 <td style="border: 1px solid black; width:10%; font-size:36px; font-weight:bold; text-align:center;"/>
@@ -79,7 +83,7 @@
                             </tr>
                             <tr>
                                 <td style="border: 1px solid black; width:20%; font-size:16px; font-weight:bold; text-align:center;">APPROVED BY:</td>
-                                <td style="border: 1px solid black; width:15%; font-size:16px; font-weight:bold; text-align:center;"> Q.A  MANAGER</td>
+                                <td style="border: 1px solid black; width:15%; font-size:16px; font-weight:bold; text-align:center;">Q.A  MANAGER</td>
                                 <td style="border: 1px solid black; width:15%; font-size:16px; font-weight:bold; text-align:center;"/>
                                 <td style="border: 1px solid black; width:20%; font-size:16px; font-weight:bold; text-align:center;"/>
                                 <td style="border: 1px solid black; width:10%; font-size:16px; font-weight:bold; text-align:center;"/>
@@ -93,10 +97,7 @@
                             </tr>
                             <tr>
                                 <td style="width:33%; padding: 2px; font-weight:bold; border: 1px solid black; text-align:left;">Description</td>
-                                <td style="width:33%; padding: 2px; font-weight:bold; border: 1px solid black; text-align:left;">Name:
-                                    <t t-if="doc.parent_mo_id"> <t t-esc="doc.parent_mo_id.product_id.product_tmpl_id.name"/> </t>
-                                    <t t-if="not doc.parent_mo_id"> &amp;nbsp;</t>
-                                </td>
+                                <td style="width:33%; padding: 2px; font-weight:bold; border: 1px solid black; text-align:left;">Name: <t t-esc="doc.product_id.name"/></td>
                                 <td style="width:33%; padding: 2px; font-weight:bold; border: 1px solid black; text-align:left;">Color: <t t-esc="doc.product_id.product_color"/> </td>
                             </tr>
                             <tr>
