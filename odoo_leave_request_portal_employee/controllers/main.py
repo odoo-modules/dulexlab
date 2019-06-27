@@ -90,7 +90,7 @@ class CustomerPortal(CustomerPortal):
         # pager
         # pager = request.website.pager(
         pager = portal_pager(
-            url="/my/leaves",
+            url="/my/leave_request",
             total=holidays_count,
             page=page,
             step=self._items_per_page
