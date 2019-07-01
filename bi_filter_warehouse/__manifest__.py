@@ -8,7 +8,7 @@
     'author': "BI Solutions Development Team",
     'category': 'Sale Stock',
     'version': '0.1',
-    'depends': ['stock'],
+    'depends': ['stock', 'sale'],
     'data': [
         'views/stock_warehouse_form.xml',
     ],
