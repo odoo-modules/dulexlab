@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <record id="add_is_bonus_and_original_product_to_product_form" model="ir.ui.view">
+            <field name="name">add.is.bonus.and.original.product.to.product.form</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group[@name='sale']/group" position="after">
+                    <group string="Bonus" name="bonus_product">
+                        <field name="is_bonus"/>
+                        <field name="original_product" attrs="{'invisible': [('is_bonus', '=', False)]}"/>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

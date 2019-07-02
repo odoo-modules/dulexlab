@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <record id="add_vat_to_so_form" model="ir.ui.view">
+            <field name="name">add.vat.to.so.form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='amount_tax']" position="replace">
+                    <field name="vat_with_bonus" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>
