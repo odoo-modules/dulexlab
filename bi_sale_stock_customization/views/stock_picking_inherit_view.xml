@@ -9,6 +9,10 @@
                 <xpath expr="//field[@name='date_done']" position="attributes">
                     <attribute name="attrs">{'readonly':True, 'invisible':False}</attribute>
                 </xpath>
+                <xpath expr="//notebook/page[2]/field[@name='move_ids_without_package']/tree/field[@name='product_uom_qty']"
+                       position="before">
+                    <field name="product_qty_on_hand"/>
+                </xpath>
             </field>
         </record>
         <record id="view_picking_form_dates_admin_inherit" model="ir.ui.view">
