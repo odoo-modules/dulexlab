@@ -4,6 +4,30 @@ from odoo import models, fields, api
 from odoo.exceptions import UserError, ValidationError
 
 
+class KsGlobalDiscountSalesLine(models.Model):
+    _inherit = "sale.order.line"
+
+    @api.depends('product_uom_qty', 'discount', 'price_unit', 'tax_id')
+    def _compute_amount(self):
+        res = super(KsGlobalDiscountSalesLine, self)._compute_amount()
+        for line in self:
+            if line.tax_id:
+                prod_public_price_rate = self.env['ir.config_parameter'].sudo().get_param('prod_public_price_rate')
+                prod_public_price_rate = line.price_unit * float(prod_public_price_rate)
+                price_unit = prod_public_price_rate
+            else:
+                price_unit = line.price_unit
+            price = price_unit * (1 - (line.discount or 0.0) / 100.0)
+            taxes = line.tax_id.compute_all(price, line.order_id.currency_id, line.product_uom_qty,
+                                            product=line.product_id, partner=line.order_id.partner_shipping_id)
+            line.update({
+                'price_tax': sum(t.get('amount', 0.0) for t in taxes.get('taxes', [])),
+                'price_total': taxes['total_included'],
+                'price_subtotal': taxes['total_excluded'],
+            })
+        return res
+
+
 class KsGlobalDiscountSales(models.Model):
     _inherit = "sale.order"
 
