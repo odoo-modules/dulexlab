@@ -12,11 +12,11 @@ class AccountInvoiceLineInherit(models.Model):
     cd_disc = fields.Float(string='CD %')
 
     @api.multi
-    @api.depends('price_unit')
+    @api.depends('product_id')
     def get_public_price_lst(self):
         for line in self:
             prod_public_price_rate = self.env['ir.config_parameter'].sudo().get_param('prod_public_price_rate')
-            line.public_price_lst = line.price_unit * float(prod_public_price_rate)
+            line.public_price_lst = line.product_id.lst_price * float(prod_public_price_rate)
 
 
 class AccountInvoiceInherit(models.Model):

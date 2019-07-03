@@ -5,34 +5,20 @@ from odoo.exceptions import UserError, ValidationError
 class KsGlobalDiscountInvoiceLine(models.Model):
     _inherit = "account.invoice.line"
 
-    @api.one
-    @api.depends('price_unit', 'discount', 'invoice_line_tax_ids', 'quantity',
-                 'product_id', 'invoice_id.partner_id', 'invoice_id.currency_id', 'invoice_id.company_id',
-                 'invoice_id.date_invoice', 'invoice_id.date')
-    def _compute_price(self):
-        if self.invoice_line_tax_ids:
-            prod_public_price_rate = self.env['ir.config_parameter'].sudo().get_param('prod_public_price_rate')
-            prod_public_price_rate = self.price_unit * float(prod_public_price_rate)
-            price = prod_public_price_rate * (1 - (self.discount or 0.0) / 100.0)
+    @api.onchange('invoice_line_tax_ids')
+    def chnge_invoice_line_tax_ids(self):
+        for line in self:
+            line._set_currency()
 
-        else:
-            price = self.price_unit * (1 - (self.discount or 0.0) / 100.0)
-        currency = self.invoice_id and self.invoice_id.currency_id or None
-
-        taxes = False
-        if self.invoice_line_tax_ids:
-            taxes = self.invoice_line_tax_ids.compute_all(price, currency, self.quantity, product=self.product_id,
-                                                          partner=self.invoice_id.partner_id)
-        self.price_subtotal = price_subtotal_signed = taxes['total_excluded'] if taxes else self.quantity * price
-        self.price_total = taxes['total_included'] if taxes else self.price_subtotal
-        if self.invoice_id.currency_id and self.invoice_id.currency_id != self.invoice_id.company_id.currency_id:
-            currency = self.invoice_id.currency_id
-            date = self.invoice_id._get_currency_rate_date()
-            price_subtotal_signed = currency._convert(price_subtotal_signed, self.invoice_id.company_id.currency_id,
-                                                      self.company_id or self.env.user.company_id,
-                                                      date or fields.Date.today())
-        sign = self.invoice_id.type in ['in_refund', 'out_refund'] and -1 or 1
-        self.price_subtotal_signed = price_subtotal_signed * sign
+    def _set_currency(self):
+        for line in self:
+            if line.invoice_line_tax_ids:
+                prod_public_price_rate = self.env['ir.config_parameter'].sudo().get_param('prod_public_price_rate')
+                prod_public_price_rate = line.product_id.list_price * float(prod_public_price_rate)
+                line.price_unit = prod_public_price_rate
+            else:
+                line.price_unit = line.product_id.lst_price
+        return super(KsGlobalDiscountInvoiceLine, self)._set_currency()
 
 
 class KsGlobalDiscountInvoice(models.Model):
