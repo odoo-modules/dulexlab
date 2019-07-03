@@ -159,6 +159,7 @@
                             <t t-set="evaluation" t-value="evaluation - (evaluation * doc.partner_id.property_product_pricelist.phd_disc)/100"/>
                             <t t-set="evaluation" t-value="evaluation - (evaluation * doc.partner_id.property_product_pricelist.cd_disc)/100"/>
                             <t t-set="taxes" t-value="taxes - (taxes * doc.partner_id.property_product_pricelist.phd_disc)/100"/>
+                            <t t-set="taxes" t-value="taxes - (taxes * doc.partner_id.property_product_pricelist.cd_disc)/100"/>
                         </t>
                         <table style="width:30%; direction: rtl; border-style:none;" border="0">
                             <tr>
