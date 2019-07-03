@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="picking_delivery_note_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div style="border: 2px solid black; padding: 5px; width: 60%; margin: 0 auto;">
+                            <h4 style="text-align: center; vertical-align:middle;">
+                                <t t-esc="doc.name"/> &amp;nbsp;&amp;nbsp;&amp;nbsp; أمر إذن تسليم
+                            </h4>
+                        </div>
+                        <hr/>
+                        <table style="direction: rtl; width: 100%; border-style:none;" border="0">
+                            <tr>
+                                <td style="width: 10%; text-align:right; padding:5px; border-style:none;">تاريخ الإذن:</td>
+                                <td style="width: 40%; text-align:right; padding:5px; border-style:none;">
+                                    <t t-esc="doc.scheduled_date.date()"/>
+                                </td>
+                                <td style="width: 10%; text-align:right; padding:5px; border-style:none;">مخزن الصرف:</td>
+                                <td style="width: 40%; text-align:right; padding:5px; border-style:none; background-color: white;">
+                                    <t t-esc="doc.location_id.name"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 10%; text-align:right; padding:5px; border-style:none;">السادة:</td>
+                                <t t-if="doc.partner_id.parent_id">
+                                    <td style="width: 40%; text-align:right; padding:5px; border-style:none;">
+                                        <t t-esc="doc.partner_id.parent_id.name"/>
+                                    </td>
+                                </t>
+                                <t t-if="not doc.partner_id.parent_id">
+                                    <td style="width: 40%; text-align:right; padding:5px; border-style:none;">
+                                        <t t-esc="doc.partner_id.name"/>
+                                    </td>
+                                </t>
+                                <td style="width: 10%; text-align:right; padding:5px; border-style:none;">مخزن التسليم:</td>
+                                <td style="width: 40%; text-align:right; padding:5px; border-style:none; background-color: white;">
+                                    <t t-esc="doc.partner_id.name"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 10%; text-align:right; padding:5px; border-style:none;">ملاحظات:</td>
+                                <td style="width: 40%; text-align:right; padding:5px; border-style:none;">&amp;nbsp;</td>
+                                <td style="width: 10%; text-align:right; padding:5px; border-style:none;">المنطقة:</td>
+                                <td style="width: 40%; text-align:right; padding:5px; border-style:none; background-color: white;">
+                                    <t t-if="doc.area">
+                                        <t t-esc="doc.area.name"/>
+                                    </t>
+                                    <t t-if="not doc.area">
+                                        &amp;nbsp;
+                                    </t>
+                                </td>
+                            </tr>
+                        </table>
+                        <br/>
+                        <br/>
+                        <t t-set="evaluation" t-value="0"/>
+                        <t t-set="taxes" t-value="0"/>
+                        <table style="direction: rtl; width: 100%; border: 1px solid black;" border="1">
+                            <t t-set="has_barcode" t-value="any([move_ids_without_package.product_id and move_ids_without_package.product_id.sudo().barcode or move_ids_without_package.package_id for move_ids_without_package in doc.move_line_ids])"/>
+                            <t t-set="has_serial_number"
+                               t-value="doc.move_line_ids.filtered(lambda ml: ml.lot_id or ml.lot_name)"
+                               groups="stock.group_production_lot"/>
+                            <tr style="border: 1px solid black;">
+                                <td style="width: 5%; text-align:right; padding:5px; border: 1px solid black; text-align: center; vertical-align: middle;">م</td>
+                                <td style="width: 15%; text-align:right; padding:5px; border: 1px solid black; text-align: center; vertical-align: middle;">كود</td>
+                                <td style="width: 15%; text-align:right; padding:5px; border: 1px solid black; text-align: center; vertical-align: middle;">الصنف</td>
+                                <td style="width: 5%; text-align:right; padding:5px; border: 1px solid black; text-align: center; vertical-align: middle;">التشغيله</td>
+                                <td style="width: 10%; text-align:right; padding:5px; border: 1px solid black; text-align: center; vertical-align: middle;">الصلاحيه</td>
+                                <td style="width: 10%; text-align:right; padding:5px; border: 1px solid black; text-align: center; vertical-align: middle;">الكميه</td>
+                                <td style="width: 10%; text-align:right; padding:5px; border: 1px solid black; text-align: center; vertical-align: middle;">س<br/>الجمهور
+                                </td>
+                                <td style="width: 10%; text-align:right; padding:5px; border: 1px solid black; text-align: center; vertical-align: middle;">س<br/>الموزع
+                                </td>
+                                <td style="width: 8%; text-align:right; padding:5px; border: 1px solid black; text-align: center; vertical-align: middle;">القيمة</td>
+                                <td style="width: 4%; text-align:right; padding:5px; border: 1px solid black; text-align: center; vertical-align: middle;">ض م</td>
+                                <td style="width: 8%; text-align:right; padding:5px; border: 1px solid black; text-align: center; vertical-align: middle; background-color: white;">الفيمة
+                                    <br/>بالضريبة
+                                </td>
+                            </tr>
+                            <t t-set="move_index" t-value="0"/>
+                            <t t-foreach="doc.move_ids_without_package.sorted(key=lambda m: m.product_id.id)"
+                               t-as="move">
+                                <t t-foreach="move.move_line_ids.sorted(key=lambda ml: ml.location_id.id)" t-as="ml">
+                                    <t t-set="move_index" t-value="move_index + 1"/>
+                                    <tr style="border: 1px solid black;">
+                                        <td style="width: 5%; text-align:right; padding:5px; border: 1px solid black;">
+                                            <t t-esc="move_index"/>
+                                        </td>
+                                        <td style="width: 15%; text-align:right; padding:5px; border: 1px solid black;">
+                                            <span t-field="ml.product_id.default_code"/>
+                                            <br/>
+                                        </td>
+                                        <td style="width: 15%; text-align:right; padding:5px; border: 1px solid black;">
+                                            <span t-field="ml.product_id.name"/>
+                                            <br/>
+                                            <span t-field="ml.product_id.description_picking"/>
+                                        </td>
+                                        <td style="width: 5%; text-align:right; padding:5px; border: 1px solid black;">
+                                            <t t-esc="ml.lot_id.name"/>
+                                        </td>
+                                        <td style="width: 10%; text-align:right; padding:5px; border: 1px solid black;">
+                                            <t t-esc="ml.lot_id.life_date.date()"/>
+                                        </td>
+                                        <td style="width: 10%; text-align:right; padding:5px; border: 1px solid black;">
+                                            <span t-if="doc.state != 'done'" t-field="ml.product_uom_qty"/>
+                                            <span t-if="doc.state == 'done'" t-field="ml.qty_done"/>
+                                            <span t-field="ml.product_uom_id" groups="uom.group_uom"/>
+                                        </td>
+                                        <td style="width: 10%; text-align:right; padding:5px; border: 1px solid black;">
+                                            <t t-esc="'{0:,.2f}'.format(ml.product_id.public_price_lst)"/>
+                                        </td>
+                                        <td style="width: 10%; text-align:right; padding:5px; border: 1px solid black;">
+                                            <t t-esc="'{0:,.2f}'.format(ml.product_id.lst_price)"/>
+                                        </td>
+                                        <td style="width: 8%; text-align:right; padding:5px; border: 1px solid black;">
+                                            <t t-if="doc.state != 'done'">
+                                                <t t-esc="'{0:,.3f}'.format(ml.product_id.lst_price * ml.product_uom_qty)"/>
+                                                <t t-set="evaluation" t-value="evaluation + ml.product_id.lst_price * ml.product_uom_qty"/>
+                                            </t>
+                                            <t t-if="doc.state == 'done'">
+                                                <t t-esc="'{0:,.3f}'.format(ml.product_id.lst_price * ml.qty_done)"/>
+                                                <t t-set="evaluation" t-value="evaluation + ml.product_id.lst_price * ml.qty_done"/>
+                                            </t>
+                                        </td>
+                                        <td style="width: 4%; text-align:right; padding:5px; border: 1px solid black;">
+
+                                            <t t-esc="ml.product_id.taxes_id.amount"/>
+                                            <t t-if="ml.product_id.taxes_id.amount">
+                                                <t t-set="taxes" t-value="taxes + (ml.product_id.lst_price * ml.product_id.taxes_id.amount)/100"/>
+                                            </t>
+                                        </td>
+                                        <td style="width: 8%; text-align:right; padding:5px; border: 1px solid black; background-color: white;">
+                                            <t t-if="ml.product_id.taxes_id">
+                                                <t t-if="doc.state != 'done'">
+                                                    <t t-esc="'{0:,.3f}'.format((ml.product_id.lst_price * ml.product_uom_qty * (ml.product_id.taxes_id.amount + 100))/100)"/>
+                                                </t>
+                                                <t t-if="doc.state == 'done'">
+                                                    <t t-esc="'{0:,.3f}'.format((ml.product_id.lst_price * ml.qty_done * (ml.product_id.taxes_id.amount + 100))/100)"/>
+                                                </t>
+                                            </t>
+                                            <t t-if="not (ml.product_id.taxes_id and ml.product_id.taxes_id.amount != 0.0)">
+                                                0.000
+                                            </t>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </t>
+                        </table>
+                        <br/><br/>
+                        <table style="width:30%; direction: rtl; border-style:none;" border="0">
+                            <tr>
+                                <td style="text-align:right; padding: 5px; border-style:none;">القيمه</td>
+                                <td style="text-align:right; padding: 5px; background-color: white; border-style:none;"><t t-esc="evaluation"/></td>
+                            </tr>
+                            <tr>
+                                <td style="text-align:right; padding: 5px; border-style:none;">الضريبة</td>
+                                <td style="text-align:right; padding: 5px; border-style:none; background-color: white;"><t t-esc="taxes"/></td>
+                            </tr>
+                            <tr>
+                                <td style="text-align:right; padding: 5px; border-style:none;">الاجمالي</td>
+                                <td style="text-align:right; padding: 5px; border-style:none; background-color: white;"><t t-esc="evaluation + taxes"/></td>
+                            </tr>
+                        </table>
+                        <br/><br/>
+                        <table style="width:100%; direction: rtl; border-style:none;" border="0">
+                            <tr>
+                                <td style="text-align:right; padding: 5px; border-style:none;">إسم المستلم</td>
+                                <td style="text-align:center; padding: 5px; border-style:none;">الصفه</td>
+                                <td style="text-align:left; padding: 5px; border-style:none; background-color:white;">توقيع المستلم</td>
+                            </tr>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <report id="report_print_picking_delivery_note"
+            model="stock.picking"
+            name="bi_delivery_note_report.picking_delivery_note_template"
+            file="bi_delivery_note_report.picking_delivery_note_template"
+            string="Delivery Note"
+            report_type="qweb-pdf"
+            print_report_name="('Delivery Note - %s' % (object.name))"
+    />
+
+</odoo>
