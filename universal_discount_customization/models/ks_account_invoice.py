@@ -2,25 +2,6 @@ from odoo import api, fields, models
 from odoo.exceptions import UserError, ValidationError
 
 
-class KsGlobalDiscountInvoiceLine(models.Model):
-    _inherit = "account.invoice.line"
-
-    @api.onchange('invoice_line_tax_ids')
-    def chnge_invoice_line_tax_ids(self):
-        for line in self:
-            line._set_currency()
-
-    def _set_currency(self):
-        for line in self:
-            if line.invoice_line_tax_ids:
-                prod_public_price_rate = self.env['ir.config_parameter'].sudo().get_param('prod_public_price_rate')
-                prod_public_price_rate = line.product_id.list_price * float(prod_public_price_rate)
-                line.price_unit = prod_public_price_rate
-            else:
-                line.price_unit = line.product_id.lst_price
-        return super(KsGlobalDiscountInvoiceLine, self)._set_currency()
-
-
 class KsGlobalDiscountInvoice(models.Model):
     _inherit = "account.invoice"
 

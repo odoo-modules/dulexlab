@@ -4,20 +4,6 @@ from odoo import models, fields, api
 from odoo.exceptions import UserError, ValidationError
 
 
-class KsGlobalDiscountSalesLine(models.Model):
-    _inherit = "sale.order.line"
-
-    @api.onchange('product_id', 'tax_id')
-    def _get_unit_price(self):
-        for line in self:
-            if line.tax_id:
-                prod_public_price_rate = self.env['ir.config_parameter'].sudo().get_param('prod_public_price_rate')
-                prod_public_price_rate = line.product_id.list_price * float(prod_public_price_rate)
-                line.price_unit = prod_public_price_rate
-            else:
-                line.product_id_change()
-
-
 class KsGlobalDiscountSales(models.Model):
     _inherit = "sale.order"
 
