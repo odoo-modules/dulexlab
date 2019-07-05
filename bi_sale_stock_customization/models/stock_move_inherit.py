@@ -7,6 +7,14 @@ from odoo.exceptions import UserError, ValidationError
 class StockMoveInherit(models.Model):
     _inherit = 'stock.move'
 
+    product_qty_on_hand = fields.Float(string="Product Qty On Hand", compute="get_product_qty_on_hand", store=True, readonly=True)
+
+    @api.depends('product_id')
+    @api.multi
+    def get_product_qty_on_hand(self):
+        for record in self:
+            record.product_qty_on_hand = record.product_id.qty_available
+
     def _action_done(self):
         res = super(StockMoveInherit,self)._action_done()
         for move in res:

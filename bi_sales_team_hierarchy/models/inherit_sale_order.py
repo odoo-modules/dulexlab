@@ -24,6 +24,13 @@ class InheritSaleOrder(models.Model):
                                   required=True)
     car_number = fields.Many2one('fleet.vehicle', string="Car Number")
 
+    @api.onchange('car_number')
+    @api.multi
+    def set_driver_name(self):
+        for order in self:
+            if order.car_number and order.car_number.driver_id and order.car_number.driver_id.id:
+                order.driver_name = order.car_number.driver_id.id
+
     @api.multi
     def _prepare_invoice(self):
         invoice_vals = super(InheritSaleOrder, self)._prepare_invoice()
@@ -32,6 +39,7 @@ class InheritSaleOrder(models.Model):
         invoice_vals['team_leader'] = self.team_leader.id or False
         invoice_vals['driver_name'] = self.driver_name.id or False
         invoice_vals['car_number'] = self.car_number.id or False
+        invoice_vals['warehouse_id'] = self.warehouse_id.id or False
         return invoice_vals
 
 

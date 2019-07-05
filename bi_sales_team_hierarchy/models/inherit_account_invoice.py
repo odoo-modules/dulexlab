@@ -13,3 +13,4 @@ class InheritedAccountInvoice(models.Model):
     user_id = fields.Many2one('res.users', string='Salesperson', track_visibility='onchange',
         readonly=True, states={'draft': [('readonly', False)]}, default=False)
     team_id = fields.Many2one('crm.team', string='Sales Team', default=False, oldname='section_id')
+    warehouse_id = fields.Many2one('stock.warehouse', string='Warehouse', readonly=True)
