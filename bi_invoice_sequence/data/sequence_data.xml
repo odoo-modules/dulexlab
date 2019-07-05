@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="untaxed_inv_sequence" model="ir.sequence">
+            <field name="name">Un-Taxed Invoice Sequence</field>
+            <field name="code">untaxed.invoice.seq</field>
+            <field name="padding">5</field>
+            <field name="prefix">UTI/</field>
+        </record>
+    </data>
+</odoo>
