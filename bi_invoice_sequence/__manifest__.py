@@ -12,6 +12,7 @@
     'data': [
         'data/sequence_data.xml',
         'views/inherit_account_inv.xml',
+        'reports/custom_invoice_report.xml',
     ],
     'installable': True,
     'auto_install': False,

@@ -1,0 +1,213 @@
+<odoo>
+
+    <report id="custom_inv_report"
+            model="account.invoice"
+            string="Custom Invoice"
+            report_type="qweb-pdf"
+            name="bi_invoice_sequence.custom_inv_report_template"
+            file="bi_invoice_sequence.custom_inv_report_template"
+            attachment_use="True"
+    />
+
+
+    <template id="custom_inv_report_template">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <t t-foreach="docs" t-as="o">
+                        <table style="width: 100%;">
+                            <tbody>
+                                <tr>
+                                    <td style="text-align: center;">
+                                        <strong>
+                                            <span t-field="o.company_id.company_registry"/>
+                                        </strong>
+                                    </td>
+                                    <td style="text-align: right;">سجل تجاري</td>
+                                    <td style="text-align: right; width: 5%;"></td>
+                                    <td style="text-align: center;">
+                                        <h4>
+                                            <span t-field="o.number"/>
+                                        </h4>
+                                    </td>
+                                    <td style="text-align: center;">
+                                        <h4>فاتورة مبيعات</h4>
+                                    </td>
+                                    <td style="width: 30%;"></td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;">
+                                        <strong>
+                                            <span t-field="o.company_id.vat"/>
+                                        </strong>
+                                    </td>
+                                    <td style="text-align: right;">بطاقة ضريبية</td>
+                                    <td style="text-align: right;"></td>
+                                    <td style="text-align: right;"></td>
+                                    <td style="text-align: right;"></td>
+                                    <td style="text-align: right;"></td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: right;"></td>
+                                    <td style="text-align: right;"></td>
+                                    <td style="text-align: right;"></td>
+                                    <td style="text-align: right;"></td>
+                                    <td style="text-align: right;"></td>
+                                    <td style="text-align: right;"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <br/>
+                        <br/>
+                        <table style="width: 100%;" class="table-sm">
+                            <tbody>
+                                <tr>
+                                    <td style="text-align: right;"></td>
+                                    <td style="text-align: right;">
+                                        <strong>امر التوريد</strong>
+                                    </td>
+                                    <td style="text-align: right;"></td>
+                                    <td style="text-align: right;">
+                                        <!--tahseel-->
+                                    </td>
+                                    <td style="text-align: right;">
+                                        <strong>تاريخ التحصيل</strong>
+                                    </td>
+                                    <td style="text-align: right;"></td>
+                                    <td style="text-align: right;">
+                                        <span t-field="o.date_invoice"/>
+                                    </td>
+                                    <td style="text-align: right;">
+                                        <strong>التاريخ</strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: right;"></td>
+                                    <td style="text-align: right;">
+                                        <strong>اذن الصرف</strong>
+                                    </td>
+                                    <td style="text-align: right;"></td>
+                                    <td style="text-align: right;"></td>
+                                    <td style="text-align: right;"></td>
+                                    <td style="text-align: right;"></td>
+                                    <td style="text-align: right;">
+                                        <span t-field="o.partner_id.name"/>
+                                    </td>
+                                    <td style="text-align: right;">
+                                        <strong>العميل</strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: right;"></td>
+                                    <td style="text-align: right;"></td>
+                                    <td style="text-align: right;" colspan="5">
+                                        <span t-field="o.partner_id.street"/>
+                                    </td>
+                                    <td style="text-align: right;">
+                                        <strong>العنوان</strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: right;">
+                                        <!--<span t-field="o.warehouse_id"/>-->
+                                    </td>
+                                    <td style="text-align: right;">
+                                        <strong>المخزن</strong>
+                                    </td>
+                                    <td style="text-align: right;">
+                                        <span t-field="o.user_id"/>
+                                    </td>
+                                    <td style="text-align: right;">
+                                        <strong>المندوب</strong>
+                                    </td>
+                                    <td style="text-align: right;">
+                                        <span t-field="o.payment_term_id.name"/>
+
+                                    </td>
+                                    <td style="text-align: right;">
+                                        <strong>القطاع</strong>
+                                    </td>
+                                    <td style="text-align: right;">
+                                        <span t-field="o.partner_id.state_id.name"/>
+                                    </td>
+                                    <td style="text-align: right;">
+                                        <strong>المنطقة</strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: right;"></td>
+                                    <td style="text-align: right;"></td>
+                                    <td style="text-align: right;"></td>
+                                    <td style="text-align: right;"></td>
+                                    <td style="text-align: right;">
+                                        <strong>رقم البوليصة</strong>
+                                    </td>
+                                    <td style="text-align: right;"></td>
+                                    <td style="text-align: right;">
+                                        <span t-field="o.partner_id.phone"/>
+                                        <br/>
+                                        <span t-field="o.partner_id.mobile"/>
+                                    </td>
+                                    <td style="text-align: right;">
+                                        <strong>التليفون</strong>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <br/>
+                        <br/>
+                        <table class="table">
+                            <thead class="table">
+                                <tr>
+                                    <th class="text-right" scope="col">القيمة</th>
+                                    <th class="text-right" scope="col">الكمية</th>
+                                    <th class="text-right" scope="col">السعر الاساسي</th>
+                                    <th class="text-right" scope="col" dir="rtl">خ.م%</th>
+                                    <th class="text-right" scope="col" dir="rtl">خ.ق.م%</th>
+                                    <th class="text-right" scope="col" dir="rtl">خ.ص%</th>
+                                    <th class="text-right" scope="col">القيمة</th>
+                                    <th class="text-right" scope="col">سعر الجمهور</th>
+                                    <th class="text-right" scope="col">اسم الصنف</th>
+                                    <th class="text-right" scope="col">كود</th>
+                                    <th class="text-right" scope="col">#</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-set="s" t-value="1"/>
+                                <t t-foreach="o.invoice_line_ids" t-as="l">
+                                    <tr>
+                                        <td>
+                                            <span t-field="l.price_subtotal"/>
+                                        </td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+
+
+                                        <td></td>
+                                        <td></td>
+                                        <td style="width:30%">
+                                            <span t-field="l.name"/>
+                                        </td>
+
+                                        <td>
+                                            <span class="text-right" t-field="l.product_id.barcode"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="s"/>
+                                            <t t-set="s" t-value="s+1"/>
+                                        </td>
+
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </t>
+                </div>
+            </t>
+        </t>
+    </template>
+
+</odoo>
