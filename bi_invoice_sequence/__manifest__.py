@@ -8,7 +8,7 @@
     'author': "BI Solutions Development Team",
     'category': 'Accounting',
     'version': '0.1',
-    'depends': ['account_accountant', 'base'],
+    'depends': ['account_accountant', 'base', 'bi_account_invoice_layout', 'universal_discount_customization'],
     'data': [
         'data/sequence_data.xml',
         'views/inherit_account_inv.xml',

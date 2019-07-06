@@ -19,18 +19,31 @@
                             <tbody>
                                 <tr>
                                     <td style="text-align: center;">
-                                        <strong>
-                                            <span t-field="o.company_id.company_registry"/>
-                                        </strong>
+                                        <span t-field="o.company_id.company_registry"/>
                                     </td>
-                                    <td style="text-align: right;">سجل تجاري</td>
+                                    <td style="text-align: right;">
+                                        <strong>سجل تجاري</strong>
+                                    </td>
                                     <td style="text-align: right; width: 5%;"></td>
-                                    <td style="text-align: center;">
-                                        <h4>
-                                            <span t-field="o.number"/>
-                                        </h4>
+                                    <td style="text-align: center;background-color: #f9f9f9;">
+                                        <t t-if="not o.tax_line_ids">
+                                            <h4>
+                                                <span t-field="o.number"/>
+                                            </h4>
+                                        </t>
+                                        <t t-if="o.tax_line_ids">
+                                            <h4>
+                                                <span t-field="o.seq_un_taxed"/>
+                                            </h4>
+                                        </t>
+                                        <t t-if="o.state == 'draft'">
+                                            <h4>
+                                                Draft
+                                            </h4>
+                                        </t>
+
                                     </td>
-                                    <td style="text-align: center;">
+                                    <td style="text-align: center;background-color: #f9f9f9;">
                                         <h4>فاتورة مبيعات</h4>
                                     </td>
                                     <td style="width: 30%;"></td>
@@ -41,7 +54,9 @@
                                             <span t-field="o.company_id.vat"/>
                                         </strong>
                                     </td>
-                                    <td style="text-align: right;">بطاقة ضريبية</td>
+                                    <td style="text-align: right;">
+                                        <strong>بطاقة ضريبية</strong>
+                                    </td>
                                     <td style="text-align: right;"></td>
                                     <td style="text-align: right;"></td>
                                     <td style="text-align: right;"></td>
@@ -58,18 +73,10 @@
                             </tbody>
                         </table>
                         <br/>
-                        <br/>
-                        <table style="width: 100%;" class="table-sm">
+                        <table class="table-sm" style="width: 100%;">
                             <tbody>
                                 <tr>
                                     <td style="text-align: right;"></td>
-                                    <td style="text-align: right;">
-                                        <strong>امر التوريد</strong>
-                                    </td>
-                                    <td style="text-align: right;"></td>
-                                    <td style="text-align: right;">
-                                        <!--tahseel-->
-                                    </td>
                                     <td style="text-align: right;">
                                         <strong>تاريخ التحصيل</strong>
                                     </td>
@@ -84,11 +91,8 @@
                                 <tr>
                                     <td style="text-align: right;"></td>
                                     <td style="text-align: right;">
-                                        <strong>اذن الصرف</strong>
+                                        <strong>امر التوريد</strong>
                                     </td>
-                                    <td style="text-align: right;"></td>
-                                    <td style="text-align: right;"></td>
-                                    <td style="text-align: right;"></td>
                                     <td style="text-align: right;"></td>
                                     <td style="text-align: right;">
                                         <span t-field="o.partner_id.name"/>
@@ -99,8 +103,10 @@
                                 </tr>
                                 <tr>
                                     <td style="text-align: right;"></td>
-                                    <td style="text-align: right;"></td>
-                                    <td style="text-align: right;" colspan="5">
+                                    <td style="text-align: right;">
+                                        <strong>اذن الصرف</strong>
+                                    </td>
+                                    <td style="text-align: right;" colspan="2">
                                         <span t-field="o.partner_id.street"/>
                                     </td>
                                     <td style="text-align: right;">
@@ -109,24 +115,12 @@
                                 </tr>
                                 <tr>
                                     <td style="text-align: right;">
-                                        <!--<span t-field="o.warehouse_id"/>-->
-                                    </td>
-                                    <td style="text-align: right;">
-                                        <strong>المخزن</strong>
-                                    </td>
-                                    <td style="text-align: right;">
                                         <span t-field="o.user_id"/>
                                     </td>
                                     <td style="text-align: right;">
                                         <strong>المندوب</strong>
                                     </td>
-                                    <td style="text-align: right;">
-                                        <span t-field="o.payment_term_id.name"/>
-
-                                    </td>
-                                    <td style="text-align: right;">
-                                        <strong>القطاع</strong>
-                                    </td>
+                                    <td style="text-align: right;"></td>
                                     <td style="text-align: right;">
                                         <span t-field="o.partner_id.state_id.name"/>
                                     </td>
@@ -136,60 +130,76 @@
                                 </tr>
                                 <tr>
                                     <td style="text-align: right;"></td>
-                                    <td style="text-align: right;"></td>
-                                    <td style="text-align: right;"></td>
-                                    <td style="text-align: right;"></td>
                                     <td style="text-align: right;">
                                         <strong>رقم البوليصة</strong>
                                     </td>
                                     <td style="text-align: right;"></td>
                                     <td style="text-align: right;">
                                         <span t-field="o.partner_id.phone"/>
-                                        <br/>
-                                        <span t-field="o.partner_id.mobile"/>
                                     </td>
                                     <td style="text-align: right;">
                                         <strong>التليفون</strong>
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td style="text-align: right;">
+                                        <span t-field="o.payment_term_id.name"/>
+                                    </td>
+                                    <td style="text-align: right;">
+                                        <strong>القطاع</strong>
+                                    </td>
+                                    <td style="text-align: right;"></td>
+                                    <td style="text-align: right;">
+                                        <span t-field="o.partner_id.mobile"/>
+                                    </td>
+                                    <td style="text-align: right;">
+                                        <strong>الموبايل</strong>
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
+
                         <br/>
                         <br/>
-                        <table class="table">
-                            <thead class="table">
-                                <tr>
-                                    <th class="text-right" scope="col">القيمة</th>
-                                    <th class="text-right" scope="col">الكمية</th>
-                                    <th class="text-right" scope="col">السعر الاساسي</th>
-                                    <th class="text-right" scope="col" dir="rtl">خ.م%</th>
-                                    <th class="text-right" scope="col" dir="rtl">خ.ق.م%</th>
-                                    <th class="text-right" scope="col" dir="rtl">خ.ص%</th>
-                                    <th class="text-right" scope="col">القيمة</th>
-                                    <th class="text-right" scope="col">سعر الجمهور</th>
-                                    <th class="text-right" scope="col">اسم الصنف</th>
-                                    <th class="text-right" scope="col">كود</th>
-                                    <th class="text-right" scope="col">#</th>
+                        <table class="table-sm">
+                            <thead style="background-color: #f9f9f9;border-radius:5px;">
+                                <tr style="border-top:1px solid #c3c3c3;padding-top:3px;padding-bottom:3px;border-bottom:1px solid #c3c3c3">
+                                    <th class="text-right" style="padding:2px">القيمة</th>
+                                    <th class="text-right" style="padding:2px">الكمية</th>
+                                    <th class="text-right" style="padding:2px">السعر الاساسي</th>
+                                    <th class="text-right" dir="rtl" style="padding:5px">خ.م%</th>
+                                    <th class="text-right" dir="rtl" style="padding:5px">خ.ق.م%</th>
+                                    <th class="text-right" dir="rtl" style="padding:5px">خ.ص%</th>
+                                    <th class="text-right" style="padding:2px">القيمة</th>
+                                    <th class="text-right" style="padding:2px">سعر الجمهور</th>
+                                    <th class="text-right" style="padding:2px;width:30%!important;">اسم الصنف</th>
+                                    <th class="text-right" style="padding:2px;width:15%!important;">كود</th>
+                                    <th class="text-right" style="padding:2px;">#</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <t t-set="s" t-value="1"/>
                                 <t t-foreach="o.invoice_line_ids" t-as="l">
-                                    <tr>
+                                    <tr style="padding-top:3px;padding-bottom:3px;border-bottom:1px solid #c3c3c3">
                                         <td>
                                             <span t-field="l.price_subtotal"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="l.quantity"/>
+
                                         </td>
                                         <td></td>
                                         <td></td>
                                         <td></td>
                                         <td></td>
-                                        <td></td>
 
 
                                         <td></td>
-                                        <td></td>
-                                        <td style="width:30%">
-                                            <span t-field="l.name"/>
+                                        <td>
+                                            <span t-field="l.public_price_lst"/>
+                                        </td>
+                                        <td class="text-right" style="width:30%!important;">
+                                            <span t-esc="l.name"/>
                                         </td>
 
                                         <td>
@@ -204,6 +214,73 @@
                                 </t>
                             </tbody>
                         </table>
+                        <br/>
+                        <table class="table table-sm" style="width:35%">
+                            <tr class="border-black o_subtotal" style="padding:5px">
+                                <td>
+                                    <span t-field="o.amount_untaxed"/>
+                                </td>
+                                <td class="text-right">
+                                    <strong>القيمة</strong>
+                                </td>
+
+                            </tr>
+                            <t t-foreach="o.amount_by_group" t-as="amount_by_group">
+                                <tr style="">
+                                    <t t-if="len(o.tax_line_ids) == 1 and o.amount_untaxed == amount_by_group[2]">
+
+                                        <td class="o_price_total" style="width:60%">
+                                            <span t-esc="amount_by_group[3]"/>
+                                        </td>
+                                        <td class="text-right" style="width:60%">
+                                            <strong>الضريبة</strong>
+                                            <!--<span t-esc="amount_by_group[0]"/>-->
+                                        </td>
+
+                                    </t>
+                                    <t t-else="">
+                                        <td>
+                                            <span t-esc="amount_by_group[0]"/>
+                                            <span>&amp;nbsp;
+                                                <span>on</span>
+                                                <t t-esc="amount_by_group[4]"/>
+                                            </span>
+                                        </td>
+                                        <td class="text-right o_price_total">
+                                            <span t-esc="amount_by_group[3]"/>
+                                        </td>
+                                    </t>
+                                </tr>
+                            </t>
+                            <tr class="border-black o_subtotal" style="padding:5px">
+                                <td>
+                                    <span t-field="o.discount_amount"/>
+                                </td>
+                                <td class="text-right">
+                                    <strong>الخصم</strong>
+                                </td>
+
+                            </tr>
+                            <tr style="padding:5px">
+                                <td>
+                                    <span t-field="o.ks_amount_discount"/>
+                                </td>
+                                <td class="text-right">
+                                    <strong>الخصم النقدي</strong>
+                                </td>
+
+                            </tr>
+
+                            <tr class="border-black o_total">
+                                <td>
+                                    <span t-field="o.amount_total"/>
+                                </td>
+                                <td class="text-right">
+                                    <strong>الصافي</strong>
+                                </td>
+                            </tr>
+                        </table>
+
                     </t>
                 </div>
             </t>
