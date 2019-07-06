@@ -16,7 +16,7 @@
                 <div class="page">
                     <t t-foreach="docs" t-as="o">
                         <div class="row text-center"
-                             style="width:100%;height:60px;background-color:#492b68;border-radius:5px;">
+                             style="width:100%;height:50px;background-color:#492b68;border-radius:5px;">
                             <div class="col-6">
                             </div>
                             <div class="col-5"
@@ -197,7 +197,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="text-right"
+                        <div class="text-right" dir="rtl"
                              style="margin-top:3px;padding:3px;border-top:1px solid #492b68;border-bottom:1px solid #492b68">
                             <span t-esc="o.get_amount_total_words()"/>
                         </div>

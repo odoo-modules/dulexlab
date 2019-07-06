@@ -29,4 +29,7 @@ class AccountInvoiceInhh(models.Model):
         for val in self:
             if val.amount_total:
                 words = num2words(val.amount_total, lang='ar')
-                return words
+                unit, sub_unit = words.split(",")
+                words_currency = unit + val.currency_id.currency_unit_label + " , " + sub_unit + \
+                                 val.currency_id.currency_subunit_label + " فقط لا غير"
+                return words_currency
