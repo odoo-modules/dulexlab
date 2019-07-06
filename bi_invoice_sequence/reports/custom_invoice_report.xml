@@ -20,7 +20,7 @@
                             <div class="col-6">
                             </div>
                             <div class="col-5"
-                                 style="padding:10px;height:60px;background-color:#fff;overflow:hidden;z-index:100000001">
+                                 style="position:absolute;padding:10px;height:60px;background-color:#fff;overflow:hidden;z-index:100000001">
                                 <div style="padding:10px">
                                     <strong>
                                         <h4 class="text-center" style="color:#492b68">
