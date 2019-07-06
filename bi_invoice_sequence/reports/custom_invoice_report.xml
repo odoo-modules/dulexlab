@@ -50,9 +50,7 @@
                                 </tr>
                                 <tr>
                                     <td style="text-align: center;">
-                                        <strong>
-                                            <span t-field="o.company_id.vat"/>
-                                        </strong>
+                                        <span t-field="o.company_id.vat"/>
                                     </td>
                                     <td style="text-align: right;">
                                         <strong>بطاقة ضريبية</strong>
