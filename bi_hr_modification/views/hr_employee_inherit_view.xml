@@ -11,7 +11,28 @@
                     <field name="name_ar"/>
                     <field name="emp_code"/>
                     <field name="hiring_date"/>
+                    <field name="emp_exp_years"/>
                 </xpath>
+                <xpath expr="//field[@name='coach_id']" position="attributes">
+                    <attribute name="string">Head of Department</attribute>
+                </xpath>
+                <xpath expr="//page[@name='personal_information']" position="attributes">
+                     <attribute name="string">Personal Information</attribute>
+                 </xpath>
+                <xpath expr="//field[@name='birthday']" position="after">
+                    <field name="emp_age"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_employee_filter_inherit" model="ir.ui.view">
+            <field name="name">hr.employee.filter.inherit</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_filter"/>
+            <field name="arch" type="xml">
+                 <xpath expr="//filter[@name='group_coach']" position="attributes">
+                     <attribute name="string">Head of Department</attribute>
+                 </xpath>
             </field>
         </record>
 
@@ -35,6 +56,32 @@
                            filter_domain="['|','|','|',('emp_code','ilike',self),('name_ar','ilike',self),('work_email','ilike',self),('name','ilike',self)]"/>
 
                 </xpath>
+            </field>
+        </record>
+
+
+        <!--Bank view inherit-->
+        <record id="view_res_bank_form_inherit" model="ir.ui.view">
+            <field name="name">res.bank.form.inherit</field>
+            <field name="model">res.bank</field>
+            <field name="inherit_id" ref="base.view_res_bank_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='bic']" position="after">
+                    <field name="branch"/>
+                    <field name="cid"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!--Reource view inherit-->
+        <record id="resource_calendar_form_inherit" model="ir.ui.view">
+            <field name="name">resource.calendar.form.inherit</field>
+            <field name="model">resource.calendar</field>
+            <field name="inherit_id" ref="resource.resource_calendar_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[2]" position="attributes">
+                     <attribute name="string">Public Holidays</attribute>
+                 </xpath>
             </field>
         </record>
 

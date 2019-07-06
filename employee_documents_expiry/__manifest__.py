@@ -33,6 +33,7 @@
     'depends': ['base', 'hr'],
     'data': [
         'security/ir.model.access.csv',
+        'views/res_conf_settings_view.xml',
         'views/employee_check_list_view.xml',
         'views/employee_document_view.xml',
     ],

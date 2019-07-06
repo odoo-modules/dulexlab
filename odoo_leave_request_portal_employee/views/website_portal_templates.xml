@@ -74,7 +74,7 @@
                         </div>
                         <div class="row mt-4">
                             <div class="col-lg-6 col-md-6">
-                                <span style="font-weight: bold; font-size: 18px;">Date of hiring: </span>
+                                <span style="font-weight: bold; font-size: 18px;">Hiring date: </span>
                                 <span t-esc="employee_data.hiring_date"/>
                             </div>
                             <div class="col-lg-6 col-md-6">

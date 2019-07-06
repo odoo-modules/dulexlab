@@ -8,7 +8,7 @@
     'author': "BI Solutions Development Team",
     'category': 'hr',
     'version': '0.1',
-    'depends': ['base', 'hr', 'hr_payroll', 'hr_attendance', 'hr_holidays'],
+    'depends': ['base', 'hr', 'hr_payroll', 'hr_attendance', 'hr_holidays', 'hr_experience'],
     'data': [
         'security/ir.model.access.csv',
         'data/hr_payroll_data.xml',
