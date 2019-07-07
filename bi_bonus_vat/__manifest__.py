@@ -9,7 +9,7 @@
     'website': "http://bisolutions.com/",
     'category': 'Sale',
     'version': '12.0',
-    'depends': ['sale', 'product', 'universal_discount_customization'],
+    'depends': ['sale', 'product'],
     'data': [
         'views/product.xml',
         'views/sale_order.xml',

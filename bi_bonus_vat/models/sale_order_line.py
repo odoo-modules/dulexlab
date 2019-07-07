@@ -21,11 +21,20 @@ class SaleOrderLine(models.Model):
                     'price_subtotal': taxes['total_excluded'],
                 })
             else:
-                line_tax = 0.0
+                line_price_list = line.order_id.partner_id.property_product_pricelist
+                line_price = line.product_id.original_product.list_price * line.product_uom_qty
+                if line_price_list:
+                    line_price -= (line_price * line_price_list.phd_disc) / 100
+                    if line.order_id.partner_id.property_product_pricelist.dd_disc != 0:
+                        line_price -= (line_price * line_price_list.dd_disc) / 100
+                    else:
+                        line_price -= (line_price * line_price_list.cd_disc) / 100
                 if line.tax_id:
                     line_tax = line.tax_id.amount
+                    line_price = line_price * line_tax / 100
+
                 line.update({
-                    'price_tax': (line.product_id.original_product.list_price * line_tax) / 100,
-                    'price_total': (line.product_id.original_product.list_price * line_tax) / 100,
+                    'price_tax': line_price,
+                    'price_total': line_price,
                     'price_subtotal': 0,
                 })
