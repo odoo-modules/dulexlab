@@ -10,3 +10,4 @@ class SaleOrder(models.Model):
         for invoice_id in invoices:
             invoice = self.env['account.invoice'].browse(invoice_id)
             invoice.action_invoice_open()
+        return invoices
