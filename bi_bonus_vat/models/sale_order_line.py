@@ -32,7 +32,8 @@ class SaleOrderLine(models.Model):
                 if line.tax_id:
                     line_tax = line.tax_id.amount
                     line_price = line_price * line_tax / 100
-
+                else:
+                    line_price = 0
                 line.update({
                     'price_tax': line_price,
                     'price_total': line_price,

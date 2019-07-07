@@ -18,20 +18,21 @@ class AccountInvoice(models.Model):
                     line.invoice_line_tax_ids.compute_all(price_unit, self.currency_id, line.quantity, line.product_id,
                                                           self.partner_id)['taxes']
             else:
-                print("XXs")
                 taxes = \
                     line.invoice_line_tax_ids.compute_all(line.product_id.original_product.lst_price, self.currency_id,
                                                           line.quantity,
                                                           line.product_id.original_product,
                                                           self.partner_id)['taxes']
-                for tax in taxes:
-                    if line.product_id.taxes_id and tax['name'] == line.product_id.taxes_id.name:
-                        if self.partner_id.property_product_pricelist:
-                            tax['amount'] -= tax['amount'] * (self.partner_id.property_product_pricelist.phd_disc / 100)
-                            if self.partner_id.property_product_pricelist.dd_disc != 0:
-                                tax['amount'] -= tax['amount'] * (self.partner_id.property_product_pricelist.dd_disc / 100)
-                            else:
-                                tax['amount'] -= tax['amount'] * (self.partner_id.property_product_pricelist.cd_disc / 100)
+
+                for line_tax in line.invoice_line_tax_ids:
+                    for tax in taxes:
+                        if tax['name'] == line_tax.name:
+                            if self.partner_id.property_product_pricelist:
+                                tax['amount'] -= tax['amount'] * (self.partner_id.property_product_pricelist.phd_disc / 100)
+                                if self.partner_id.property_product_pricelist.dd_disc != 0:
+                                    tax['amount'] -= tax['amount'] * (self.partner_id.property_product_pricelist.dd_disc / 100)
+                                else:
+                                    tax['amount'] -= tax['amount'] * (self.partner_id.property_product_pricelist.cd_disc / 100)
 
             for tax in taxes:
                 val = self._prepare_tax_line_vals(line, tax)
