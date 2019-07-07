@@ -23,6 +23,7 @@
 from datetime import datetime, date, timedelta
 from odoo import models, fields, api, _
 from odoo.exceptions import Warning
+import ast
 
 
 class HrEmployeeDocument(models.Model):
@@ -30,20 +31,31 @@ class HrEmployeeDocument(models.Model):
     _description = 'HR Employee Documents'
 
     def mail_reminder(self):
+
+        # get documents expiration notification groups
+        documents_expiration_groups_ids = ast.literal_eval(
+            (self.env['ir.config_parameter'].sudo().get_param('documents_expiration_groups_ids')))
+        partner_ids = []
+        for group in self.env['res.groups'].search([('id', 'in', documents_expiration_groups_ids)]):
+            for user in group.users:
+                if user.partner_id.id not in partner_ids:
+                    partner_ids.append(user.partner_id.id)
+
         now = datetime.now() + timedelta(days=1)
         date_now = now.date()
         match = self.search([])
         for i in match:
-            if i.expiry_date:
+            if i.expiry_date and partner_ids:
                 exp_date = i.expiry_date - timedelta(days=7)
                 if date_now >= exp_date:
                     mail_content = "  Hello  " + i.employee_ref.name + ",<br>Your Document " + i.name + "is going to expire on " + \
                                    str(i.expiry_date) + ". Please renew it before expiry date"
                     main_content = {
                         'subject': _('Document-%s Expired On %s') % (i.name, i.expiry_date),
-                        'author_id': self.env.user.partner_id.id,
+                        'author_id': self.env.ref('base.partner_admin').id,
                         'body_html': mail_content,
-                        'email_to': i.employee_ref.work_email,
+                        # 'email_to': i.employee_ref.work_email,
+                        'recipient_ids': [(6, 0, partner_ids)],
                     }
                     self.env['mail.mail'].create(main_content).send()
 

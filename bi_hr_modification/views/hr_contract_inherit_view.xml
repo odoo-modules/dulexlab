@@ -12,6 +12,12 @@
                         <field name="tax"/>
                     </group>
                 </xpath>
+                <xpath expr="//field[@name='trial_date_end']" position="attributes">
+                    <attribute name="string">End of Probation Period</attribute>
+                </xpath>
+                <xpath expr="//group[@name='salary_and_advantages']/label[1]" position="attributes">
+                    <attribute name="string">Salary</attribute>
+                </xpath>
             </field>
         </record>
     </data>

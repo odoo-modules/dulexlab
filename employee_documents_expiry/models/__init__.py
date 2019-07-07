@@ -20,5 +20,6 @@
 #
 ###################################################################################
 
+from . import res_config_settings_inherit
 from . import employee_documents
 from . import employee_entry_exit_check_list
