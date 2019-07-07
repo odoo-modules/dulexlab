@@ -115,9 +115,17 @@
 
                                             </td>
                                             <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
+
+                                            <td>
+                                                <span t-field="l.phd_disc"/>
+                                            </td>
+                                            <td>
+                                                <span t-field="l.dd_disc"/>
+                                            </td>
+                                            <td>
+                                                <span t-field="l.cd_disc"/>
+
+                                            </td>
 
 
                                             <td></td>
@@ -192,7 +200,8 @@
                                     <span t-field="o.amount_total"/>
 
                                 </div>
-                                <div class="col-6 text-right" style="font-size:25px;color:#fff;background-color:#53a944">
+                                <div class="col-6 text-right"
+                                     style="font-size:25px;color:#fff;background-color:#53a944">
                                     <strong>الصافي</strong>
                                 </div>
                             </div>
