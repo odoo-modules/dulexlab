@@ -5,7 +5,7 @@ from odoo import models, fields, api, _
 class SaleOrderLine(models.Model):
     _inherit = "sale.order.line"
 
-    @api.depends('product_uom_qty', 'discount', 'price_unit', 'tax_id')
+    @api.depends('product_uom_qty', 'discount', 'price_unit', 'tax_id', 'order_id.pricelist_id')
     def _compute_amount(self):
         """
         Compute the amounts of the SO line.
@@ -21,11 +21,11 @@ class SaleOrderLine(models.Model):
                     'price_subtotal': taxes['total_excluded'],
                 })
             else:
-                line_price_list = line.order_id.partner_id.property_product_pricelist
+                line_price_list = line.order_id.pricelist_id
                 line_price = line.product_id.original_product.list_price * line.product_uom_qty
                 if line_price_list:
                     line_price -= (line_price * line_price_list.phd_disc) / 100
-                    if line.order_id.partner_id.property_product_pricelist.dd_disc != 0:
+                    if line_price_list.dd_disc != 0:
                         line_price -= (line_price * line_price_list.dd_disc) / 100
                     else:
                         line_price -= (line_price * line_price_list.cd_disc) / 100
