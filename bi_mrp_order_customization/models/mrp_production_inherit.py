@@ -8,7 +8,6 @@ class MrpProduction(models.Model):
     parent_mo_id = fields.Many2one('mrp.production', string="Parent MO")
 
     def _log_manufacture_exception(self, documents, cancel=False):
-        print("x")
         if documents:
             for item in next(iter(documents)):
                 for object in item:

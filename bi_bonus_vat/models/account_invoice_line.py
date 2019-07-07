@@ -21,10 +21,18 @@ class AccountInvoiceLine(models.Model):
             self.price_total = taxes['total_included'] if taxes else self.price_subtotal
         else:
             line_tax = 0.0
+            line_price_list = self.invoice_id.partner_id.property_product_pricelist
             if self.invoice_line_tax_ids:
                 line_tax = self.invoice_line_tax_ids[0].amount
-            self.price_subtotal = price_subtotal_signed = (self.product_id.original_product.list_price * line_tax) / 100
-            self.price_total = self.price_subtotal
+            self.price_total = (self.product_id.original_product.list_price * self.quantity * line_tax) / 100
+            if line_price_list:
+                self.price_total -= (self.price_total * line_price_list.phd_disc) / 100
+                if line_price_list.dd_disc != 0:
+                    self.price_total -= (self.price_total * line_price_list.dd_disc) / 100
+                else:
+                    self.price_total -= (self.price_total * line_price_list.cd_disc) / 100
+            self.price_subtotal = price_subtotal_signed = 0
+            self.price_tax = 0
 
         if self.invoice_id.currency_id and self.invoice_id.currency_id != self.invoice_id.company_id.currency_id:
             currency = self.invoice_id.currency_id
