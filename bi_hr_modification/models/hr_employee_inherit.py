@@ -13,7 +13,8 @@ class HrEmployeeInherit(models.Model):
     emp_code = fields.Char('Code')
     hiring_date = fields.Date('Hiring Date')
     emp_age = fields.Float(string='Age', compute='get_employee_age')
-    emp_exp_years = fields.Float(string='Years of Experience', compute='get_employee_exp_years')
+    emp_exp_years = fields.Integer(string='Years of Experience', compute='get_employee_exp_years')
+    emp_exp_months = fields.Integer(string='Months of Experience', compute='get_employee_exp_years')
 
     @api.multi
     @api.depends('birthday')
@@ -28,7 +29,7 @@ class HrEmployeeInherit(models.Model):
     def get_employee_exp_years(self):
         today = date.today()
         for rec in self:
-            total_months = 0.0
+            total_months = 0
             if rec.experience_ids:
                 for line in rec.experience_ids:
                     date_to = line.end_date if line.end_date and line.end_date <= today else today
@@ -36,7 +37,9 @@ class HrEmployeeInherit(models.Model):
                         delta = relativedelta(date_to, line.start_date)
                         full_months = delta.years * 12 + delta.months
                         total_months += full_months
-            rec.emp_exp_years = total_months / 12.0
+            total_years = int(total_months / 12)
+            rec.emp_exp_years = total_years
+            rec.emp_exp_months = (total_months - (total_years * 12))
 
     @api.model
     def name_search(self, name, args=None, operator='ilike', limit=100):
