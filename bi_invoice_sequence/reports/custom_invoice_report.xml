@@ -89,17 +89,17 @@
                         <div>
                             <table class="table-bordered table-ms" style="width: 100%;">
                                 <thead>
-                                    <tr style="border-bottom:2px solid black;padding-top:3px;padding-bottom:3px;border-top:1px solid #c3c3c3">
-                                        <th class="text-center" style="padding:2px;">القيمة</th>
+                                    <tr style="border-bottom:2px solid black;padding-top:3px;padding-bottom:3px;border-top:1px solid #black;">
+                                        <th class="text-center" style="padding:2px; border-left:1px solid #black;">القيمة</th>
                                         <th class="text-center" style="padding:2px;">الكمية</th>
                                         <th class="text-center" dir="rtl" style="padding:5px;">خ.ن%</th>
                                         <th class="text-center" dir="rtl" style="padding:5px;">خ.ت%</th>
                                         <th class="text-center" dir="rtl" style="padding:5px;">خ.ص%</th>
-                                        <th class="text-center" style="padding:2px;">سعر الجمهور</th>
-                                        <th class="text-center" style="padding:2px;">السعر الاساسي</th>
-                                        <th class="text-center" style="padding:2px; width:30%!important;">اسم الصنف</th>
-<!--                                        <th class="text-right" style="padding:2px; width:15%!important;">كود</th>-->
-                                        <th class="text-right" style="padding:2px; text-align: center;">#</th>
+                                        <th class="text-center" style="padding:5px;">سعر الجمهور</th>
+                                        <th class="text-center" style="padding:5px;">السعر الاساسي</th>
+                                        <th class="text-center" style="padding:5px; width:30%!important;">اسم الصنف</th>
+<!--                                        <th class="text-center" style="padding:2px; width:15%!important;">كود</th>-->
+                                        <th class="text-center" style="padding:5px; text-align: center;border-right:1px solid #black;">#</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -200,8 +200,7 @@
                                     <span t-field="o.amount_total"/>
 
                                 </div>
-                                <div class="col-4 text-right"
-                                     style="font-size:25px;color:#fff;background-color:#53a944">
+                                <div class="col-4 text-right" style="font-size:20px;color:#fff;background-color:#53a944; vertical-align:middle;">
                                     <strong>الصافي</strong>
                                 </div>
                             </div>
