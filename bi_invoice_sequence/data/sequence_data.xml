@@ -7,5 +7,11 @@
             <field name="padding">5</field>
             <field name="prefix">UTI/</field>
         </record>
+        <record id="taxed_inv_sequence" model="ir.sequence">
+            <field name="name">Taxed Invoice Sequence</field>
+            <field name="code">taxed.invoice.seq</field>
+            <field name="padding">5</field>
+            <field name="prefix">TIS/</field>
+        </record>
     </data>
 </odoo>

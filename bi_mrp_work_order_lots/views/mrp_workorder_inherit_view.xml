@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="mrp_workorder_view_form_tablet_lot_inherit" model="ir.ui.view">
+        <field name="name">mrp.workorder.view.form.tablet.lot.inherit</field>
+        <field name="model">mrp.workorder</field>
+        <field name="inherit_id" ref="mrp_workorder.mrp_workorder_view_form_tablet"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@class='o_workorder_field']/field[@name='component_id']" position="attributes">
+                <attribute name="context">{'default_product_id': component_id}</attribute>
+            </xpath>
+
+            <xpath expr="//div[@class='o_workorder_field text-center']/field[@name='lot_id']" position="replace">
+                <field name="component_id" context="{'default_product_id': component_id}" />
+                <field name="lot_id" context="{'default_product_id': component_id}" domain="[('product_id', '=', component_id)]"
+                       attrs="{'invisible': [('component_tracking', '=', 'none')]}" options="{'no_create': True}"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
