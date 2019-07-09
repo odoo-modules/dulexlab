@@ -16,7 +16,7 @@ class AccountInvoiceLine(models.Model):
         if self.invoice_line_tax_ids:
             taxes = self.invoice_line_tax_ids.compute_all(price, currency, self.quantity, product=self.product_id,
                                                           partner=self.invoice_id.partner_id)
-        if self.invoice_id.type in ['out_refund', 'out_invoice']:
+        if self.invoice_id.type in ['out_refund', 'out_invoice'] and self.product_id:
             if self.product_id.is_bonus is True:
                 line_tax = 0.0
                 line_price_list = self.invoice_id.partner_id.property_product_pricelist

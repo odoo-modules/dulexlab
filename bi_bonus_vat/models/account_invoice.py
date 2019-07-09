@@ -13,7 +13,7 @@ class AccountInvoice(models.Model):
             if not line.account_id:
                 continue
             price_unit = line.price_unit * (1 - (line.discount or 0.0) / 100.0)
-            if self.type in ['out_refund', 'out_invoice']:
+            if self.type in ['out_refund', 'out_invoice'] and self.product_id:
                 if line.product_id.is_bonus is True:
                     taxes = \
                         line.invoice_line_tax_ids.compute_all(line.product_id.original_product.lst_price, self.currency_id,
