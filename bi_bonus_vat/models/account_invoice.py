@@ -32,10 +32,7 @@ class AccountInvoice(models.Model):
                         if tax['name'] == line_tax.name:
                             if self.partner_id.property_product_pricelist:
                                 tax['amount'] -= tax['amount'] * (self.partner_id.property_product_pricelist.phd_disc / 100)
-                                if self.partner_id.property_product_pricelist.dd_disc != 0:
-                                    tax['amount'] -= tax['amount'] * (self.partner_id.property_product_pricelist.dd_disc / 100)
-                                else:
-                                    tax['amount'] -= tax['amount'] * (self.partner_id.property_product_pricelist.cd_disc / 100)
+                                tax['amount'] -= tax['amount'] * (self.partner_id.property_product_pricelist.dd_disc / 100)
 
             else:
                 taxes = \

@@ -25,10 +25,7 @@ class AccountInvoiceLine(models.Model):
                 self.price_total = (self.product_id.original_product.lst_price * self.quantity * line_tax) / 100
                 if line_price_list:
                     self.price_total -= (self.price_total * line_price_list.phd_disc) / 100
-                    if line_price_list.dd_disc != 0:
-                        self.price_total -= (self.price_total * line_price_list.dd_disc) / 100
-                    else:
-                        self.price_total -= (self.price_total * line_price_list.cd_disc) / 100
+                    self.price_total -= (self.price_total * line_price_list.dd_disc) / 100
                 self.price_subtotal = price_subtotal_signed = 0
                 self.price_tax = 0
             else:
@@ -39,10 +36,7 @@ class AccountInvoiceLine(models.Model):
                 self.price_subtotal = price_subtotal_signed = (self.product_id.list_price * self.quantity)
                 if line_price_list:
                     self.price_subtotal -= (self.price_subtotal * line_price_list.phd_disc) / 100
-                    if line_price_list.dd_disc != 0:
-                        self.price_subtotal -= (self.price_subtotal * line_price_list.dd_disc) / 100
-                    else:
-                        self.price_subtotal -= (self.price_subtotal * line_price_list.cd_disc) / 100
+                    self.price_subtotal -= (self.price_subtotal * line_price_list.dd_disc) / 100
                 self.price_total = self.price_subtotal
 
         else:

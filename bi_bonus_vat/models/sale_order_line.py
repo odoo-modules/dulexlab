@@ -25,10 +25,7 @@ class SaleOrderLine(models.Model):
                 line_price = line.product_id.original_product.list_price * line.product_uom_qty
                 if line_price_list:
                     line_price -= (line_price * line_price_list.phd_disc) / 100
-                    if line_price_list.dd_disc != 0:
-                        line_price -= (line_price * line_price_list.dd_disc) / 100
-                    else:
-                        line_price -= (line_price * line_price_list.cd_disc) / 100
+                    line_price -= (line_price * line_price_list.dd_disc) / 100
                 if line.tax_id:
                     line_tax = line.tax_id.amount
                     line_price = line_price * line_tax / 100
