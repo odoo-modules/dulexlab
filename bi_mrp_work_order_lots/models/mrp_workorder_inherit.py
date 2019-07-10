@@ -7,7 +7,6 @@ class MrpWorkorder(models.Model):
     _inherit = 'mrp.workorder'
 
     lot_id = fields.Many2one('stock.production.lot', readonly=False, related=False, compute='get_component_lot_value', )
-    component_taken_lot_ids = fields.Many2many('stock.production.lot', string='Component Taken Lots')
 
     @api.onchange('lot_id')
     def change_component_lot_qty(self):
@@ -39,11 +38,14 @@ class MrpWorkorder(models.Model):
             product_move_object = work_order.move_raw_ids.filtered(
                 lambda stock_move: stock_move.product_id == work_order.component_id)
             move_product_lot_ids = product_move_object.move_line_ids.mapped('lot_id')
+            active_product_lot_ids = work_order.active_move_line_ids.filtered(
+                lambda stock_move_line: stock_move_line.product_id == work_order.component_id).mapped('lot_id')
+            diff_lot_ids = [lot for lot in move_product_lot_ids if lot not in active_product_lot_ids]
 
-            if move_product_lot_ids:
-                work_order.lot_id = move_product_lot_ids[0]
+            if len(diff_lot_ids):
+                work_order.lot_id = diff_lot_ids[0]
                 lot_product_move_line_object = product_move_object.move_line_ids.filtered(
-                    lambda stock_move_line: stock_move_line.lot_id == move_product_lot_ids[
+                    lambda stock_move_line: stock_move_line.lot_id == diff_lot_ids[
                         0] and stock_move_line.product_qty > 0)
                 work_order.qty_done = lot_product_move_line_object.product_qty
             else:
