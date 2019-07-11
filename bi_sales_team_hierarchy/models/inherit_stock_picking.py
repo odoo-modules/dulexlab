@@ -19,7 +19,6 @@ class InheritedStockPicking(models.Model):
         res = super(InheritedStockPicking, self).create(vals)
         if 'sale_id' in vals:
             res.write({'car_number': res.sale_id.car_number.id, 'driver_name': res.sale_id.driver_name.id})
-        print(res.name)
         return res
 
     @api.multi

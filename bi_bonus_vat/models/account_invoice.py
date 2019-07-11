@@ -14,11 +14,12 @@ class AccountInvoice(models.Model):
                 continue
             price_unit = line.price_unit * (1 - (line.discount or 0.0) / 100.0)
             if self.type in ['out_refund', 'out_invoice'] and line.product_id:
-                if line.product_id.is_bonus is True:
+                if line.product_id.is_bonus:
                     taxes = \
-                        line.invoice_line_tax_ids.compute_all(line.product_id.original_product.lst_price, self.currency_id,
+                        line.invoice_line_tax_ids.compute_all(line.product_id.original_product.lst_price,
+                                                              self.currency_id,
                                                               line.quantity,
-                                                              line.product_id.original_product,
+                                                              line.product_id,
                                                               self.partner_id)['taxes']
                 else:
                     taxes = \
@@ -31,8 +32,10 @@ class AccountInvoice(models.Model):
                     for tax in taxes:
                         if tax['name'] == line_tax.name:
                             if self.partner_id.property_product_pricelist:
-                                tax['amount'] -= tax['amount'] * (self.partner_id.property_product_pricelist.phd_disc / 100)
-                                tax['amount'] -= tax['amount'] * (self.partner_id.property_product_pricelist.dd_disc / 100)
+                                tax['amount'] -= tax['amount'] * (
+                                        self.partner_id.property_product_pricelist.phd_disc / 100)
+                                tax['amount'] -= tax['amount'] * (
+                                        self.partner_id.property_product_pricelist.dd_disc / 100)
 
             else:
                 taxes = \
