@@ -2,6 +2,17 @@
 from odoo import models, fields, api, _
 
 
+class SaleOrder(models.Model):
+    _inherit = 'sale.order'
+
+    @api.multi
+    def _prepare_invoice(self):
+        res = super(SaleOrder, self)._prepare_invoice()
+        for order in self:
+            res['pricelist_id'] = order.pricelist_id.id
+        return res
+
+
 class SaleOrderLine(models.Model):
     _inherit = "sale.order.line"
 

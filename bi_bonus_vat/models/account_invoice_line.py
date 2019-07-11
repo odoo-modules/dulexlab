@@ -12,16 +12,16 @@ class AccountInvoiceLine(models.Model):
     def _compute_price(self):
         res = super(AccountInvoiceLine, self)._compute_price()
         if self.product_id.is_bonus:
-            partner_price_list = self.invoice_id.partner_id.property_product_pricelist
+            invoice_price_list = self.invoice_id.pricelist_id
             self.price_total = (self.product_id.original_product.lst_price)
             if self.invoice_line_tax_ids:
                 total_tax_amount = sum([tax_line.amount for tax_line in self.invoice_line_tax_ids])
                 self.price_total = (self.product_id.original_product.lst_price * self.quantity) * (
                         total_tax_amount / 100)
 
-            if partner_price_list:
-                self.price_total -= self.price_total * (partner_price_list.phd_disc / 100)
-                self.price_total -= self.price_total * (partner_price_list.dd_disc / 100)
+            if invoice_price_list:
+                self.price_total -= self.price_total * (invoice_price_list.phd_disc / 100)
+                self.price_total -= self.price_total * (invoice_price_list.dd_disc / 100)
             self.price_subtotal = price_subtotal_signed = 0
             self.price_tax = 0
         return res

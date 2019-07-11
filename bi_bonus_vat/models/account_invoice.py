@@ -5,6 +5,8 @@ from odoo import models, fields, api, _
 class AccountInvoice(models.Model):
     _inherit = "account.invoice"
 
+    pricelist_id = fields.Many2one('product.pricelist', string='Pricelist')
+
     @api.multi
     def get_taxes_values(self):
         tax_grouped = {}
@@ -31,11 +33,11 @@ class AccountInvoice(models.Model):
                 for line_tax in line.invoice_line_tax_ids:
                     for tax in taxes:
                         if tax['name'] == line_tax.name:
-                            if self.partner_id.property_product_pricelist:
+                            if self.pricelist_id:
                                 tax['amount'] -= tax['amount'] * (
-                                        self.partner_id.property_product_pricelist.phd_disc / 100)
+                                        self.pricelist_id.phd_disc / 100)
                                 tax['amount'] -= tax['amount'] * (
-                                        self.partner_id.property_product_pricelist.dd_disc / 100)
+                                        self.pricelist_id.dd_disc / 100)
 
             else:
                 taxes = \
@@ -53,7 +55,7 @@ class AccountInvoice(models.Model):
                     tax_grouped[key]['amount'] += val['amount']
                     tax_grouped[key]['base'] += round_curr(val['base'])
         if self.type == 'out_refund':
-            if self.partner_id.property_product_pricelist and self.partner_id.property_product_pricelist.cd_disc > 0.0:
-                self.sudo().write({'ks_global_discount_rate': self.partner_id.property_product_pricelist.cd_disc})
+            if self.pricelist_id and self.pricelist_id.cd_disc > 0.0:
+                self.sudo().write({'ks_global_discount_rate': self.pricelist_id.cd_disc})
 
         return tax_grouped
