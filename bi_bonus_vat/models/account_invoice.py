@@ -1,11 +1,15 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api, _
 
-
 class AccountInvoice(models.Model):
     _inherit = "account.invoice"
 
     pricelist_id = fields.Many2one('product.pricelist', string='Pricelist')
+
+    @api.onchange('pricelist_id')
+    def get_ks_global_discount_rate(self):
+        for val in self:
+            val.ks_global_discount_rate = val.pricelist_id.cd_disc
 
     @api.multi
     def get_taxes_values(self):
