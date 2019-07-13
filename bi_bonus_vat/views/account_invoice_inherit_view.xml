@@ -8,7 +8,7 @@
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='payment_term_id']" position="after">
                     <field name="pricelist_id"
-                           attrs="{'readonly': [('state', '!=', 'draft')],'invisible': [('type', '!=', 'out_refund')],'required': [('type', '=', 'out_refund')]}"/>
+                           attrs="{'readonly': [('state', '!=', 'draft')],'invisible': [('type', '!=', 'out_refund')]}"/>
                 </xpath>
             </field>
         </record>

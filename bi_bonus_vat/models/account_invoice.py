@@ -11,6 +11,9 @@ class AccountInvoice(models.Model):
         for val in self:
             val.ks_global_discount_rate = val.pricelist_id.cd_disc
 
+    @api.onchange('user_id')
+
+
     @api.multi
     def get_taxes_values(self):
         tax_grouped = {}

@@ -19,7 +19,6 @@ class InheritSaleOrder(models.Model):
     area = fields.Many2one('new.area', string="Area", related='user_id.area', readonly=False)
     team_supervisor = fields.Many2one('res.users', related='team_id.team_supervisor', srting="Team Supervisor")
     team_leader = fields.Many2one('res.users', related='team_id.user_id', srting="Team Leader")
-    # vehicle_id = fields.Many2one('fleet.vehicle')
     driver_name = fields.Many2one('res.partner', related='car_number.driver_id', readonly=False, string="Driver Name",
                                   required=True)
     car_number = fields.Many2one('fleet.vehicle', string="Car Number")

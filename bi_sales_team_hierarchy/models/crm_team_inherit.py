@@ -6,4 +6,3 @@ class SrmTeam(models.Model):
     _inherit = 'crm.team'
 
     team_supervisor = fields.Many2one('res.users', string="Team Supervisor")
-    # res_user_id = fields.Many2one('res.users', string="Users Ids")
