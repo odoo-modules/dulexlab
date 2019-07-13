@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api, _
 
+
 class AccountInvoice(models.Model):
     _inherit = "account.invoice"
 
@@ -8,11 +9,14 @@ class AccountInvoice(models.Model):
 
     @api.onchange('pricelist_id')
     def get_ks_global_discount_rate(self):
-        for val in self:
-            val.ks_global_discount_rate = val.pricelist_id.cd_disc
+        for invoice in self:
+            invoice.ks_global_discount_rate = invoice.pricelist_id.cd_disc
 
-    @api.onchange('user_id')
-
+    @api.onchange('partner_id')
+    def get_default_invoice_pricelist(self):
+        for invoice in self:
+            if invoice.type == 'out_refund':
+                invoice.pricelist_id = invoice.partner_id.property_product_pricelist.id
 
     @api.multi
     def get_taxes_values(self):
