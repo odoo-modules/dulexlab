@@ -88,5 +88,6 @@ class InvoiceValidateWizard(models.TransientModel):
                 'location_id': self.location_id.id,
                 'location_dest_id': self.location_dest_id.id,
                 'picking_id': stock_picking.id,
+                'picking_type_id': self.operation_type_id.id,
             })
         stock_picking.action_assign()
