@@ -10,7 +10,13 @@ class InheritedAccountInvoice(models.Model):
     team_leader = fields.Many2one('res.users', srting="Team Leader")
     driver_name = fields.Many2one('res.partner', string="Driver Name")
     car_number = fields.Many2one('fleet.vehicle', string="Car Number")
-    user_id = fields.Many2one('res.users', string='Salesperson', track_visibility='onchange',
-        readonly=True, states={'draft': [('readonly', False)]}, default=False)
-    team_id = fields.Many2one('crm.team', string='Sales Team', default=False, oldname='section_id')
     warehouse_id = fields.Many2one('stock.warehouse', string='Warehouse', readonly=True)
+
+    @api.onchange('user_id')
+    def get_user_team_values(self):
+        for invoice in self:
+            if invoice.user_id:
+                invoice.team_id = invoice.user_id.sale_team_id.id
+                invoice.area = invoice.user_id.area.id
+                invoice.team_leader = invoice.user_id.sale_team_id.user_id.id
+                invoice.team_supervisor = invoice.user_id.sale_team_id.team_supervisor.id

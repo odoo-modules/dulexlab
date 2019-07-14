@@ -18,6 +18,7 @@ class InvoiceValidateWizard(models.TransientModel):
         self.location_dest_id = False
         self.operation_type_id = False
         active_id = self.env.context.get('active_id')
+        self.invoice_id = active_id
         inv_id = self.env['account.invoice'].search([('id', '=', active_id)])
         operation_type_ids = []
         location_ids = []
@@ -87,5 +88,6 @@ class InvoiceValidateWizard(models.TransientModel):
                 'location_id': self.location_id.id,
                 'location_dest_id': self.location_dest_id.id,
                 'picking_id': stock_picking.id,
+                'picking_type_id': self.operation_type_id.id,
             })
         stock_picking.action_assign()
