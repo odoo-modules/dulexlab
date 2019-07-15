@@ -22,7 +22,7 @@
         <field name="arch" type="xml">
             <xpath expr="//button[@name='action_confirm']" position="after">
                 <button name="so_revision_quote" string="Make Revise Sale Quotation"
-                    type="object" states="sent" class="btn-primary" />
+                    type="object" states="draft,sent" class="btn-primary" />
             </xpath>
 
             <xpath expr="//div[@name='button_box']" position="inside">
