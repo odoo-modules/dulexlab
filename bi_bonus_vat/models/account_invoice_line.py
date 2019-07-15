@@ -25,7 +25,7 @@ class AccountInvoiceLine(models.Model):
             self.price_subtotal = price_subtotal_signed = 0
             self.price_tax = 0
 
-        if self.invoice_id and self.invoice_id.pricelist_id and self.invoice_id.type in ['out_refund']:
+        if self.invoice_id and self.invoice_id.pricelist_id and not self.invoice_id.refund_invoice_id and self.invoice_id.type == 'out_refund':
             if invoice_price_list:
                 self.price_subtotal -= (self.price_subtotal * (invoice_price_list.phd_disc / 100))
                 self.price_subtotal -= (self.price_subtotal * (invoice_price_list.dd_disc / 100))
