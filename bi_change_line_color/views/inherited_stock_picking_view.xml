@@ -7,7 +7,7 @@
             <field name="inherit_id" ref="stock.view_picking_form"/>
             <field name="arch" type="xml">
                 <xpath expr="//notebook/page/field[@name='move_ids_without_package']/tree" position="attributes">
-                    <attribute name="decoration-danger">product_uom_qty != reserved_availability</attribute> # and not parent.immediate_transfer and state != 'done' and quantity_done &gt; reserved_availability and show_reserved_availability
+                    <attribute name="decoration-success">not parent.immediate_transfer and product_uom_qty != reserved_availability and state != 'done'</attribute> # and not parent.immediate_transfer and state != 'done' and quantity_done &gt; reserved_availability and show_reserved_availability
                 </xpath>
             </field>
         </record>
