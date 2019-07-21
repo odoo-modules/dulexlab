@@ -169,5 +169,5 @@ class AccountPaymentInherit(models.Model):
         for rec in self:
             if rec.payment_difference and rec.payment_difference_handling == 'reconcile':
                 total_writeoff_amount = rec.writeoff_amount + rec.writeoff2_amount + rec.writeoff3_amount + rec.writeoff4_amount + rec.writeoff5_amount
-                if rec.payment_difference != total_writeoff_amount:
+                if round(rec.payment_difference, 2) != round(total_writeoff_amount, 2):
                     raise UserError(_('Total Difference Amount Must Be Equal To Payment Difference Amount!'))
