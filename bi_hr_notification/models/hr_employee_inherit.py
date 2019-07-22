@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
+from datetime import time as d_time
+from pytz import timezone, utc
 import time
 from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
 from dateutil.relativedelta import relativedelta
@@ -19,6 +21,25 @@ class HrEmployeeInherit(models.Model):
     linked_absence = fields.Integer('Linked Absence')
     unlinked_absence = fields.Integer('Un-linked Absence')
 
+
+    def get_weekends(self, date_from, date_to, work_days, resource_calendar_id):
+        week_days = [0, 1, 2, 3, 4, 5, 6]  # ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
+        schedule_days = []
+        for line in resource_calendar_id.attendance_ids:
+            schedule_days.append(int(line.dayofweek))
+        schedule_days = list(set(schedule_days))
+        weekend_days = list(set(week_days) - set(schedule_days))
+
+        count = 0
+        if work_days > len(schedule_days) or (date_from.weekday() not in weekend_days and date_from.weekday()):
+            delta = timedelta(days=1)
+            while date_from <= date_to:
+                if date_from.weekday() in weekend_days:
+                    count += 1
+                date_from += delta
+
+        return count
+
     @api.model
     def attendance_notification(self):
         for employee in self.search([]):
@@ -28,6 +49,7 @@ class HrEmployeeInherit(models.Model):
             recipient_ids = []
             today_date = date.today()
             year_from = date.today().replace(day=1, month=1)
+            year_datetime_from = datetime.combine(datetime.now().replace(day=1, month=1), d_time.min)
             absence_days_groups_ids = ast.literal_eval(
                 (self.env['ir.config_parameter'].sudo().get_param('absence_days_groups_ids')))
             get_param = self.env['ir.config_parameter'].sudo().get_param
@@ -44,28 +66,33 @@ class HrEmployeeInherit(models.Model):
                         recipient_ids.append(user.partner_id.id)
 
             # Todo Linked Absence
-            if linked_days:
+            if linked_days and employee.resource_calendar_id:
                 attendance_obj = self.env['hr.attendance'].search([('employee_id', '=', employee.id),
                                                                    ('check_out', '!=', False),
                                                                    ('check_out', '>=', year_from),
                                                                    ('check_out', '<', today_date)],
                                                                   order='check_out desc', limit=1)
 
-                last_check_out = attendance_obj.check_out.date() if attendance_obj else year_from
-                leave_objs = employee.check_leaves(employee_id=employee.id, check_from=last_check_out,
-                                                   check_to=today_date)
+                last_check_out = attendance_obj.check_out + timedelta(days=1) if attendance_obj else year_datetime_from
+
                 d_frm_obj = last_check_out
-                d_to_obj = today_date
+                d_to_obj = datetime.now()
 
-                if leave_objs and leave_objs[0].date_to:
-                    d_frm_obj = leave_objs[0].date_to.date()
-                diff = (d_to_obj - d_frm_obj).days
+                tzinfo = employee.resource_calendar_id.tz
+                d_frm_obj = timezone(tzinfo).localize(d_frm_obj) if tzinfo else d_frm_obj
+                d_to_obj = timezone(tzinfo).localize(d_to_obj) if tzinfo else d_to_obj
 
-                if linked_days and (diff == linked_days):
+                work_data = employee.get_work_days_data(d_frm_obj, d_to_obj, calendar=employee.resource_calendar_id, compute_leaves=True)
+                no_days = work_data['days']
+
+                weekends_no = self.get_weekends(d_frm_obj.date(), d_to_obj.date(), no_days, employee.resource_calendar_id)
+                no_days = work_data['days'] + weekends_no
+
+                if linked_days and (no_days >= linked_days):
 
                     table_data += "<tr><td style='width:33%;padding:10px;border:1px solid gray'>" + employee.name + "</td><td style='width:33%;padding:10px;border:1px solid gray'>" + str(
                         employee.emp_code or ' ') + "</td><td style='width:33%;padding:10px;border:1px solid gray'>" + str(
-                        diff) + "/days</td></tr>"
+                        no_days) + "/days</td></tr>"
 
                     if recipient_ids:
                         mail_data = {'subject': 'linked absence mail notification',
