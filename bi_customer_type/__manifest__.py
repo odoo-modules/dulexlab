@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 {
     'name': "BI Sales Customer Type",
-    'summary': "BI Sales Customer Type",
+    'summary': "BI Sales Partner Type",
     'description': """ 
-            This module creates new model(customer type) and adds new field to customer and adds customer type to SO && Invoice.
+            This module creates new model(customer type) and adds new field to Partner and adds Partner type to SO && Invoice.
      """,
     'author': "BI Solutions Development Team",
     'category': 'Sale',

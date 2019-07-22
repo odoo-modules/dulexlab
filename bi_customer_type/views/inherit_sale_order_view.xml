@@ -17,7 +17,7 @@
             <field name="inherit_id" ref="sale.sale_order_view_search_inherit_quotation"/>
             <field name="arch" type="xml">
                 <xpath expr="//filter[@name='filter_order_date']" position="replace">
-                    <filter name="group_by_customer_type" string="Customer Type"
+                    <filter name="group_by_customer_type" string="Partner Type"
                             context="{'group_by':'customer_type'}"/>
                 </xpath>
             </field>

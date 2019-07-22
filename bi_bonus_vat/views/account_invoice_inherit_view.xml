@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="invoice_form_price_list_inherit" model="ir.ui.view">
+            <field name="name">invoice.form.price.list.inherit</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='payment_term_id']" position="after">
+                    <field name="pricelist_id"
+                           attrs="{'readonly': [('state', '!=', 'draft')],'invisible': [('type', '!=', 'out_refund')]}"/>
+                </xpath>
+                <xpath expr="//group/group[2]" position="inside">
+                    <field name="refund_invoice_id" attrs="{'invisible': [('type', '!=', 'out_refund')]}" readonly="1"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

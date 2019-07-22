@@ -1,7 +1,7 @@
 <odoo>
     <data>
         <record id="group_customer_type" model="res.groups">
-            <field name="name">Customer Type Advisor</field>
+            <field name="name">Partner Type Advisor</field>
             <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
         </record>
     </data>

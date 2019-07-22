@@ -76,9 +76,3 @@ class MrpProduction(models.Model):
                                                                         'product_qty'] * bom_line.product_qty) / order.bom_id.product_qty})
 
         return res
-
-    def _workorders_create(self, bom, bom_data):
-        res = super(MrpProduction, self)._workorders_create(bom, bom_data)
-        if self.routing_id.operation_ids:
-            res.update({'workcenter_id': self.routing_id.operation_ids[0].workcenter_id.id})
-        return res

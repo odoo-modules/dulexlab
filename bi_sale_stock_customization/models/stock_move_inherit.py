@@ -13,7 +13,15 @@ class StockMoveInherit(models.Model):
     @api.multi
     def get_product_qty_on_hand(self):
         for record in self:
-            record.product_qty_on_hand = record.product_id.qty_available
+            quantity = 0.0
+            res_quantity = 0.0
+            quants = self.env['stock.quant'].search(
+                [('location_id.usage', '=', 'internal'), ('product_id', '=', record.product_id.id),
+                 ('location_id', '=', record.picking_id.location_id.id)])
+            for quant in quants:
+                quantity += quant.quantity
+                res_quantity += quant.reserved_quantity
+            record.product_qty_on_hand = quantity - res_quantity
 
     def _action_done(self):
         res = super(StockMoveInherit,self)._action_done()

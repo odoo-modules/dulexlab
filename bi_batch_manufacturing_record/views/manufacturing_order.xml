@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="mrp_production_adding_batch_number" model="ir.ui.view">
+            <field name="name">mrp.production.adding.batch.number</field>
+            <field name="model">mrp.production</field>
+            <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group/group[2]" postion="inside">
+                    <field name="batch_number" readonly="1"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

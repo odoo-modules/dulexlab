@@ -22,7 +22,7 @@
                 </xpath>
 
                 <xpath expr="//group/filter[@name='category_product']" position="after">
-                    <filter name="partner_type" string="Customer Type" domain="[]" context="{'group_by':'customer_type'}"/>
+                    <filter name="partner_type" string="Partner Type" domain="[]" context="{'group_by':'customer_type'}"/>
                 </xpath>
             </field>
         </record>

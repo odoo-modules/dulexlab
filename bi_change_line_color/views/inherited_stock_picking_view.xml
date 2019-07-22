@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+        <record id="inherited_stock_picking_view_form" model="ir.ui.view">
+            <field name="name">inherited.stock.picking.view.form</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook/page/field[@name='move_ids_without_package']/tree" position="attributes">
+                    <attribute name="decoration-success">not parent.immediate_transfer and product_uom_qty != reserved_availability and state != 'done'</attribute> # and not parent.immediate_transfer and state != 'done' and quantity_done &gt; reserved_availability and show_reserved_availability
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

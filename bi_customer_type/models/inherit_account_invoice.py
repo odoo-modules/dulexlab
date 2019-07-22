@@ -5,7 +5,7 @@ from odoo import models, fields, api
 class AccountInvoice(models.Model):
     _inherit = 'account.invoice'
 
-    customer_type = fields.Many2one('customer.type', string="Customer Type", related='partner_id.customer_type', store=True)
+    customer_type = fields.Many2one('customer.type', string="Partner Type", related='partner_id.customer_type', store=True)
 
 
 class AccountInvoiceReport(models.Model):
@@ -26,7 +26,7 @@ class AccountInvoiceReport(models.Model):
             else:
                 record.customer_type = False
 
-    customer_type = fields.Many2one('customer.type', string="Customer Type", default=_get_customer_type)
+    customer_type = fields.Many2one('customer.type', string="Partner Type", default=_get_customer_type)
 
     def _select(self):
         return super(AccountInvoiceReport, self)._select() + ", sub.customer_type as customer_type"

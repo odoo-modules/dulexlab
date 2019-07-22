@@ -19,6 +19,16 @@
                 <xpath expr="//notebook//page[@name='other_information']//field[@name='team_id']" position="attributes">
                     <attribute name="required">1</attribute>
                 </xpath>
+                <xpath expr="//field[@name='date_order']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='expected_date']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//group/group[1]" position="inside">
+                    <field name="date_order"/>
+                    <field name="expected_date"/>
+                </xpath>
                 <!--<xpath expr="//notebook//page[@name='other_information']//field[@name='team_id']" position="attributes">-->
                 <!--<attribute name="domain">[('team_id','=',member_ids.name)]</attribute>-->
                 <!--</xpath>-->

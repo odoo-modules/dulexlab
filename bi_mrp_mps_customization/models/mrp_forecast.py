@@ -9,7 +9,6 @@ class SaleForecast(models.Model):
 
     @api.model
     def save_forecast_data(self, product_id=False, quantity=0, date=False, date_to=False, field=None, period=False):
-        print(product_id, quantity, date, date_to, field, period)
         product = self.env['product.product'].browse(product_id)
         bom = self.env['mrp.bom']._bom_find(product=product)
         if bom:
@@ -53,7 +52,6 @@ class SaleForecast(models.Model):
                 new_quantity_per_day = ceil(new_quantity_per_day)
                 start_date = datetime.strptime(date, '%Y-%m-%d')
                 for i in range(0, 28, 1):
-                    print(calendar.day_name[start_date.weekday()])
                     new_date = start_date + timedelta(days=i)
                     if calendar.day_name[new_date.weekday()] != 'Friday':
                         forecast = self.search(
@@ -106,7 +104,6 @@ class SaleForecast(models.Model):
                     new_quantity_per_day = ceil(new_quantity_per_day)
                     start_date = datetime.strptime(date, '%Y-%m-%d')
                     for i in range(0, 28, 1):
-                        print(calendar.day_name[start_date.weekday()])
                         new_date = start_date + timedelta(days=i)
                         if calendar.day_name[new_date.weekday()] != 'Friday':
                             forecast = self.search(
