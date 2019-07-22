@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="product_product_adding_batch_fields_base" model="ir.ui.view">
+            <field name="name">product.product.adding.batch.fields</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group[@name='group_standard_price']" postion="inside">
+                    <field name="batch_sequence" attrs="{'readonly':True}"/>
+                    <field name="batch_step" attrs="{'readonly':True}"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="product_product_adding_batch_fields_edit" model="ir.ui.view">
+            <field name="name">product.product.adding.batch.fields</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="bi_batch_manufacturing_record.product_product_adding_batch_fields_base"/>
+            <field name="groups_id" eval="[(6, 0, [ref('mrp.group_mrp_manager')])]"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='batch_sequence']" position="attributes">
+                    <attribute name="readonly">False</attribute>
+                </xpath>
+                <xpath expr="//field[@name='batch_step']" position="attributes">
+                    <attribute name="readonly">False</attribute>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

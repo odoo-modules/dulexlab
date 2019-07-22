@@ -7,7 +7,7 @@
     'license': 'LGPL-3',
     "category": "Manufacturing Report",
     "summary": "Batch Manufacturing Report for Manufacturing Order.",
-    "depends": ["mrp", "bi_product_customization", "bi_mrp_order_customization"],
+    "depends": ["mrp", "bi_product_customization", "bi_mrp_order_customization", "bi_batch_manufacturing_record"],
     "data": [
         'report/batch_record_report.xml',
     ],
