@@ -8,7 +8,7 @@ class MrpWorkorder(models.Model):
 
     lot_id = fields.Many2one('stock.production.lot', readonly=False, related=False, compute='get_component_lot_value', )
 
-    @api.onchange('lot_id')
+    @api.onchange('lot_id', 'qty_producing')
     def change_component_lot_qty(self):
         for work_order in self:
             product_lots = self.env['stock.production.lot'].search(
@@ -28,7 +28,8 @@ class MrpWorkorder(models.Model):
                     location=work_order.production_id.location_src_id.id, lot_id=work_order.lot_id.id).qty_available
                 lot_qty = lot_location_qty_available
 
-            work_order.qty_done = lot_qty
+            if lot_qty > work_order.component_remaining_qty:
+                work_order.qty_done = work_order.component_remaining_qty
 
     @api.depends('component_id')
     def get_component_lot_value(self):
@@ -47,7 +48,11 @@ class MrpWorkorder(models.Model):
                 lot_product_move_line_object = product_move_object.move_line_ids.filtered(
                     lambda stock_move_line: stock_move_line.lot_id == diff_lot_ids[
                         0] and stock_move_line.product_qty > 0)
-                work_order.qty_done = lot_product_move_line_object.product_qty
+
+                if lot_product_move_line_object.product_qty > work_order.component_remaining_qty:
+                    work_order.qty_done = work_order.component_remaining_qty
+                else:
+                    work_order.qty_done = lot_product_move_line_object.product_qty
             else:
                 product_lot_objects = self.env['stock.production.lot'].search(
                     [('product_id', '=', work_order.component_id.id)])
