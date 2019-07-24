@@ -5,3 +5,7 @@
     text-align: center;
     padding: 10px 0px 2px 3px;
 }
+
+.o_kanban_view.o_kanban_dashboard.o_shift_kanban .oe_kanban_content{
+    padding-top: 50px!important;
+}
