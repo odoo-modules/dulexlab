@@ -5,6 +5,13 @@ from odoo import models, fields, api, _
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
+    @api.onchange('pricelist_id')
+    def set_pricelist_orderlines(self):
+        for order in self:
+            for line in order.order_line:
+                line._compute_amount()
+                line._onchange_discount()
+
     @api.multi
     def _prepare_invoice(self):
         res = super(SaleOrder, self)._prepare_invoice()

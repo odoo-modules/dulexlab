@@ -8,6 +8,7 @@
                 <form string="Partner Type">
                     <group>
                         <field name="name"/>
+                        <field name="category_id"/>
                     </group>
                 </form>
             </field>

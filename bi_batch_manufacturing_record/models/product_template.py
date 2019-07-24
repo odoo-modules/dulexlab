@@ -12,7 +12,6 @@ class ProductTemplate(models.Model):
     @api.multi
     def update_batch_sequence(self):
         for template in self.search([]):
-            print(fields.Date.today().month, template.batch_month)
             if fields.Date.today().month != template.batch_month:
                 template.write({'batch_sequence': template.batch_sequence + template.batch_step})
                 template.write({'batch_month': fields.Date.today().month})
