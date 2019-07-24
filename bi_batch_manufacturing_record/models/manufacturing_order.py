@@ -20,7 +20,6 @@ class ManufacturingOrder(models.Model):
                 ('state', '!=', 'cancel'),
                 ('product_id', '=', self.product_id.id)
             ])
-            print(self.date_planned_start.month)
             first_part = False
             if self.date_planned_start.month == self.product_id.batch_month:
                 first_part = self.product_id.batch_sequence
