@@ -1,2 +1,3 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_customer_type,access.customer.type,model_customer_type,bi_customer_type.group_customer_type,1,1,1,1
+access_partner_category,access.partner.category,model_partner_category,bi_customer_type.group_customer_type,1,1,1,1
