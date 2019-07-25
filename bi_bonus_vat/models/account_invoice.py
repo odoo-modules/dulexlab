@@ -11,6 +11,8 @@ class AccountInvoice(models.Model):
     def get_ks_global_discount_rate(self):
         for invoice in self:
             invoice.ks_global_discount_rate = invoice.pricelist_id.cd_disc
+            for line in invoice.invoice_line_ids:
+                line._compute_price()
 
     @api.onchange('partner_id')
     def get_default_invoice_pricelist(self):
