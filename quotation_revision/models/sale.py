@@ -24,6 +24,7 @@ class SaleOrder(models.Model):
         ('draft_quote', 'Revised Quotation'),
         ('draft', 'Quotation'),
         ('sent', 'Quotation Sent'),
+        ('pend', 'Pending'),
         ('revised', 'Revised Order'),
         ('sale', 'Sale Order'),
         ('done', 'Done'),

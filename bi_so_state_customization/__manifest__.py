@@ -8,7 +8,7 @@
     'author': "BI Solutions Development Team",
     'category': 'Sales',
     'version': '0.1',
-    'depends': ['sale', 'base'],
+    'depends': ['sale', 'base', 'bi_saleorder_cancel_modification'],
     'data': [
         'views/inherit_sale_order.xml',
     ],
