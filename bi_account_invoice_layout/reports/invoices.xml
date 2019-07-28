@@ -14,7 +14,6 @@
                     <span t-field="line.public_price_lst"/>
                 </td>
             </xpath>
-
             <xpath expr="//div[@class='page']/table[@name='invoice_line_table']/thead/tr/th[@t-if='display_discount']"
                    position="attributes">
                 <attribute name="style">display:none</attribute>
@@ -31,12 +30,10 @@
                     <span>CD</span>
                 </th>
             </xpath>
-
             <xpath expr="//div[@class='page']/table[@name='invoice_line_table']/tbody/t/tr/t/td[@t-if='display_discount']"
                    position="attributes">
                 <attribute name="style">display:none</attribute>
             </xpath>
-
             <xpath expr="//div[@class='page']/table[@name='invoice_line_table']/tbody/t/tr/t/td[@t-if='display_discount']"
                    position="after">
 
@@ -54,16 +51,23 @@
                 </td>
 
             </xpath>
-
             <!--<xpath expr="//div[@id='total']/div[1]/table[1]/tr[@class='border-black'][2]" position="before">-->
             <xpath expr="//div[@id='total']/div/table/t" position="after">
-
                 <tr class="border-black">
                     <td>
                         <span>Discount Amount</span>
                     </td>
                     <td class="text-right">
                         <span t-field="o.discount_amount"/>
+                    </td>
+                </tr>
+            </xpath>
+
+            <xpath expr="//tr[hasclass('border-black')][3]" position="replace">
+                <tr class="border-black o_total">
+                    <td style="background-color: white !important; color: black !important; border-right: 1px solid black !important;"><strong>Total</strong></td>
+                    <td class="text-right" style="background-color: white !important; color: black !important; border-left: 1px solid black !important;">
+                        <span t-field="o.amount_total"/>
                     </td>
                 </tr>
             </xpath>
