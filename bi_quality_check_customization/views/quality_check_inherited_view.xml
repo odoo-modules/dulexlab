@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_quality_check_tree_inherited" model="ir.ui.view">
+        <field name="name">quality.check.tree.inherited</field>
+        <field name="model">quality.check</field>
+        <field name="inherit_id" ref="quality_control.quality_check_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='lot_id']" position="replace">
+                <field name="partner_id"/>
+                <field name="initial_demand"/>
+                <field name="done_qty"/>
+                <field name="uom_qty"/>
+                <field name="move_line_ids">
+                    <tree string="LoTs">
+                        <field name="lot_id"/>
+                        <field name="lot_name"/>
+                        <field name="qty_done"/>
+                        <field name="product_uom_id"/>
+                    </tree>
+                </field>
+            </xpath>
+        </field>
+    </record>
+</odoo>
