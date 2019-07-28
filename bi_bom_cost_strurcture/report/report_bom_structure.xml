@@ -8,12 +8,21 @@
         <xpath expr="//div/t/div[2]/div/div/table/tbody/tr/td[3]" position="before">
             <th class="text-right">&amp;nbsp;</th>
         </xpath>
+        <xpath expr="//div/t/div[2]/div/div/table/tfoot/tr/td[3]" position="before">
+            <th class="text-right">&amp;nbsp;</th>
+        </xpath>
     </template>
 
     <template id="report_mrp_bom_line_inherit" inherit_id="mrp.report_mrp_bom_line">
         <xpath expr="//t[2]/tr/td[3]" position="before">
             <td class="text-right">
-                <span>
+                <t t-if="l['available_qty'] &lt; l['prod_qty']">
+                    <t t-set="style" t-value="'color:red'"/>
+                </t>
+                <t t-if="l['available_qty'] >= l['prod_qty']">
+                    <t t-set="style" t-value="'color:green'"/>
+                </t>
+                <span t-att-style="style">
                     <t t-esc="l['available_qty']"
                        t-options='{"widget": "float", "decimal_precision": "Product Unit of Measure"}'/>
                 </span>
@@ -24,7 +33,14 @@
     <template id="report_mrp_bom_pdf_line_inherit" inherit_id="mrp.report_mrp_bom_pdf_line">
         <xpath expr="//t[2]/tr/td[3]" position="before">
             <td class="text-right">
-                <span>
+
+                <t t-if="l['available_qty'] &lt; l['quantity']">
+                    <t t-set="style" t-value="'color:red'"/>
+                </t>
+                <t t-if="l['available_qty'] >= l['quantity']">
+                    <t t-set="style" t-value="'color:green'"/>
+                </t>
+                <span t-att-style="style">
                     <t t-if="l['type'] == 'bom'" t-esc="l['available_qty']"
                        t-options='{"widget": "float", "decimal_precision": "Product Unit of Measure"}'/>
                 </span>
