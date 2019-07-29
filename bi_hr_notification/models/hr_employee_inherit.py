@@ -68,12 +68,17 @@ class HrEmployeeInherit(models.Model):
             # Todo Linked Absence
             if linked_days and employee.resource_calendar_id:
                 attendance_obj = self.env['hr.attendance'].search([('employee_id', '=', employee.id),
-                                                                   ('check_out', '!=', False),
-                                                                   ('check_out', '>=', year_from),
-                                                                   ('check_out', '<', today_date)],
-                                                                  order='check_out desc', limit=1)
-
-                last_check_out = attendance_obj.check_out + timedelta(days=1) if attendance_obj else year_datetime_from
+                                                                   ('check_in', '!=', False),
+                                                                   ('check_in', '>=', year_from),
+                                                                   ('check_in', '<', today_date)],
+                                                                  order='check_in desc', limit=1)
+                if attendance_obj:
+                    if attendance_obj.check_out:
+                        last_check_out = attendance_obj.check_out + timedelta(days=1)
+                    else:
+                        last_check_out = attendance_obj.check_in + timedelta(days=1)
+                else:
+                    last_check_out = year_datetime_from
 
                 d_frm_obj = last_check_out
                 d_to_obj = datetime.now()
@@ -102,6 +107,7 @@ class HrEmployeeInherit(models.Model):
                                      }
                         mail = self.env['mail.mail'].create(mail_data)
                         mail.send()
+
             # Todo Un-Linked Absence
             if unlinked_days:
                 days = 0
@@ -128,7 +134,7 @@ class HrEmployeeInherit(models.Model):
                         if not emp_att_obj and not check_leaves:
                             unlinked += 1
 
-                if unlinked == unlinked_days:
+                if unlinked >= unlinked_days:
                     table_header = "<table style='width: 100%;padding:10px;'><tbody><tr><td style='width:33%;padding:10px;border:1px solid gray'>Employee Name</td><td style='width:33%;padding:10px;border:1px solid gray'>Employee Code</td><td style='width:33%;padding:10px;border:1px solid gray'>Un-linked Absence days</td></tr>"
                     table_data += "<tr><td style='width:33%;padding:10px;border:1px solid gray'>" + employee.name + "</td><td style='width:33%;padding:10px;border:1px solid gray'>" + str(
                         employee.emp_code or ' ') + "</td><td style='width:33%;padding:10px;border:1px solid gray'>" + str(
