@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_icon_team_form" model="ir.ui.view">
+            <field name="name">icon.team.form</field>
+            <field name="model">icon.team</field>
+            <field name="arch" type="xml">
+                <form string="Icon Team">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="view_icon_team_tree" model="ir.ui.view">
+            <field name="name">icon.team.tree</field>
+            <field name="model">icon.team</field>
+            <field name="arch" type="xml">
+                <tree string="Icon Team">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_icon_team" model="ir.actions.act_window">
+            <field name="name">Icon Team</field>
+            <field name="res_model">icon.team</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_icon_team_tree"/>
+        </record>
+
+        <menuitem id="menu_icon_team" name="Icon Teams"
+                  parent="account.account_account_menu"
+                  sequence="5"
+                  action="action_icon_team"/>
+    </data>
+</odoo>
