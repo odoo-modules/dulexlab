@@ -62,7 +62,24 @@
                     </td>
                 </tr>
             </xpath>
-
+            <xpath expr="//div[@id='informations']" position="inside">
+                <div name="salesperson_name" class="col-auto mw-100 mb-2" t-if="o.user_id.name" >
+                    <strong>Salesperson:</strong>
+                    <p class="m-0" t-field="o.user_id.name"/>
+                </div>
+                <div name="partner_phone" class="col-auto mw-100 mb-2" t-if="o.partner_id.phone">
+                    <strong>Phone:</strong>
+                    <p class="m-0" t-field="o.partner_id.phone"/>
+                </div>
+                <div name="partner_mobile" class="col-auto mw-100 mb-2" t-if="o.partner_id.mobile">
+                    <strong>Mobile:</strong>
+                    <p class="m-0" t-field="o.partner_id.mobile"/>
+                </div>
+<!--                <div name="partner_phone_mobile" class="col-auto mw-100 mb-2" t-if="not (o.partner_id.phone and o.partner_id.mobile)">-->
+<!--                    <strong>Phone:</strong>-->
+<!--                    <p class="m-0">&amp;nbsp;</p>-->
+<!--                </div>-->
+            </xpath>
             <xpath expr="//tr[hasclass('border-black')][3]" position="replace">
                 <tr class="border-black o_total">
                     <td style="background-color: white !important; color: black !important; border-right: 1px solid black !important;"><strong>Total</strong></td>
