@@ -10,7 +10,7 @@
     'version': '0.1',
     'depends': ['base', 'sale', 'account'],
     'data': [
-        'security/groups.xml',
+        # 'security/groups.xml',
         'security/ir.model.access.csv',
         'views/icon_team_view.xml',
         'views/inherit_sale_order_view.xml',
