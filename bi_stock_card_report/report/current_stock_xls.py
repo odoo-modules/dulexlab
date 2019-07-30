@@ -11,45 +11,75 @@ class StandardReportXlsx(models.AbstractModel):
         self.env.cr.execute(
             """WITH
                 source as (select t1.product_id, sum(t1.product_uom_qty) as openin from stock_move as t1
-                where (t1.location_dest_id = %s )
+                where (t1.location_dest_id = %s)
                 and t1.date < %s
                 and t1.state = 'done'
                 group by t1.product_id ),
+                
                 dist as (select t1.product_id, sum(t1.product_uom_qty) as openout from stock_move as t1
-                where (t1.location_id =%s )
+                where (t1.location_id = %s)
                 and t1.date < %s
                 and t1.state = 'done'
                 group by t1.product_id),
+                
                 qtyin as (select t1.product_id, sum(t1.product_uom_qty) as qtyin from stock_move as t1
-                where (t1.location_dest_id = %s )
+                where (t1.location_dest_id = %s)
                 and t1.date BETWEEN %s AND %s
                 and t1.state = 'done'
-                group by t1.product_id ),
+                group by t1.product_id),
+                
                 qtyout as (select t1.product_id, sum(t1.product_uom_qty) as qtyout from stock_move as t1
                 where (t1.location_id = %s)
                 and t1.date BETWEEN %s AND %s
                 and t1.state = 'done'
                 group by t1.product_id)
-                select product_template.name, source.openin,
-                dist.openout,
-                (coalesce(source.openin,0) - coalesce(dist.openout,0)) as openBlance
-                ,qtyin.qtyin,qtyout.qtyout,
-                (coalesce(source.openin,0) - coalesce(dist.openout,0)) + coalesce(qtyin.qtyin,0) - +coalesce(qtyout.qtyout,0) as endblance
+                
+                select product_template.name, 
+                SUM(source.openin), 
+                SUM(dist.openout),
+                SUM((coalesce(source.openin,0) - coalesce(dist.openout,0))) as openBalance,
+                SUM(qtyin.qtyin),
+                SUM(qtyout.qtyout),
+                SUM( (coalesce(source.openin,0) - coalesce(dist.openout,0)) + (coalesce(qtyin.qtyin,0) - coalesce(qtyout.qtyout,0)) ) as endbalance
+
                 from dist full join source on dist.product_id = source.product_id
                 full join qtyin on qtyin.product_id = source.product_id
                 full join qtyout on qtyout.product_id = source.product_id
                 left join product_product on product_product.id = GREATEST(dist.product_id,source.product_id,qtyin.product_id,qtyout.product_id)
                 left join product_template on product_template.id= product_product.product_tmpl_id
-                order by product_template.name""",(
+                group by product_template.name
+                order by product_template.name
+
+                """, (
                 data['location'], data['start_date'], data['location'], data['start_date'],
                 data['location'],
                 data['start_date'], data['end_date'], data['location'], data['start_date'],
                 data['end_date']))
-        lines = self.env.cr.fetchall()
+        tuple_lines = self.env.cr.fetchall()
+        lines = list()
+        for tuple_line in tuple_lines:
+            lines.append(list(tuple_line))
+        return lines
+
+    def merge_lines(self, lines):
+        index = 0
+        for line in lines:
+            if 'Bonus' in line[0]:
+                if index >= 1 and lines[index - 1] and lines[index - 1][0] == line[0][:-6]:
+                    for i in range(1, 7):
+                        if not lines[index - 1][i]:
+                            lines[index - 1][i] = 0
+                        if not line[i]:
+                            line[i] = 0
+                        lines[index - 1][i] += line[i]
+                    lines[index] = False
+            index += 1
         return lines
 
     def generate_xlsx_report(self, workbook, data, objs):
         lines = self.get_lines(data)
+        if data['merge_bonus']:
+            lines = self.merge_lines(lines)
         sheet = workbook.add_worksheet('Stock Info')
         format1 = workbook.add_format(
             {'font_size': 14, 'bottom': True, 'right': True, 'left': True, 'top': True, 'align': 'vcenter',
@@ -101,9 +131,10 @@ class StandardReportXlsx(models.AbstractModel):
 
         count = 4
         for line in lines:
-            sheet.write(count, 0, line[0], format21_unbolded)
-            sheet.write(count, 1, line[3], format21_unbolded)
-            sheet.write(count, 2, line[4], format21_unbolded)
-            sheet.write(count, 3, line[5], format21_unbolded)
-            sheet.write(count, 4, line[6], format21_unbolded)
-            count += 1
+            if line:
+                sheet.write(count, 0, line[0], format21_unbolded)
+                sheet.write(count, 1, line[3], format21_unbolded)
+                sheet.write(count, 2, line[4], format21_unbolded)
+                sheet.write(count, 3, line[5], format21_unbolded)
+                sheet.write(count, 4, line[6], format21_unbolded)
+                count += 1

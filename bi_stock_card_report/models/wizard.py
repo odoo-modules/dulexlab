@@ -8,6 +8,7 @@ class StockReport(models.TransientModel):
     location = fields.Many2one('stock.location', string="Location", required=True)
     start_date = fields.Datetime(string="Start Date", required=True)
     end_date = fields.Datetime(string="End Date", required=True)
+    merge_bonus = fields.Boolean(string="Merge Bonus", default=False)
 
     @api.multi
     def export_xls(self):
@@ -16,6 +17,7 @@ class StockReport(models.TransientModel):
         data['location_name'] = self.location.name
         data['start_date'] = self.start_date
         data['end_date'] = self.end_date
+        data['merge_bonus'] = self.merge_bonus
         return {
             'data': data,
             'type': 'ir.actions.report',
