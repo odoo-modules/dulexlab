@@ -1,6 +1,5 @@
 <odoo>
-    <data>
-
+    <data noupdate="1">
         <record id="group_new_area" model="res.groups">
             <field name="name">Area Advisor</field>
             <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>

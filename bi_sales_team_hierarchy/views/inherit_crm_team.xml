@@ -9,6 +9,9 @@
                 <xpath expr="//field[@name='team_type']" position="after">
                     <field name="team_supervisor" widget="many2one" options="{'no_create': False}"/>
                 </xpath>
+                <xpath expr="//field[@name='user_id']" position="attributes">
+                    <attribute name="domain">[]</attribute>
+                </xpath>
             </field>
         </record>
     </data>
