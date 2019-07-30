@@ -40,14 +40,15 @@ class StandardReportXlsx(models.AbstractModel):
                 SUM((coalesce(source.openin,0) - coalesce(dist.openout,0))) as openBalance,
                 SUM(qtyin.qtyin),
                 SUM(qtyout.qtyout),
-                SUM( (coalesce(source.openin,0) - coalesce(dist.openout,0)) + (coalesce(qtyin.qtyin,0) - coalesce(qtyout.qtyout,0)) ) as endbalance
+                SUM( (coalesce(source.openin,0) - coalesce(dist.openout,0)) + (coalesce(qtyin.qtyin,0) - coalesce(qtyout.qtyout,0)) ) as endbalance,
+                product_template.default_code
 
                 from dist full join source on dist.product_id = source.product_id
                 full join qtyin on qtyin.product_id = source.product_id
                 full join qtyout on qtyout.product_id = source.product_id
                 left join product_product on product_product.id = GREATEST(dist.product_id,source.product_id,qtyin.product_id,qtyout.product_id)
                 left join product_template on product_template.id= product_product.product_tmpl_id
-                group by product_template.name
+                group by product_template.name, product_template.default_code
                 order by product_template.name
 
                 """, (
@@ -119,22 +120,25 @@ class StandardReportXlsx(models.AbstractModel):
 
         sheet.set_column(0, 0, 40)
         sheet.set_column(1, 1, 15)
-        sheet.set_column(2, 2, 10)
-        sheet.set_column(3, 3, 12)
-        sheet.set_column(4, 4, 15)
+        sheet.set_column(2, 2, 15)
+        sheet.set_column(3, 3, 10)
+        sheet.set_column(4, 4, 12)
+        sheet.set_column(5, 5, 15)
 
         sheet.write(3, 0, "Name", format21)
-        sheet.write(3, 1, "Open Balance", format21)
-        sheet.write(3, 2, "Qty In", format21)
-        sheet.write(3, 3, "Qty Out", format21)
-        sheet.write(3, 4, "End Balance", format21)
+        sheet.write(3, 1, "Internal Ref.", format21)
+        sheet.write(3, 2, "Open Balance", format21)
+        sheet.write(3, 3, "Qty In", format21)
+        sheet.write(3, 4, "Qty Out", format21)
+        sheet.write(3, 5, "End Balance", format21)
 
         count = 4
         for line in lines:
             if line:
                 sheet.write(count, 0, line[0], format21_unbolded)
-                sheet.write(count, 1, line[3], format21_unbolded)
-                sheet.write(count, 2, line[4], format21_unbolded)
-                sheet.write(count, 3, line[5], format21_unbolded)
-                sheet.write(count, 4, line[6], format21_unbolded)
+                sheet.write(count, 1, line[7], format21_unbolded)
+                sheet.write(count, 2, line[3], format21_unbolded)
+                sheet.write(count, 3, line[4], format21_unbolded)
+                sheet.write(count, 4, line[5], format21_unbolded)
+                sheet.write(count, 5, line[6], format21_unbolded)
                 count += 1
