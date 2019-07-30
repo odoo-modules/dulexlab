@@ -3,12 +3,15 @@
 
     <template id="report_mrp_bom_inherit" inherit_id="mrp.report_mrp_bom">
         <xpath expr="//div/t/div[2]/div/div/table/thead/tr/th[3]" position="before">
+            <th class="text-right">Variance</th>
             <th class="text-right">Quantity Available</th>
         </xpath>
         <xpath expr="//div/t/div[2]/div/div/table/tbody/tr/td[3]" position="before">
             <th class="text-right">&amp;nbsp;</th>
+            <th class="text-right">&amp;nbsp;</th>
         </xpath>
         <xpath expr="//div/t/div[2]/div/div/table/tfoot/tr/td[3]" position="before">
+            <th class="text-right">&amp;nbsp;</th>
             <th class="text-right">&amp;nbsp;</th>
         </xpath>
     </template>
@@ -16,11 +19,18 @@
     <template id="report_mrp_operation_line_inherit" inherit_id="mrp.report_mrp_operation_line">
         <xpath expr="//t[2]/tr/td[3]" position="before">
             <th class="text-right">&amp;nbsp;</th>
+            <th class="text-right">&amp;nbsp;</th>
         </xpath>
     </template>
 
     <template id="report_mrp_bom_line_inherit" inherit_id="mrp.report_mrp_bom_line">
         <xpath expr="//t[2]/tr/td[3]" position="before">
+            <td class="text-right">
+                <span>
+                    <t t-esc="l['available_qty'] - l['prod_qty']"
+                       t-options='{"widget": "float", "decimal_precision": "Product Unit of Measure"}'/>
+                </span>
+            </td>
             <td class="text-right">
                 <t t-if="l['available_qty'] &lt; l['prod_qty']">
                     <t t-set="style" t-value="'color:red'"/>
@@ -36,13 +46,19 @@
         </xpath>
         <xpath expr="//t[3]/tr/td[3]" position="before">
             <td class="text-right">&amp;nbsp;</td>
+            <td class="text-right">&amp;nbsp;</td>
         </xpath>
     </template>
 
     <template id="report_mrp_bom_pdf_line_inherit" inherit_id="mrp.report_mrp_bom_pdf_line">
         <xpath expr="//t[2]/tr/td[3]" position="before">
             <td class="text-right">
-
+                <span>
+                    <t t-if="l['type'] == 'bom'" t-esc="l['available_qty'] - l['quantity']"
+                       t-options='{"widget": "float", "decimal_precision": "Product Unit of Measure"}'/>
+                </span>
+            </td>
+            <td class="text-right">
                 <t t-if="l['available_qty'] &lt; l['quantity']">
                     <t t-set="style" t-value="'color:red'"/>
                 </t>
