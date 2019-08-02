@@ -10,6 +10,7 @@
             <form>
                 <group>
                     <field name="driver_id"/>
+                    <field name="merge_bonus"/>
                 </group>
                 <group>
                     <field name="all_pickings"/>
