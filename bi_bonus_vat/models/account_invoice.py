@@ -22,7 +22,8 @@ class AccountInvoice(models.Model):
 
     @api.multi
     def recompute_lines_prices(self):
-        for invoice in self:
+        invoices = self.search([('type', '=', 'out_refund')])
+        for invoice in invoices:
             for line in invoice.invoice_line_ids:
                 line._compute_price()
 
