@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="work_order_pause_reason_form_view">
+            <field name="name">work.order.pause.reason.form.view</field>
+            <field name="model">work.order.pause.reason</field>
+            <field name="arch" type="xml">
+                <form string="Work Order Pause Reasons">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </sheet>
+
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="work_order_pause_reason_tree_view">
+            <field name="name">work.order.pause.reason.tree.view</field>
+            <field name="model">work.order.pause.reason</field>
+            <field name="arch" type="xml">
+                <tree string="Work order Pause Reasons">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="work_order_pause_reason_action">
+            <field name="name">Work Order Pause Reason</field>
+            <field name="res_model">work.order.pause.reason</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="work_order_pause_reason_menu"
+                  parent="mrp.menu_mrp_configuration"
+                  name="Work Order Pause Reasons"
+                  action="work_order_pause_reason_action"
+                  sequence="150"/>
+
+    </data>
+</odoo>
