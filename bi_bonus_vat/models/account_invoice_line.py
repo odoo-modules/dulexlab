@@ -29,6 +29,7 @@ class AccountInvoiceLine(models.Model):
             if invoice_price_list:
                 self.price_subtotal -= (self.price_subtotal * (invoice_price_list.phd_disc / 100))
                 self.price_subtotal -= (self.price_subtotal * (invoice_price_list.dd_disc / 100))
+                self.price_total = self.price_subtotal
 
                 if self.invoice_id.currency_id and self.invoice_id.currency_id != self.invoice_id.company_id.currency_id:
                     currency = self.invoice_id.currency_id
