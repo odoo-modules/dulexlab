@@ -21,6 +21,12 @@ class AccountInvoice(models.Model):
                 invoice.pricelist_id = invoice.partner_id.property_product_pricelist.id
 
     @api.multi
+    def recompute_lines_prices(self):
+        for invoice in self:
+            for line in invoice.invoice_line_ids:
+                line._compute_price()
+
+    @api.multi
     def get_taxes_values(self):
         tax_grouped = {}
         round_curr = self.currency_id.round
