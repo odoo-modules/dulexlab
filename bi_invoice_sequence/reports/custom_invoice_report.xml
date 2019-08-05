@@ -229,7 +229,9 @@
                             <span t-esc="o.get_amount_total_words()"/>
                         </div>
                         <br/>
-                        <div style="position:absolute;top:850px; page-break-inside: avoid;">
+<!--                        <div style="position:absolute;top:850px; page-break-inside: avoid;">-->
+                        <div style="page-break-inside: avoid;">
+<!--                        <div style="position:absolute;top:850px;">-->
                             <table style="width: 100%;">
                                 <tbody>
                                     <tr>
