@@ -8,7 +8,7 @@
     'author': "BI Solutions Development Team",
     'category': 'Manufacturing',
     'version': '0.1',
-    'depends': ['mrp'],
+    'depends': ['mrp', 'mrp_workorder'],
     'data': [
         'security/ir.model.access.csv',
         'wizard/pause_reason_wizard_view.xml',
