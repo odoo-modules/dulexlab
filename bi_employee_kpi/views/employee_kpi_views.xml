@@ -49,7 +49,7 @@
         <field name="arch" type="xml">
             <form string="Employee KPI">
                 <header>
-                    <button name="action_confirm" type="object" class="btn-primary" attrs="{'invisible': [('state', '!=', 'draft')]}" string="Confirm"/>
+                    <button name="action_confirm" type="object" class="btn-primary" attrs="{'invisible': [('state', '!=', 'draft')]}" string="Confirm" groups="hr.group_hr_manager"/>
                     <field name="state" widget="statusbar"/>
                 </header>
                 <sheet>
