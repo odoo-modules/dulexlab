@@ -20,7 +20,15 @@
             <div class="text-center" style="border-top: 1px solid black;">
                 <table style="width:100%;">
                     <tr>
-                        <td style="border: 1px solid black; font-weight:bold; background-color:#bfbfbf; width:33%; text-align:center; vertical-align: middle;">BATCH NO:<br/> <t t-esc="doc.name"/></td>
+                        <td style="border: 1px solid black; font-weight:bold; background-color:#bfbfbf; width:33%; text-align:center; vertical-align: middle;">
+                            BATCH RECORD: <br/>
+                            <t t-if="doc.parent_mo_id">
+                                <t t-esc="doc.parent_mo_id.batch_number"/>
+                            </t>
+                            <t t-if="not doc.parent_mo_id">
+                                <t t-esc="doc.batch_number"/>
+                            </t>
+                        </td>
                         <td style="border: 1px solid black; font-weight:bold; background-color:#bfbfbf; width:33%; text-align:center; vertical-align: middle;">MANUFACTURING DATE:<br/> <t t-esc='doc.create_date.date()'/></td>
                         <td style="border: 1px solid black; font-weight:bold; background-color:#bfbfbf; width:33%; text-align:center; vertical-align: middle;">EXPIRY DATE:<br/> <t t-esc='(doc.create_date + relativedelta(months=doc.product_id.validity_period or 0)).date()'/></td>
                     </tr>
@@ -87,7 +95,10 @@
                                 <td style="border: 1px solid black; width:15%; font-size:36px; font-weight:bold; text-align:center;"/>
                                 <td style="border: 1px solid black; width:20%; font-size:36px; font-weight:bold; text-align:center;"/>
                                 <td style="border: 1px solid black; width:10%; font-size:36px; font-weight:bold; text-align:center;"/>
-                                <td style="border: 1px solid black; width:15%; font-size:20px; font-weight:bold; text-align:center;"/>
+                                <td style="border: 1px solid black; width:15%; font-size:16px; font-weight:bold; text-align:center;">
+                                    BATCH NO: <br/>
+                                    <t t-esc="doc.name"/>
+                                </td>
                             </tr>
                             <tr>
                                 <td style="border: 1px solid black; width:20%; font-size:16px; font-weight:bold; text-align:center;">APPROVED BY:</td>

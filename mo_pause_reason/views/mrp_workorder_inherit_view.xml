@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="mrp_workorder_production_workorder_form_view_pause_inherit" model="ir.ui.view">
+            <field name="name">mrp.workorder.production.workorder.form.view.pause.inherit</field>
+            <field name="model">mrp.workorder</field>
+            <field name="inherit_id" ref="mrp_workorder.mrp_workorder_view_form_inherit_workorder"/>
+            <field name="arch" type="xml">
+                <xpath expr="//header" position="inside">
+                    <button name="%(work_order_pause_wizard_action)d" type="action" string="Pause" class="btn-warning"
+                            attrs="{'invisible': ['|', '|', ('working_state', '=', 'blocked'), ('state', 'in', ('done', 'pending', 'ready', 'cancel')), ('is_user_working', '=', False)]}"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="mrp_production_workorder_form_view_pause_inherit" model="ir.ui.view">
+            <field name="name">mrp.production.workorder.form.view.pause.inherit</field>
+            <field name="model">mrp.workorder</field>
+            <field name="inherit_id" ref="mrp.mrp_production_workorder_form_view_inherit"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='time_ids']/tree/field[@name='loss_id']" position="after">
+                    <field name="pause_reason_id" class="oe_inline" required="False" options='{"no_open": True}'/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

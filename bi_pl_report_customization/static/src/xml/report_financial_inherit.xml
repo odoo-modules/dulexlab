@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="line_template_inherit" inherit_id="account_reports.line_template">
+        <xpath expr="//t[1]/tr/td" position="attributes">
+            <attribute name="style">width:25% !important;</attribute>
+        </xpath>
+        <xpath expr="//t[1]/tr/t/td" position="attributes">
+            <attribute name="t-att-class">'o_account_report_line ' + ((line.get('unfoldable') and ' o_foldable_total' or '')) + ('' if hierarchies_enabled else ' o_account_report_line_indent')</attribute>
+        </xpath>
+        <xpath expr="//t[1]/tr/t/td/span" position="replace">
+            <span class="o_account_report_column_value" t-att-title="column.get('title')" style="display: inline-block; width: 100px !important;">
+                <t t-esc="column.get('name')"/>
+            </span>
+        </xpath>
+        <xpath expr="//t[1]/tr/t/td" position="inside">
+            <span class="o_account_report_column_value">
+                <t t-if="('no_format_name' in column) and (line.get('unfoldable') or (not line.get('caret_options'))) and (report.get('name') in ['Income Statement', 'الأرباح و الخسائر'])">
+                    &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;-&amp;nbsp;&amp;nbsp;
+                    <t t-esc="column.get('percent')"/>
+                    %
+                </t>
+            </span>
+        </xpath>
+    </template>
+    <template id="main_table_header_inherit" inherit_id="account_reports.main_table_header">
+        <xpath expr="//t[2]/thead/tr/t/th" position="attributes">
+            <attribute name="t-att-class">'o_account_report_column_header'</attribute>
+        </xpath>
+    </template>
+</odoo>

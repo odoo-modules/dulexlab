@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="mrp_workorder_adding_batch_mo_report_print_button" model="ir.ui.view">
+            <field name="name">mrp.workorder.adding.batch.mo.report.print.button</field>
+            <field name="model">mrp.workorder</field>
+            <field name="inherit_id" ref="mrp_workorder.mrp_workorder_view_form_inherit_workorder"/>
+            <field name="arch" type="xml">
+                <xpath expr="//header" postion="inside">
+                    <button name="print_mo_record" type="object" string="Print Batch MO" class="oe_highlight" attrs="{'invisible': [('production_id', '=', False)]}"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
