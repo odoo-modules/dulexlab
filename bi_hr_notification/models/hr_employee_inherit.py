@@ -42,28 +42,34 @@ class HrEmployeeInherit(models.Model):
 
     @api.model
     def attendance_notification(self):
+        linked_table_header = "<table style='width: 100%;padding:10px;'><tbody><tr><td style='width:33%;padding:10px;border:1px solid gray'>Employee Name</td><td style='width:33%;padding:10px;border:1px solid gray'>Employee Code</td><td style='width:33%;padding:10px;border:1px solid gray'>Last Check Out From</td></tr>"
+        linked_table_data = ''
+
+        unlinked_table_header = "<table style='width: 100%;padding:10px;'><tbody><tr><td style='width:33%;padding:10px;border:1px solid gray'>Employee Name</td><td style='width:33%;padding:10px;border:1px solid gray'>Employee Code</td><td style='width:33%;padding:10px;border:1px solid gray'>Un-linked Absence days</td></tr>"
+        unlinked_table_data = ''
+
+        table_end = '</tbody></table>'
+
+        recipient_ids = []
+        absence_days_groups_ids = ast.literal_eval(
+            (self.env['ir.config_parameter'].sudo().get_param('absence_days_groups_ids')))
+        for group in self.env['res.groups'].search([('id', 'in', absence_days_groups_ids)]):
+            for user in group.users:
+                if user.partner_id.id not in recipient_ids:
+                    recipient_ids.append(user.partner_id.id)
+
+        get_param = self.env['ir.config_parameter'].sudo().get_param
+        unlinked_days = int(get_param('unlinked_days'))
+        linked_days = int(get_param('linked_days'))
+
         for employee in self.search([]):
-            table_header = "<table style='width: 100%;padding:10px;'><tbody><tr><td style='width:33%;padding:10px;border:1px solid gray'>Employee Name</td><td style='width:33%;padding:10px;border:1px solid gray'>Employee Code</td><td style='width:33%;padding:10px;border:1px solid gray'>Last Check Out From</td></tr>"
-            table_data = ''
-            table_end = '</tbody></table>'
-            recipient_ids = []
             today_date = date.today()
             year_from = date.today().replace(day=1, month=1)
             year_datetime_from = datetime.combine(datetime.now().replace(day=1, month=1), d_time.min)
-            absence_days_groups_ids = ast.literal_eval(
-                (self.env['ir.config_parameter'].sudo().get_param('absence_days_groups_ids')))
-            get_param = self.env['ir.config_parameter'].sudo().get_param
-            unlinked_days = int(get_param('unlinked_days'))
-            linked_days = int(get_param('linked_days'))
 
             # ----------------- recipients ------------------#
-            if employee.parent_id.address_home_id.id and (employee.parent_id.address_home_id.id not in recipient_ids):
-                recipient_ids.append(employee.parent_id.address_home_id.id)
-
-            for group in self.env['res.groups'].search([('id', 'in', absence_days_groups_ids)]):
-                for user in group.users:
-                    if user.partner_id.id not in recipient_ids:
-                        recipient_ids.append(user.partner_id.id)
+            # if employee.parent_id.address_home_id.id and (employee.parent_id.address_home_id.id not in recipient_ids):
+            #     recipient_ids.append(employee.parent_id.address_home_id.id)
 
             # Todo Linked Absence
             if linked_days and employee.resource_calendar_id:
@@ -95,18 +101,9 @@ class HrEmployeeInherit(models.Model):
 
                 if linked_days and (no_days >= linked_days):
 
-                    table_data += "<tr><td style='width:33%;padding:10px;border:1px solid gray'>" + employee.name + "</td><td style='width:33%;padding:10px;border:1px solid gray'>" + str(
+                    linked_table_data += "<tr><td style='width:33%;padding:10px;border:1px solid gray'>" + employee.name + "</td><td style='width:33%;padding:10px;border:1px solid gray'>" + str(
                         employee.emp_code or ' ') + "</td><td style='width:33%;padding:10px;border:1px solid gray'>" + str(
                         no_days) + "/days</td></tr>"
-
-                    if recipient_ids:
-                        mail_data = {'subject': 'linked absence mail notification',
-                                     'body_html': 'Dears' + ',<br/>' + table_header + table_data + table_end,
-                                     'recipient_ids': [(6, 0, recipient_ids)],
-                                     'author_id': self.env.ref('base.partner_admin').id,
-                                     }
-                        mail = self.env['mail.mail'].create(mail_data)
-                        mail.send()
 
             # Todo Un-Linked Absence
             if unlinked_days:
@@ -135,18 +132,28 @@ class HrEmployeeInherit(models.Model):
                             unlinked += 1
 
                 if unlinked >= unlinked_days:
-                    table_header = "<table style='width: 100%;padding:10px;'><tbody><tr><td style='width:33%;padding:10px;border:1px solid gray'>Employee Name</td><td style='width:33%;padding:10px;border:1px solid gray'>Employee Code</td><td style='width:33%;padding:10px;border:1px solid gray'>Un-linked Absence days</td></tr>"
-                    table_data += "<tr><td style='width:33%;padding:10px;border:1px solid gray'>" + employee.name + "</td><td style='width:33%;padding:10px;border:1px solid gray'>" + str(
+                    unlinked_table_data += "<tr><td style='width:33%;padding:10px;border:1px solid gray'>" + employee.name + "</td><td style='width:33%;padding:10px;border:1px solid gray'>" + str(
                         employee.emp_code or ' ') + "</td><td style='width:33%;padding:10px;border:1px solid gray'>" + str(
                         unlinked) + "/days</td></tr>"
-                    if recipient_ids:
-                        mail_data = {'subject': 'Un-linked absence mail notification',
-                                     'body_html': 'Dears' + ',<br/>' + table_header + table_data + table_end,
-                                     'recipient_ids': [(6, 0, recipient_ids)],
-                                     'author_id': self.env.ref('base.partner_admin').id,
-                                     }
-                        mail = self.env['mail.mail'].create(mail_data)
-                        mail.send()
+
+        if recipient_ids:
+            if linked_table_data:
+                mail_data = {'subject': 'linked absence mail notification',
+                             'body_html': 'Dears' + ',<br/>' + linked_table_header + linked_table_data + table_end,
+                             'recipient_ids': [(6, 0, recipient_ids)],
+                             'author_id': self.env.ref('base.partner_admin').id,
+                             }
+                mail = self.env['mail.mail'].create(mail_data)
+                mail.send()
+
+            if unlinked_table_data:
+                mail_data = {'subject': 'Un-linked absence mail notification',
+                             'body_html': 'Dears' + ',<br/>' + unlinked_table_header + unlinked_table_data + table_end,
+                             'recipient_ids': [(6, 0, recipient_ids)],
+                             'author_id': self.env.ref('base.partner_admin').id,
+                             }
+                mail = self.env['mail.mail'].create(mail_data)
+                mail.send()
 
     @api.multi
     def check_leaves(self, employee_id, check_from, check_to):

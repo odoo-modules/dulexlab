@@ -9,6 +9,7 @@
             <field name="arch" type="xml">
                  <xpath expr="//field[@name='check_out']" position="after">
                     <field name="is_bus_delayed" readonly="1"/>
+                    <field name="attend_date" invisible="1"/>
                 </xpath>
             </field>
         </record>
