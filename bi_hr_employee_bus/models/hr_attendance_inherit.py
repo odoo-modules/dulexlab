@@ -7,7 +7,7 @@ import pytz
 class HrAttendanceInherit(models.Model):
     _inherit = 'hr.attendance'
 
-    attend_date = fields.Date(compute='_get_attend_date')
+    attend_date = fields.Date(compute='_get_attend_date', store=1)
     is_bus_delayed = fields.Boolean(string='Is bus delayed?', default=False)
 
     @api.multi

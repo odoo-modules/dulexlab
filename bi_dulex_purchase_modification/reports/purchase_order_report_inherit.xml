@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+        <template id="report_purchase_order_inherit" inherit_id="purchase.report_purchaseorder_document">
+            <xpath expr="//div[@class='page']/h2" position="before">
+                <td class="text-right">
+                    <span t-field="o.tag_id" widget="many2many"/>
+                </td>
+            </xpath>
+        </template>
+    </data>
+</odoo>

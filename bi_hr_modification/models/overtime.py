@@ -33,7 +33,7 @@ class EmployeeOverTime(models.Model):
         res = super(EmployeeOverTime, self).create(values)
         ovt = str(datetime.timedelta(hours=res.diff)).rsplit(':', 1)[0]
         overtime_groups_ids = ast.literal_eval(
-            (self.env['ir.config_parameter'].sudo().get_param('overtime_groups_ids')))
+            (self.env['ir.config_parameter'].sudo().get_param('overtime_group_ids')))
         recipient_ids = []
 
         if res.employee_id.parent_id.address_home_id.id:

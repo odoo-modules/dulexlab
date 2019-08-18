@@ -20,7 +20,19 @@ class HrPayslipInherit(models.Model):
         return False
 
 
-    kpi_line_ids = fields.One2many('employee.kpi.line', 'payslip_id', string="KPI's", default=_get_default_kpi_lines)
+    kpi_line_ids = fields.Many2many('employee.kpi.line', string="KPI's", compute='_get_kpi_lines')
+
+    @api.multi
+    @api.depends('date_from', 'date_to', 'employee_id')
+    def _get_kpi_lines(self):
+        for rec in self:
+            lines = []
+            for kh in self.env['employee.kpi.history'].search([('state', '=', 'confirmed'), ('date', '>=', rec.date_from), ('date', '<=', rec.date_to)], limit=1):
+                for line in kh.kpi_line_ids:
+                    if line.apply:
+                        lines.append(line.id)
+            rec.kpi_line_ids = [(6, 0, lines)]
+
 
     @api.model
     def _get_payslip_lines(self, contract_ids, payslip_id):
