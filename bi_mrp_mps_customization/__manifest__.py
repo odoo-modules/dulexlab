@@ -13,6 +13,7 @@
     'depends': ['mrp_mps'],
     'data': [
         "views/editing_mrp_mps_template.xml",
+        "views/product_form.xml",
     ],
 
 }

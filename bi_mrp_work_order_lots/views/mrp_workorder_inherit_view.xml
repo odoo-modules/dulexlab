@@ -10,9 +10,12 @@
             </xpath>
 
             <xpath expr="//div[@class='o_workorder_field text-center']/field[@name='lot_id']" position="replace">
-                <field name="lot_id" context="{'default_product_id': component_id}"
+                <field name="external_lot_id" context="{'default_product_id': component_id}"
                        domain="[('product_id', '=', component_id)]"
                        attrs="{'invisible': [('component_tracking', '=', 'none')]}" options="{'no_create': True}"/>
+<!--                <field name="lot_id" context="{'default_product_id': component_id}"-->
+<!--                       domain="[('product_id', '=', component_id)]"-->
+<!--                       attrs="{'invisible': [('component_tracking', '=', 'none')]}" options="{'no_create': True}"/>-->
             </xpath>
         </field>
     </record>
