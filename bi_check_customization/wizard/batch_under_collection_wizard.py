@@ -8,6 +8,7 @@ class UnderCollectionWizard(models.TransientModel):
     journal_id = fields.Many2one('account.journal', string='Journal')
     debit_account_id = fields.Many2one('account.account', string='Debit Account')
     credit_account_id = fields.Many2one('account.account', string='Credit Account')
+    payment_date = fields.Date(string="Date", default=lambda self: fields.Date.today())
 
     @api.multi
     def action_confirm_payment(self):
@@ -26,7 +27,7 @@ class UnderCollectionWizard(models.TransientModel):
                             'payment_batch_id': batch.id,
                             'ref': line.communication,
                             'journal_id': val.journal_id.id,
-                            # 'date': date,
+                            'date': val.payment_date,
                         }
                         if not line.due_date:
                             raise ValidationError(

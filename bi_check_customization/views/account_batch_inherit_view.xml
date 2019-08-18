@@ -27,7 +27,7 @@
                     <button name="action_account_entries" type="object" class="oe_stat_button"
                             icon="fa-pencil-square-o"
                             string="Entries">
-                    </button>3-sales team in sales order mandatory
+                    </button>
 
                 </div>
             </xpath>
