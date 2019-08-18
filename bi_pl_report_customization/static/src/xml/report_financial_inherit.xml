@@ -16,9 +16,8 @@
         <xpath expr="//t[1]/tr/t/td" position="inside">
             <span class="o_account_report_column_value">
                 <t t-if="('no_format_name' in column) and (line.get('unfoldable') or (not line.get('caret_options'))) and (report.get('name') in ['Income Statement', 'الأرباح و الخسائر'])">
-                    &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;-&amp;nbsp;&amp;nbsp;
+                    &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;
                     <t t-esc="column.get('percent')"/>
-                    %
                 </t>
             </span>
         </xpath>
