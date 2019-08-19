@@ -9,9 +9,16 @@
             <attribute name="t-att-class">'o_account_report_line ' + ((line.get('unfoldable') and ' o_foldable_total' or '')) + ('' if hierarchies_enabled else ' o_account_report_line_indent')</attribute>
         </xpath>
         <xpath expr="//t[1]/tr/t/td/span" position="replace">
-            <span class="o_account_report_column_value" t-att-title="column.get('title')" style="display: inline-block; width: 100px !important;">
-                <t t-esc="column.get('name')"/>
-            </span>
+            <t t-if="report.get('name') in ['Income Statement', 'الأرباح و الخسائر']">
+                <span class="o_account_report_column_value" t-att-title="column.get('title')" style="display: inline-block; width: 100px !important;">
+                    <t t-esc="column.get('name')"/>
+                </span>
+            </t>
+            <t t-if="report.get('name') not in ['Income Statement', 'الأرباح و الخسائر']">
+                <span class="o_account_report_column_value" t-att-title="column.get('title')">
+                    <t t-esc="column.get('name')"/>
+                </span>
+            </t>
         </xpath>
         <xpath expr="//t[1]/tr/t/td" position="inside">
             <span class="o_account_report_column_value">
