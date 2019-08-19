@@ -9,6 +9,9 @@
                 <xpath expr="//field[@name='order_line']/tree//field[@name='purchase_price']" position="attributes">
                    <attribute name="groups">bi_dulex_groups.group_cost_access_show</attribute>
                 </xpath>
+                <xpath expr="//field[@name='order_line']/form//field[@name='purchase_price']" position="attributes">
+                   <attribute name="groups">bi_dulex_groups.group_cost_access_show</attribute>
+                </xpath>
                 <xpath expr="//notebook/page[@name='order_lines']/group/field[@name='margin']" position="attributes">
                     <attribute name="groups">bi_dulex_groups.group_margin_access_show</attribute>
                 </xpath>

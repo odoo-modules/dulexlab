@@ -11,7 +11,7 @@
     'author': "BI Solutions Development Team",
     'category': 'Sales',
     'version': '0.1',
-    'depends': ['sale', 'stock', 'sale_margin', 'base'],
+    'depends': ['sale_management', 'stock', 'sale_margin', 'base'],
     'data': [
         'security/groups.xml',
         'views/inherit_saleorder_view.xml',
