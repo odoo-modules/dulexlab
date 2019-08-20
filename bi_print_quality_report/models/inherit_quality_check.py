@@ -37,4 +37,5 @@ class QualityCheckReport(models.Model):
     printing_qual_note = fields.Char(string='ملاحظات')
     matching_data_note = fields.Char(string='ملاحظات')
     exporting_documents_note = fields.Char(string='ملاحظات')
-    result = fields.Binary(string="النتيجة النهائية للفحص")
+    accepted = fields.Boolean(string="مقبول")
+    not_accepted = fields.Boolean(string="غير مقبول")

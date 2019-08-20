@@ -169,19 +169,26 @@
                         </group>
                         <br/>
                         <div class="row col-sm-12" dir="rtl">
-                            <h5>
-                                <p style="text-align: center; font-weight: bold;">النتيجة النهائية للفحص:</p>
-                                <br/>
-                                <label class='text-muted text-right' style="padding:5px">
-                                    <input type="checkbox" name="result"/>
+                            <!--<h5>-->
+                            <span style="text-align: center; font-weight: bold;">النتيجة النهائية للفحص:</span>
+                        </div>
+                        <div class="row" dir="rtl">
+                            <div class="col-sm-3 pull-right">
+                                <label class='text-muted text-right'>
+                                    <field name="accepted"/>
+                                    <input type="checkbox" name="result" invisible="1"/>
                                     مقبول
                                 </label>
-                                <label class='text-muted text-right' style="padding:5px">
-                                    <input type="checkbox" name="result"/>
+                            </div>
+                            <div class="col-sm-3 pull-right">
+                                <label class='text-muted pull-left'>
+                                    <field name="not_accepted"/>
+                                    <input type="checkbox" name="result" invisible="1"/>
                                     غير مقبول
                                 </label>
-                            </h5>
+                            </div>
                         </div>
+                        <!--</h5>-->
                     </page>
                 </xpath>
             </field>

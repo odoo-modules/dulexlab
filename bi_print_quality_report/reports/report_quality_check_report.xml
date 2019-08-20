@@ -195,14 +195,19 @@
                 <h4>
                     <p style="text-align: center; font-weight: bold;">النتيجة النهائية للفحص:</p>
                     <br/>
-                    <label class='col-sm-3 text-muted text-right'>
-                        <input type="checkbox" name="result"/>
-                        مقبول
-                    </label>
-                    <label class='col-sm-3 text-muted text-right'>
-                        <input type="checkbox" name="result"/>
-                        غير مقبول
-                    </label>
+                    <t t-if="o.accepted">
+                        <label class='col-sm-3 text-muted text-right'>
+                            <input type="checkbox" name="result"/>
+                            مقبول
+                        </label>
+
+                    </t>
+                    <t t-if="o.not_accepted">
+                        <label class='col-sm-3 text-muted text-right'>
+                            <input type="checkbox" name="result"/>
+                            غير مقبول
+                        </label>
+                    </t>
                 </h4>
             </div>
             <div class="row col-sm-12">
