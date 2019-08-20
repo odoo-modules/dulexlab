@@ -58,12 +58,12 @@ class UnderCollectionWizard(models.TransientModel):
                         move_dict['line_ids'] = line_ids
                         move = self.env['account.move'].create(move_dict)
                         move.post()
-            if batch.state == 'under_collection':
-                batch.write({'state': 'collection'})
-            elif batch.batch_type == 'outbound':
-                batch.write({'state': 'collection'})
-            else:
-                batch.write({'state': 'under_collection'})
+                if batch.state == 'under_collection':
+                    batch.write({'state': 'collection'})
+                elif batch.batch_type == 'outbound':
+                    batch.write({'state': 'collection'})
+                else:
+                    batch.write({'state': 'under_collection'})
 
     @api.onchange('journal_id')
     def set_accounts(self):
