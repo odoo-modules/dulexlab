@@ -40,6 +40,9 @@
                                 <tbody style="font-weight: bold;">
                                     <tr>
                                         <td style="text-align: center; background-color: white !important; border-bottom:1px solid black;">
+                                            <strong style="background-color: white !important;">التليفون</strong>
+                                        </td>
+                                        <td style="text-align: center; background-color: white !important; border-bottom:1px solid black;">
                                             <strong>العنوان</strong>
                                         </td>
                                         <td style="text-align: center; background-color: white !important; border-bottom:1px solid black;">
@@ -47,7 +50,10 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td style="text-align: center; width: 70%; background-color: white !important;">
+                                        <td style="text-align: center; width: 10%; background-color: white !important;">
+                                            <span t-field="o.partner_id.phone"/>
+                                        </td>
+                                        <td style="text-align: center; width: 60%; background-color: white !important;">
                                             <t t-if="o.partner_id.street">
                                                 <span t-field="o.partner_id.street"/>
                                             </t>

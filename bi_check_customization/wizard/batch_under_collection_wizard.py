@@ -8,6 +8,7 @@ class UnderCollectionWizard(models.TransientModel):
     journal_id = fields.Many2one('account.journal', string='Journal')
     debit_account_id = fields.Many2one('account.account', string='Debit Account')
     credit_account_id = fields.Many2one('account.account', string='Credit Account')
+    payment_date = fields.Date(string="Date", default=lambda self: fields.Date.today())
 
     @api.multi
     def action_confirm_payment(self):
@@ -26,7 +27,7 @@ class UnderCollectionWizard(models.TransientModel):
                             'payment_batch_id': batch.id,
                             'ref': line.communication,
                             'journal_id': val.journal_id.id,
-                            # 'date': date,
+                            'date': val.payment_date,
                         }
                         if not line.due_date:
                             raise ValidationError(
@@ -57,12 +58,12 @@ class UnderCollectionWizard(models.TransientModel):
                         move_dict['line_ids'] = line_ids
                         move = self.env['account.move'].create(move_dict)
                         move.post()
-            if batch.state == 'under_collection':
-                batch.write({'state': 'collection'})
-            elif batch.batch_type == 'outbound':
-                batch.write({'state': 'collection'})
-            else:
-                batch.write({'state': 'under_collection'})
+                if batch.state == 'under_collection':
+                    batch.write({'state': 'collection'})
+                elif batch.batch_type == 'outbound':
+                    batch.write({'state': 'collection'})
+                else:
+                    batch.write({'state': 'under_collection'})
 
     @api.onchange('journal_id')
     def set_accounts(self):

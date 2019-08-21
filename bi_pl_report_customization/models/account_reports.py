@@ -61,11 +61,14 @@ class AccountReport(models.AbstractModel):
             else:
                 sheet.write(0, x, cell_content, super_col_style)
                 x += 1
+        header_delta = 0
         for row in self.get_header(options):
             x = 0
             for column in row:
                 colspan = column.get('colspan', 1)
                 header_label = column.get('name', '').replace('<br/>', ' ').replace('&nbsp;', ' ')
+                if self.display_name in ['Income Statement', 'الأرباح و الخسائر'] and header_label:
+                    colspan = 2
                 if colspan == 1:
                     sheet.write(y_offset, x, header_label, title_style)
                 else:
@@ -76,7 +79,6 @@ class AccountReport(models.AbstractModel):
         ctx.update({'no_format': True, 'print_mode': True, 'prefetch_fields': False})
         # deactivating the prefetching saves ~35% on get_lines running time
         lines = self.with_context(ctx)._get_lines(options)
-        # print(lines)
         if options.get('hierarchy'):
             lines = self._create_hierarchy(lines)
 
@@ -113,9 +115,11 @@ class AccountReport(models.AbstractModel):
                     sheet.write(y + y_offset, 0, lines[y]['name'], date_default_col1_style)
             else:
                 # write the first column, with a specific style to manage the indentation
+                print(lines[y]['name'])
                 sheet.write(y + y_offset, 0, lines[y]['name'], col1_style)
 
             # write all the remaining cells
+            data_delta = 0
             for x in range(1, len(lines[y]['columns']) + 1):
                 this_cell_style = style
                 if 'date' in lines[y]['columns'][x - 1].get('class', ''):
@@ -129,11 +133,20 @@ class AccountReport(models.AbstractModel):
                                     lines[y]['columns'][x - 1].get('name', ''), this_cell_style)
                 else:
                     if self.display_name in ['Income Statement', 'الأرباح و الخسائر']:
-                        sheet.set_column(x + lines[y].get('colspan', 1)-1, x + lines[y].get('colspan', 1)-1, 25)
-                        sheet.write(y + y_offset, x + lines[y].get('colspan', 1) - 1,
-                                    lines[y]['columns'][x - 1].get('col_name', ''), this_cell_style)
+                        sheet.set_column(x + lines[y].get('colspan', 1)-1, x + lines[y].get('colspan', 1)-1+data_delta, 50)
+                        sheet.write(y + y_offset, x + lines[y].get('colspan', 1) - 1 + data_delta,
+                                    lines[y]['columns'][x - 1].get('name', ''), this_cell_style)
+                        data_delta += 1
+                        if not lines[y]['columns'][x - 1].get('name', ''):
+                            sheet.write(y + y_offset, x + lines[y].get('colspan', 1) - 1 + data_delta,
+                                        lines[y]['columns'][x - 1].get('name', ''), this_cell_style)
+
+                        if lines[y]['columns'][x - 1].get('col_name', ''):
+                            sheet.set_column(x + lines[y].get('colspan', 1) - 1, x + lines[y].get('colspan', 1) - 1 + data_delta, 10)
+                            sheet.write(y + y_offset, x + lines[y].get('colspan', 1) - 1 + data_delta,
+                                        lines[y]['columns'][x - 1].get('col_name', ''), this_cell_style)
                     else:
-                        sheet.write(y + y_offset, x + lines[y].get('colspan', 1) - 1,
+                        sheet.write(y + y_offset, x + lines[y].get('colspan', 1) - 1 + data_delta,
                                     lines[y]['columns'][x - 1].get('name', ''), this_cell_style)
 
         workbook.close()

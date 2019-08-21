@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <!--Report-->
+    <template id="report_quality_check_document">
+        <t t-call="web.external_layout">
+            <t t-set="o" t-value="doc.with_context({'lang': 'en_US'})"/>
+            <div class="page">
+                <center>
+                    <h3>
+                        <b style="font-family: Times New Roman;">تقرير مطـابقة الجـودة</b>
+                        <br/>
+                    </h3>
+                </center>
+            </div>
+            <div class="row" dir="rtl">
+                <div t-if="o.current_date" class="col-xs-6 text-right">
+                    <strong>التـــاريخ:</strong>
+                    <span t-field="o.current_date"/>
+                </div>
+                <div t-if="o.current_date" class="col-xs-6 text-right">
+                </div>
+                <div t-if="o.product_id" class="col-xs-6 text-right">
+                    <strong>الصنــف:</strong>
+                    <span t-field="o.product_id"/>
+                </div>
+            </div>
+            <br/>
+            <div class="row col-sm-12" dir="rtl">
+                <h3>
+                    <span>
+                        أولا: الخامــات
+                    </span>
+                </h3>
+            </div>
+            <table border="1" dir="rtl" style="width:100%" class="table table-bordered mt32 pull-right">
+                <thead>
+                    <td style="padding: 5px; font-weight: bold; width: 5%; text-align: center;">م</td>
+                    <td style="padding: 5px; text-align: center; font-weight: bold; width: 30%;">
+                        البند
+                    </td>
+                    <td style="padding: 5px; text-align: center; font-weight: bold; width: 20%;">
+                        النتيجة
+                    </td>
+                    <td style="padding: 5px; text-align: center; font-weight: bold; width: 45%;">
+                        الملاحظات
+                    </td>
+                </thead>
+                <tr>
+                    <td style="padding: 5px ; text-align: center;">1</td>
+                    <td style="padding: 5px ; text-align: center;">الكثافة وحجم الحبيبات</td>
+                    <td style="padding: 5px; text-align: center;">
+                        <span t-field="o.density"/>
+                    </td>
+                    <td style="padding: 5px; text-align: center;">
+                        <span t-field="o.density_note"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 5px; text-align: center;">2</td>
+                    <td style="padding: 5px; text-align: center;">اللون</td>
+                    <td style="padding: 5px; text-align: center;">
+                        <span t-field="o.color"/>
+                    </td>
+                    <td style="padding: 5px; text-align: center;">
+                        <span t-field="o.color_note"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 5px; text-align: center;">3</td>
+                    <td style="padding: 5px; text-align: center;">الطعم</td>
+                    <td style="padding: 5px; text-align: center;">
+                        <span t-field="o.taste"/>
+                    </td>
+                    <td style="padding: 5px; text-align: center;">
+                        <span t-field="o.taste_note"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 5px; text-align: center;">4</td>
+                    <td style="padding: 5px; text-align: center;">الذوبان
+                    </td>
+                    <td style="padding: 5px; text-align: center;">
+                        <span t-field="o.melting"/>
+                    </td>
+                    <td style="padding: 5px; text-align: center;">
+                        <span t-field="o.melting_note"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 5px; text-align: center;">5</td>
+                    <td style="padding: 5px; text-align: center;">مطابقة البيانات على العبوات</td>
+                    <td style="padding: 5px; text-align: center;">
+                        <span t-field="o.matched_data"/>
+                    </td>
+                    <td style="padding: 5px; text-align: center;">
+                        <span t-field="o.matched_note"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 5px; text-align: center;">6</td>
+                    <td style="padding: 5px; text-align: center;">مستندات التوريد</td>
+                    <td style="padding: 5px; text-align: center;">
+                        <span t-field="o.exporting_doc"/>
+                    </td>
+                    <td style="padding: 5px; text-align: center;">
+                        <span t-field="o.exporting_note"/>
+                    </td>
+                </tr>
+            </table>
+            <br/>
+            <div class="row col-sm-12" dir="rtl">
+                <h3>
+                    <span>
+                        ثانيا : مواد التعبئة والتغليـف
+                    </span>
+                </h3>
+            </div>
+            <table border="1" dir="rtl" style="width:100%" class="table table-bordered mt32 pull-right">
+                <thead>
+                    <td style="padding: 5px; font-weight: bold; width: 5%; text-align: center;">م</td>
+                    <td style="padding: 5px; text-align: center; font-weight: bold; width: 30%;">
+                        البند
+                    </td>
+                    <td style="padding: 5px; text-align: center; font-weight: bold; width: 20%;">
+                        النتيجة
+                    </td>
+                    <td style="padding: 5px; text-align: center; font-weight: bold; width: 45%;">
+                        الملاحظات
+                    </td>
+                </thead>
+                <tr>
+                    <td style="padding: 5px ; text-align: center;">1</td>
+                    <td style="padding: 5px ; text-align: center;">التشغيل على الماكينات</td>
+                    <td style="padding: 5px; text-align: center;">
+                        <span t-field="o.work_on_machines"/>
+                    </td>
+                    <td style="padding: 5px; text-align: center;">
+                        <span t-field="o.work_on_machines_note"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 5px; text-align: center;">2</td>
+                    <td style="padding: 5px; text-align: center;">السمك</td>
+                    <td style="padding: 5px; text-align: center;">
+                        <span t-field="o.thickness"/>
+                    </td>
+                    <td style="padding: 5px; text-align: center;">
+                        <span t-field="o.thickness_note"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 5px; text-align: center;">3</td>
+                    <td style="padding: 5px; text-align: center;">جودة اللحام</td>
+                    <td style="padding: 5px; text-align: center;">
+                        <span t-field="o.glue_qual"/>
+                    </td>
+                    <td style="padding: 5px; text-align: center;">
+                        <span t-field="o.glue_qual_note"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 5px; text-align: center;">4</td>
+                    <td style="padding: 5px; text-align: center;">جودة الطباعة
+                    </td>
+                    <td style="padding: 5px; text-align: center;">
+                        <span t-field="o.printing_qual"/>
+                    </td>
+                    <td style="padding: 5px; text-align: center;">
+                        <span t-field="o.printing_qual_note"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 5px; text-align: center;">5</td>
+                    <td style="padding: 5px; text-align: center;">مطابقة البيانات</td>
+                    <td style="padding: 5px; text-align: center;">
+                        <span t-field="o.matching_data"/>
+                    </td>
+                    <td style="padding: 5px; text-align: center;">
+                        <span t-field="o.matching_data_note"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 5px; text-align: center;">6</td>
+                    <td style="padding: 5px; text-align: center;">مستندات التوريد</td>
+                    <td style="padding: 5px; text-align: center;">
+                        <span t-field="o.exporting_documents"/>
+                    </td>
+                    <td style="padding: 5px; text-align: center;">
+                        <span t-field="o.exporting_documents_note"/>
+                    </td>
+                </tr>
+            </table>
+            <br/>
+            <div class="row col-sm-12" dir="rtl">
+                <h4>
+                    <p style="text-align: center; font-weight: bold;">النتيجة النهائية للفحص:</p>
+                    <br/>
+                    <t t-if="o.accepted">
+                        <label class='col-sm-3 text-muted text-right'>
+                            <input type="checkbox" name="result"/>
+                            مقبول
+                        </label>
+
+                    </t>
+                    <t t-if="o.not_accepted">
+                        <label class='col-sm-3 text-muted text-right'>
+                            <input type="checkbox" name="result"/>
+                            غير مقبول
+                        </label>
+                    </t>
+                </h4>
+            </div>
+            <div class="row col-sm-12">
+                <h4>
+                    <span>
+                        توقيع مسؤول الجودة
+                    </span>
+                </h4>
+            </div>
+        </t>
+    </template>
+
+    <!--TEMPLATE [QUALITY CHECK REPORT]-->
+    <template id="report_quality_check">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="bi_print_quality_report.report_quality_check_document"/>
+            </t>
+        </t>
+    </template>
+
+    <report id="action_report_quality_check"
+            model="quality.check"
+            string="Quality Check Report"
+            report_type="qweb-pdf"
+            name="bi_print_quality_report.report_quality_check"
+            file="bi_print_quality_report.report_quality_check"
+            attachment_use="True"
+    />
+</odoo>
