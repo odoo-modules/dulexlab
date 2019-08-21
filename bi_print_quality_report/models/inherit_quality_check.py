@@ -10,7 +10,7 @@ class QualityCheckReport(models.Model):
         return self.env.ref('bi_print_quality_report.action_report_quality_check').report_action(self)
 
     # materials_id = fields.One2many('material.quality', 'quality_check_id', string="materials_id")
-    curr_date = fields.Date(string="Date", default=fields.Date.context_today)
+    current_date = fields.Date(string="Date")
 
     density = fields.Selection([('ch1', 'مقبول'), ('ch2', 'غير مقبول')], string="الكثافة وحجم الحبيبات")
     color = fields.Selection([('ch1', 'مقبول'), ('ch2', 'غير مقبول')], string="اللون")

@@ -13,11 +13,11 @@
                 </center>
             </div>
             <div class="row" dir="rtl">
-                <div t-if="o.curr_date" class="col-xs-6 text-right">
+                <div t-if="o.current_date" class="col-xs-6 text-right">
                     <strong>التـــاريخ:</strong>
-                    <span t-field="o.curr_date"/>
+                    <span t-field="o.current_date"/>
                 </div>
-                <div t-if="o.curr_date" class="col-xs-6 text-right">
+                <div t-if="o.current_date" class="col-xs-6 text-right">
                 </div>
                 <div t-if="o.product_id" class="col-xs-6 text-right">
                     <strong>الصنــف:</strong>
