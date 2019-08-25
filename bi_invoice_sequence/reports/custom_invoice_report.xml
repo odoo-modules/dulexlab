@@ -25,8 +25,14 @@
                                         <h4 class="text-center"
                                             style="color:black; vertical-align: middle;font-weight: bold;">
                                             <span t-field="o.invoice_sequence"/>
-                                            <t t-if="o.tax_line_ids">فاتورة مبيعات</t>
-                                            <t t-if="not o.tax_line_ids">اذن تسليم</t>
+                                            <t t-if="o.type == 'out_invoice'">
+                                                <t t-if="o.tax_line_ids">فاتورة مبيعات</t>
+                                                <t t-if="not o.tax_line_ids">إذن تسليم</t>
+                                            </t>
+                                            <t t-if="o.type == 'out_refund'">
+                                                <t t-if="o.tax_line_ids">فاتورة مرتجع</t>
+                                                <t t-if="not o.tax_line_ids">إذن إستلام</t>
+                                            </t>
                                         </h4>
                                     </strong>
                                 </div>
