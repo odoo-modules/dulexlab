@@ -79,9 +79,9 @@ class AccountFinancialReportLine(models.Model):
                     if line_name:
                         if 'no_format_name' in col:
                             if self.calculation_mab[line_name] == 0.0:
-                                col['percent'] = '-  0.00 %'
+                                col['percent'] = '  0.00 %'
                             else:
-                                col['percent'] = '-  ' + '{0:,.2f}'.format(100 * (float(col['no_format_name']) / self.calculation_mab[line_name])) + ' % '
+                                col['percent'] = '  ' + '{0:,.2f}'.format(100 * (float(col['no_format_name']) / self.calculation_mab[line_name])) + ' % '
                         elif self._context.get('print_mode') and self._context.get('no_format') and not self._context.get('prefetch_fields') and (col['name'] or col['name'] == 0.0):
                             if type(col['name']) is float:
                                 if self.calculation_mab[line_name] == 0.0:
