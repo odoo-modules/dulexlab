@@ -26,7 +26,7 @@ class AccountFinancialReportLine(models.Model):
                     elif 'name' in col and col['name'] and (type(col['name']) == float):
                         field_name = 'name'
                     if field_name:
-                        if line['name'] in ['الدخل التشغيلي', 'Net Sales']:
+                        if line['name'] == 'Sales':
                             self.calculation_mab['net_sales'] = float(col[field_name])
                         # elif line['name'] in ['الإجمالي Expenses', 'Total Expenses']:
                         #     self.calculation_mab['total_expenses'] = float(col[field_name])
@@ -58,6 +58,8 @@ class AccountFinancialReportLine(models.Model):
                         'TAX'
                     ] or line['name'] in [
                         'Other Income'
+                    ] or line['name'] in [
+                        'Sales', 'Discount', 'Gain & Loss from other investment'
                     ]:
                         line_name = 'net_sales'
                     # elif line['name'] in [
