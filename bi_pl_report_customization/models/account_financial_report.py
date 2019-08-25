@@ -59,7 +59,7 @@ class AccountFinancialReportLine(models.Model):
                     ] or line['name'] in [
                         'Other Income'
                     ] or line['name'] in [
-                        'Sales', 'Discount', 'Gain & Loss from other investment'
+                        'Sales', 'Discount', 'Gain & Loss from other investment', 'Total Net Sales'
                     ]:
                         line_name = 'net_sales'
                     # elif line['name'] in [
