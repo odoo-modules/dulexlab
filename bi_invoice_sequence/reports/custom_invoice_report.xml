@@ -178,7 +178,7 @@
                             <div class="row"
                                  style="border-radius:5px!important;border:2px solid black !important;">
                                 <div class="col-6" style="color:black;">
-                                    <span t-esc="o.amount_untaxed + o.discount_amount + o.ks_amount_discount"/>
+                                    <span t-esc="o.amount_untaxed + o.discount_amount"/>
                                 </div>
                                 <div class="col-6 text-right" style="color:black;background-color:white;">
                                     <strong>القيمة</strong>
