@@ -7,6 +7,7 @@ from odoo.exceptions import AccessError, UserError, RedirectWarning, ValidationE
 
 from openerp.exceptions import ValidationError
 from num2words import num2words
+from odoo.tools import float_compare
 
 
 class AccountInvoiceInhh(models.Model):
@@ -18,11 +19,14 @@ class AccountInvoiceInhh(models.Model):
     def action_invoice_open(self):
         res = super(AccountInvoiceInhh, self).action_invoice_open()
         for invoice in self:
-            if invoice.state == 'open' and ((not invoice.tax_line_ids and not invoice.invoice_sequence)
-                                            or invoice.amount_total == 0):
+            if (invoice.state == 'open' and not invoice.tax_line_ids and not invoice.invoice_sequence):
                 invoice.invoice_sequence = self.env['ir.sequence'].next_by_code('untaxed.invoice.seq')
-            if invoice.state == 'open' and invoice.tax_line_ids:
+            elif invoice.state == 'open' and invoice.tax_line_ids:
                 invoice.invoice_sequence = self.env['ir.sequence'].next_by_code('taxed.invoice.seq')
+            elif (invoice.state == 'paid' and float_compare(invoice.amount_total + invoice.amount_tax +
+                                                            invoice.amount_untaxed, 0, precision_rounding=2)):
+                invoice.invoice_sequence = self.env['ir.sequence'].next_by_code('untaxed.invoice.seq')
+
         return res
 
     @api.multi
