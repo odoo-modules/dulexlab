@@ -24,7 +24,7 @@ class AccountInvoiceInhh(models.Model):
             elif invoice.state == 'open' and invoice.tax_line_ids:
                 invoice.invoice_sequence = self.env['ir.sequence'].next_by_code('taxed.invoice.seq')
             elif (invoice.state == 'paid' and float_compare(invoice.amount_total + invoice.amount_tax +
-                                                            invoice.amount_untaxed, 0, precision_rounding=2)):
+                                                            invoice.amount_untaxed, 0, precision_rounding=2) == 0):
                 invoice.invoice_sequence = self.env['ir.sequence'].next_by_code('untaxed.invoice.seq')
 
         return res
