@@ -17,8 +17,9 @@ class AccountInvoice(models.Model):
     @api.onchange('partner_id')
     def get_default_invoice_pricelist(self):
         for invoice in self:
-            if invoice.type == 'out_refund':
-                invoice.pricelist_id = invoice.partner_id.property_product_pricelist.id
+            if invoice.partner_id and invoice.type in ('out_invoice', 'out_refund') \
+                    and invoice.partner_id.property_product_pricelist:
+                invoice.pricelist_id = invoice.partner_id.property_product_pricelist
 
     @api.multi
     def recompute_lines_prices(self):
