@@ -11,211 +11,299 @@
                         <br/>
                     </h3>
                 </center>
-            </div>
-            <div class="row" dir="rtl">
-                <div t-if="o.current_date" class="col-xs-6 text-right">
-                    <strong>التـــاريخ:</strong>
-                    <span t-field="o.current_date"/>
-                </div>
-                <div t-if="o.current_date" class="col-xs-6 text-right">
-                </div>
-                <div t-if="o.product_id" class="col-xs-6 text-right">
-                    <strong>الصنــف:</strong>
-                    <span t-field="o.product_id"/>
-                </div>
-            </div>
-            <br/>
-            <div class="row col-sm-12" dir="rtl">
-                <h3>
-                    <span>
-                        أولا: الخامــات
-                    </span>
-                </h3>
-            </div>
-            <table border="1" dir="rtl" style="width:100%" class="table table-bordered mt32 pull-right">
-                <thead>
-                    <td style="padding: 5px; font-weight: bold; width: 5%; text-align: center;">م</td>
-                    <td style="padding: 5px; text-align: center; font-weight: bold; width: 30%;">
-                        البند
-                    </td>
-                    <td style="padding: 5px; text-align: center; font-weight: bold; width: 20%;">
-                        النتيجة
-                    </td>
-                    <td style="padding: 5px; text-align: center; font-weight: bold; width: 45%;">
-                        الملاحظات
-                    </td>
-                </thead>
-                <tr>
-                    <td style="padding: 5px ; text-align: center;">1</td>
-                    <td style="padding: 5px ; text-align: center;">الكثافة وحجم الحبيبات</td>
-                    <td style="padding: 5px; text-align: center;">
-                        <span t-field="o.density"/>
-                    </td>
-                    <td style="padding: 5px; text-align: center;">
-                        <span t-field="o.density_note"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="padding: 5px; text-align: center;">2</td>
-                    <td style="padding: 5px; text-align: center;">اللون</td>
-                    <td style="padding: 5px; text-align: center;">
-                        <span t-field="o.color"/>
-                    </td>
-                    <td style="padding: 5px; text-align: center;">
-                        <span t-field="o.color_note"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="padding: 5px; text-align: center;">3</td>
-                    <td style="padding: 5px; text-align: center;">الطعم</td>
-                    <td style="padding: 5px; text-align: center;">
-                        <span t-field="o.taste"/>
-                    </td>
-                    <td style="padding: 5px; text-align: center;">
-                        <span t-field="o.taste_note"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="padding: 5px; text-align: center;">4</td>
-                    <td style="padding: 5px; text-align: center;">الذوبان
-                    </td>
-                    <td style="padding: 5px; text-align: center;">
-                        <span t-field="o.melting"/>
-                    </td>
-                    <td style="padding: 5px; text-align: center;">
-                        <span t-field="o.melting_note"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="padding: 5px; text-align: center;">5</td>
-                    <td style="padding: 5px; text-align: center;">مطابقة البيانات على العبوات</td>
-                    <td style="padding: 5px; text-align: center;">
-                        <span t-field="o.matched_data"/>
-                    </td>
-                    <td style="padding: 5px; text-align: center;">
-                        <span t-field="o.matched_note"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="padding: 5px; text-align: center;">6</td>
-                    <td style="padding: 5px; text-align: center;">مستندات التوريد</td>
-                    <td style="padding: 5px; text-align: center;">
-                        <span t-field="o.exporting_doc"/>
-                    </td>
-                    <td style="padding: 5px; text-align: center;">
-                        <span t-field="o.exporting_note"/>
-                    </td>
-                </tr>
-            </table>
-            <br/>
-            <div class="row col-sm-12" dir="rtl">
-                <h3>
-                    <span>
-                        ثانيا : مواد التعبئة والتغليـف
-                    </span>
-                </h3>
-            </div>
-            <table border="1" dir="rtl" style="width:100%" class="table table-bordered mt32 pull-right">
-                <thead>
-                    <td style="padding: 5px; font-weight: bold; width: 5%; text-align: center;">م</td>
-                    <td style="padding: 5px; text-align: center; font-weight: bold; width: 30%;">
-                        البند
-                    </td>
-                    <td style="padding: 5px; text-align: center; font-weight: bold; width: 20%;">
-                        النتيجة
-                    </td>
-                    <td style="padding: 5px; text-align: center; font-weight: bold; width: 45%;">
-                        الملاحظات
-                    </td>
-                </thead>
-                <tr>
-                    <td style="padding: 5px ; text-align: center;">1</td>
-                    <td style="padding: 5px ; text-align: center;">التشغيل على الماكينات</td>
-                    <td style="padding: 5px; text-align: center;">
-                        <span t-field="o.work_on_machines"/>
-                    </td>
-                    <td style="padding: 5px; text-align: center;">
-                        <span t-field="o.work_on_machines_note"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="padding: 5px; text-align: center;">2</td>
-                    <td style="padding: 5px; text-align: center;">السمك</td>
-                    <td style="padding: 5px; text-align: center;">
-                        <span t-field="o.thickness"/>
-                    </td>
-                    <td style="padding: 5px; text-align: center;">
-                        <span t-field="o.thickness_note"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="padding: 5px; text-align: center;">3</td>
-                    <td style="padding: 5px; text-align: center;">جودة اللحام</td>
-                    <td style="padding: 5px; text-align: center;">
-                        <span t-field="o.glue_qual"/>
-                    </td>
-                    <td style="padding: 5px; text-align: center;">
-                        <span t-field="o.glue_qual_note"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="padding: 5px; text-align: center;">4</td>
-                    <td style="padding: 5px; text-align: center;">جودة الطباعة
-                    </td>
-                    <td style="padding: 5px; text-align: center;">
-                        <span t-field="o.printing_qual"/>
-                    </td>
-                    <td style="padding: 5px; text-align: center;">
-                        <span t-field="o.printing_qual_note"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="padding: 5px; text-align: center;">5</td>
-                    <td style="padding: 5px; text-align: center;">مطابقة البيانات</td>
-                    <td style="padding: 5px; text-align: center;">
-                        <span t-field="o.matching_data"/>
-                    </td>
-                    <td style="padding: 5px; text-align: center;">
-                        <span t-field="o.matching_data_note"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="padding: 5px; text-align: center;">6</td>
-                    <td style="padding: 5px; text-align: center;">مستندات التوريد</td>
-                    <td style="padding: 5px; text-align: center;">
-                        <span t-field="o.exporting_documents"/>
-                    </td>
-                    <td style="padding: 5px; text-align: center;">
-                        <span t-field="o.exporting_documents_note"/>
-                    </td>
-                </tr>
-            </table>
-            <br/>
-            <div class="row col-sm-12" dir="rtl">
+                <!--<div class="row col-xs-12" dir="rtl">-->
                 <h4>
-                    <p style="text-align: center; font-weight: bold;">النتيجة النهائية للفحص:</p>
-                    <br/>
-                    <t t-if="o.accepted">
-                        <label class='col-sm-3 text-muted text-right'>
-                            <input type="checkbox" name="result"/>
-                            مقبول
-                        </label>
-
-                    </t>
-                    <t t-if="o.not_accepted">
-                        <label class='col-sm-3 text-muted text-right'>
-                            <input type="checkbox" name="result"/>
-                            غير مقبول
-                        </label>
-                    </t>
+                    <div class="col-xs-6 pull-right" style="padding-right: 30px;" dir="rtl">
+                        <span>التـــاريخ:</span>
+                        <span t-field="o.current_date"/>
+                    </div>
+                    <div class="col-xs-6 text-center" dir="rtl">
+                        <span>الصنــف:</span>
+                        <span t-field="o.product_id"/>
+                    </div>
                 </h4>
-            </div>
-            <div class="row col-sm-12">
-                <h4>
-                    <span>
-                        توقيع مسؤول الجودة
-                    </span>
-                </h4>
+                <!--</div>-->
+                <div class="row col-sm-12" dir="rtl">
+                    <h3>
+                        <span>
+                            أولا: الخامــات
+                        </span>
+                    </h3>
+                </div>
+                <table border="1" dir="rtl" style="width:100%" class="table table-bordered mt32 pull-right">
+                    <thead>
+                        <td style="padding: 5px; font-weight: bold; width: 5%; text-align: center;">م</td>
+                        <td style="padding: 5px; text-align: center; font-weight: bold; width: 30%;">
+                            البند
+                        </td>
+                        <td style="padding: 5px; text-align: center; font-weight: bold; width: 20%;">
+                            النتيجة
+                        </td>
+                        <td style="padding: 5px; text-align: center; font-weight: bold; width: 45%;">
+                            الملاحظات
+                        </td>
+                    </thead>
+                    <tr>
+                        <td style="padding: 5px ; text-align: center;">1</td>
+                        <td style="padding: 5px ; text-align: center;">الكثافة وحجم الحبيبات</td>
+                        <td style="padding: 5px; text-align: center;">
+                            <span style="font-weight: bold;text-decoration: underline;" t-field="o.density"/>
+                            <!--<input type="checkbox" name="density" t-att-checked="'checked' if density == ch1 else None">-->
+                                <!--مقبول-->
+                            <!--</input>-->
+                            <!--<input type="checkbox" name="density" t-att-checked="'checked' if density == ch2 else None">غير-->
+                                <!--مقبول-->
+                            <!--</input>-->
+                        </td>
+                        <td style="padding: 5px; text-align: center;">
+                            <span t-field="o.density_note"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 5px; text-align: center;">2</td>
+                        <td style="padding: 5px; text-align: center;">اللون</td>
+                        <td style="padding: 5px; text-align: center;">
+                            <span style="font-weight: bold;text-decoration: underline;" t-field="o.color"/>
+                            <!--<input type="checkbox" name="result" t-att-checked="'checked' if color == ch1 else None">-->
+                                <!--مقبول-->
+                            <!--</input>-->
+                            <!--<input type="checkbox" name="result" t-att-checked="'checked' if color == ch2 else None">غير-->
+                                <!--مقبول-->
+                            <!--</input>-->
+                        </td>
+                        <td style="padding: 5px; text-align: center;">
+                            <span t-field="o.color_note"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 5px; text-align: center;">3</td>
+                        <td style="padding: 5px; text-align: center;">الطعم</td>
+                        <td style="padding: 5px; text-align: center;">
+                            <span style="font-weight: bold;text-decoration: underline;" t-field="o.taste"/>
+                            <!--<input type="checkbox" name="result" t-att-checked="'checked' if taste == ch1 else None">-->
+                                <!--مقبول-->
+                            <!--</input>-->
+                            <!--<input type="checkbox" name="result" t-att-checked="'checked' if taste == ch2 else None">غير-->
+                                <!--مقبول-->
+                            <!--</input>-->
+                        </td>
+                        <td style="padding: 5px; text-align: center;">
+                            <span t-field="o.taste_note"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 5px; text-align: center;">4</td>
+                        <td style="padding: 5px; text-align: center;">الذوبان
+                        </td>
+                        <td style="padding: 5px; text-align: center;">
+                            <span style="font-weight: bold;text-decoration: underline;" t-field="o.melting"/>
+                            <!--<input type="checkbox" name="result" t-att-checked="'checked' if melting == ch1 else None">-->
+                                <!--مقبول-->
+                            <!--</input>-->
+                            <!--<input type="checkbox" name="result" t-att-checked="'checked' if melting == ch2 else None">-->
+                                <!--غير-->
+                                <!--مقبول-->
+                            <!--</input>-->
+                        </td>
+                        <td style="padding: 5px; text-align: center;">
+                            <span t-field="o.melting_note"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 5px; text-align: center;">5</td>
+                        <td style="padding: 5px; text-align: center;">مطابقة البيانات على العبوات</td>
+                        <td style="padding: 5px; text-align: center;">
+                            <span style="font-weight: bold;text-decoration: underline;" t-field="o.matched_data"/>
+                            <!--<input type="checkbox" name="result"-->
+                                   <!--t-att-checked="'checked' if matched_data == ch1 else None">-->
+                                <!--مقبول-->
+                            <!--</input>-->
+                            <!--<input type="checkbox" name="result"-->
+                                   <!--t-att-checked="'checked' if matched_data == ch2 else None">غير-->
+                                <!--مقبول-->
+                            <!--</input>-->
+                        </td>
+                        <td style="padding: 5px; text-align: center;">
+                            <span t-field="o.matched_note"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 5px; text-align: center;">6</td>
+                        <td style="padding: 5px; text-align: center;">مستندات التوريد</td>
+                        <td style="padding: 5px; text-align: center;">
+                            <span style="font-weight: bold;text-decoration: underline;" t-field="o.exporting_doc"/>
+                            <!--<input type="checkbox" name="result"-->
+                                   <!--t-att-checked="'checked' if exporting_doc == ch1 else None">-->
+                                <!--مقبول-->
+                            <!--</input>-->
+                            <!--<input type="checkbox" name="result"-->
+                                   <!--t-att-checked="'checked' if exporting_doc == ch2 else None">غير-->
+                                <!--مقبول-->
+                            <!--</input>-->
+                        </td>
+                        <td style="padding: 5px; text-align: center;">
+                            <span t-field="o.exporting_note"/>
+                        </td>
+                    </tr>
+                </table>
+                <div class="row col-sm-12" dir="rtl">
+                    <h3>
+                        <span>
+                            ثانيا : مواد التعبئة والتغليـف
+                        </span>
+                    </h3>
+                </div>
+                <table border="1" dir="rtl" style="width:100%" class="table table-bordered mt32 pull-right">
+                    <thead>
+                        <td style="padding: 5px; font-weight: bold; width: 5%; text-align: center;">م</td>
+                        <td style="padding: 5px; text-align: center; font-weight: bold; width: 30%;">
+                            البند
+                        </td>
+                        <td style="padding: 5px; text-align: center; font-weight: bold; width: 20%;">
+                            النتيجة
+                        </td>
+                        <td style="padding: 5px; text-align: center; font-weight: bold; width: 45%;">
+                            الملاحظات
+                        </td>
+                    </thead>
+                    <tr>
+                        <td style="padding: 5px ; text-align: center;">1</td>
+                        <td style="padding: 5px ; text-align: center;">التشغيل على الماكينات</td>
+                        <td style="padding: 5px; text-align: center;">
+                            <span style="font-weight: bold;text-decoration: underline;" t-field="o.work_on_machines"/>
+                            <!--<input type="checkbox" name="result"-->
+                                   <!--t-att-checked="'checked' if work_on_machines == ch1 else None">-->
+                                <!--مقبول-->
+                            <!--</input>-->
+                            <!--<input type="checkbox" name="result"-->
+                                   <!--t-att-checked="'checked' if work_on_machines == ch2 else None">غير-->
+                                <!--مقبول-->
+                            <!--</input>-->
+                        </td>
+                        <td style="padding: 5px; text-align: center;">
+                            <span t-field="o.work_on_machines_note"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 5px; text-align: center;">2</td>
+                        <td style="padding: 5px; text-align: center;">السمك</td>
+                        <td style="padding: 5px; text-align: center;">
+                            <span style="font-weight: bold;text-decoration: underline;" t-field="o.thickness"/>
+                            <!--<input type="checkbox" name="result"-->
+                                   <!--t-att-checked="'checked' if thickness == ch1 else None">-->
+                                <!--مقبول-->
+                            <!--</input>-->
+                            <!--<input type="checkbox" name="result"-->
+                                   <!--t-att-checked="'checked' if thickness == ch2 else None">غير-->
+                                <!--مقبول-->
+                            <!--</input>-->
+                        </td>
+                        <td style="padding: 5px; text-align: center;">
+                            <span t-field="o.thickness_note"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 5px; text-align: center;">3</td>
+                        <td style="padding: 5px; text-align: center;">جودة اللحام</td>
+                        <td style="padding: 5px; text-align: center;">
+                            <span style="font-weight: bold;text-decoration: underline;" t-field="o.glue_qual"/>
+                            <!--<input type="checkbox" name="result"-->
+                                   <!--t-att-checked="'checked' if glue_qual == ch1 else None">-->
+                                <!--مقبول-->
+                            <!--</input>-->
+                            <!--<input type="checkbox" name="result"-->
+                                   <!--t-att-checked="'checked' if glue_qual == ch2 else None">غير-->
+                                <!--مقبول-->
+                            <!--</input>-->
+                        </td>
+                        <td style="padding: 5px; text-align: center;">
+                            <span t-field="o.glue_qual_note"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 5px; text-align: center;">4</td>
+                        <td style="padding: 5px; text-align: center;">جودة الطباعة
+                        </td>
+                        <td style="padding: 5px; text-align: center;">
+                            <span style="font-weight: bold;text-decoration: underline;" t-field="o.printing_qual"/>
+                            <!--<input type="checkbox" name="result"-->
+                                   <!--t-att-checked="'checked' if printing_qual == ch1 else None">-->
+                                <!--مقبول-->
+                            <!--</input>-->
+                            <!--<input type="checkbox" name="result"-->
+                                   <!--t-att-checked="'checked' if printing_qual == ch2 else None">غير-->
+                                <!--مقبول-->
+                            <!--</input>-->
+                        </td>
+                        <td style="padding: 5px; text-align: center;">
+                            <span t-field="o.printing_qual_note"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 5px; text-align: center;">5</td>
+                        <td style="padding: 5px; text-align: center;">مطابقة البيانات</td>
+                        <td style="padding: 5px; text-align: center;">
+                            <span style="font-weight: bold;text-decoration: underline;" t-field="o.matching_data"/>
+                            <!--<input type="checkbox" name="result"-->
+                                   <!--t-att-checked="'checked' if matching_data == ch1 else None">-->
+                                <!--مقبول-->
+                            <!--</input>-->
+                            <!--<input type="checkbox" name="result"-->
+                                   <!--t-att-checked="'checked' if matching_data == ch2 else None">غير-->
+                                <!--مقبول-->
+                            <!--</input>-->
+                        </td>
+                        <td style="padding: 5px; text-align: center;">
+                            <span t-field="o.matching_data_note"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 5px; text-align: center;">6</td>
+                        <td style="padding: 5px; text-align: center;">مستندات التوريد</td>
+                        <td style="padding: 5px; text-align: center;">
+                            <span style="font-weight: bold;text-decoration: underline;" t-field="o.exporting_documents"/>
+                            <!--<input type="checkbox" name="result"-->
+                                   <!--t-att-checked="'checked' if exporting_documents == ch1 else None">-->
+                                <!--مقبول-->
+                            <!--</input>-->
+                            <!--<input type="checkbox" name="result"-->
+                                   <!--t-att-checked="'checked' if exporting_documents == ch2 else None">غير-->
+                                <!--مقبول-->
+                            <!--</input>-->
+                        </td>
+                        <td style="padding: 5px; text-align: center;">
+                            <span t-field="o.exporting_documents_note"/>
+                        </td>
+                    </tr>
+                </table>
+                <br/>
+                <div class="row col-sm-12" dir="rtl">
+                    <h4>
+                        <p style="padding: 5px; text-align: center;font-size: 20px;">النتيجة النهائية للفحص:</p>
+                        <br/>
+                        <t t-if="o.accepted">
+                            <label class='col-sm-3 text-right' style="font-weight: bold;text-decoration: underline;">
+                                <input type="checkbox"
+                                       t-att-checked="'checked' if accepted == 1 else None" style="font-weight: bold;text-decoration: underline;font-size: 20px;"/>
+                                مقبول
+                            </label>
+                        </t>
+                        <t t-if="o.not_accepted">
+                            <label class='col-sm-3 text-right' style="font-weight: bold;text-decoration: underline;font-size: 20px;">
+                                <input type="checkbox"
+                                       t-att-checked="'checked' if not_accepted == 1 else None" style="font-weight: bold;text-decoration: underline;"/>
+                                غير مقبول
+                            </label>
+                        </t>
+                    </h4>
+                </div>
+                <div class="row col-xs-12">
+                    <h4>
+                        <span style="padding: 5px; text-align: center;">
+                            توقيع مسئول الجودة
+                        </span>
+                    </h4>
+                </div>
             </div>
         </t>
     </template>

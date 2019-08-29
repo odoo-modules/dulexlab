@@ -9,12 +9,15 @@
                 <xpath expr="//sheet/group/group" position="inside">
                     <field name="current_date"/>
                 </xpath>
+                <xpath expr="//notebook/page/field[@name='note']" position="after">
+                    <field name="main_notes"/>
+                </xpath>
                 <xpath expr="//notebook" position="inside">
-                    <page string="الخامـات">
-                        <group>
+                    <page string="معايير الجودة">
+                        <group class="text-right" string=" أولا: الخـامــات">
                             <table border="1" dir="rtl" style="width:70%" class="pull-right">
                                 <thead>
-                                    <td style="padding: 5px; font-weight: bold; width: 5%;">م</td>
+                                    <td style="padding: 5px; font-weight: bold; width: 5%; text-align: center;">م</td>
                                     <td style="padding: 5px; text-align: center; font-weight: bold; width: 30%;">
                                         البند
                                     </td>
@@ -22,7 +25,7 @@
                                         النتيجة
                                     </td>
                                     <td style="padding: 5px; text-align: center; font-weight: bold; width: 45%;">
-                                        الملاخظات
+                                        الملاحظات
                                     </td>
                                 </thead>
                                 <tr>
@@ -88,12 +91,10 @@
                                 </tr>
                             </table>
                         </group>
-                    </page>
-                    <page string="مواد التعبئة والتغليف">
-                        <group>
+                        <group class="text-right" string="ثانيا: مواد التعبئـة والتغليـف ">
                             <table border="1" dir="rtl" style="width:70%" class="pull-right">
                                 <thead>
-                                    <td style="padding: 5px; font-weight: bold; width: 5%;">م</td>
+                                    <td style="padding: 5px; font-weight: bold; width: 5%; text-align: center;">م</td>
                                     <td style="padding: 5px; text-align: center; font-weight: bold; width: 30%;">
                                         البند
                                     </td>
@@ -101,7 +102,7 @@
                                         النتيجة
                                     </td>
                                     <td style="padding: 5px; text-align: center; font-weight: bold; width: 45%;">
-                                        الملاخظات
+                                        الملاحظات
                                     </td>
                                 </thead>
                                 <tr>
@@ -167,28 +168,25 @@
                                 </tr>
                             </table>
                         </group>
-                        <br/>
                         <div class="row col-sm-12" dir="rtl">
-                            <!--<h5>-->
-                            <span style="text-align: center; font-weight: bold;">النتيجة النهائية للفحص:</span>
-                        </div>
-                        <div class="row" dir="rtl">
-                            <div class="col-sm-3 pull-right">
-                                <label class='text-muted text-right'>
+                            <h4>
+                                <p style="font-weight: bold;">النتيجة النهائية للفحص:</p>
+                                <t>
                                     <field name="accepted"/>
+                                </t>
+                                <label class='col-xs-6 text-right' style="padding: 5px;">
                                     <input type="checkbox" name="result" invisible="1"/>
                                     مقبول
                                 </label>
-                            </div>
-                            <div class="col-sm-3 pull-right">
-                                <label class='text-muted pull-left'>
+                                <t>
                                     <field name="not_accepted"/>
+                                </t>
+                                <label class='col-xs-6 text-right' style="padding: 5px;">
                                     <input type="checkbox" name="result" invisible="1"/>
                                     غير مقبول
                                 </label>
-                            </div>
+                            </h4>
                         </div>
-                        <!--</h5>-->
                     </page>
                 </xpath>
             </field>

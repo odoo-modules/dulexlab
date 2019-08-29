@@ -10,7 +10,8 @@ class QualityCheckReport(models.Model):
         return self.env.ref('bi_print_quality_report.action_report_quality_check').report_action(self)
 
     # materials_id = fields.One2many('material.quality', 'quality_check_id', string="materials_id")
-    current_date = fields.Date(string="Date")
+    current_date = fields.Date(string="Date", default=fields.Date.context_today)
+    main_notes = fields.Text(string="Notes")
 
     density = fields.Selection([('ch1', 'مقبول'), ('ch2', 'غير مقبول')], string="الكثافة وحجم الحبيبات")
     color = fields.Selection([('ch1', 'مقبول'), ('ch2', 'غير مقبول')], string="اللون")
@@ -37,5 +38,6 @@ class QualityCheckReport(models.Model):
     printing_qual_note = fields.Char(string='ملاحظات')
     matching_data_note = fields.Char(string='ملاحظات')
     exporting_documents_note = fields.Char(string='ملاحظات')
-    accepted = fields.Boolean(string="مقبول")
-    not_accepted = fields.Boolean(string="غير مقبول")
+    # final_result = fields.Selection([('ch1', 'مقبول'), ('ch2', 'غير مقبول')], string="")
+    accepted = fields.Boolean(string="Accepted")
+    not_accepted = fields.Boolean(string="Not Accepted")
