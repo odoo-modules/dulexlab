@@ -46,7 +46,7 @@ class AccountInvoice(models.Model):
                                                               self.partner_id)['taxes']
                 else:
                     taxes = \
-                        line.invoice_line_tax_ids.compute_all(line.product_id.lst_price, self.currency_id,
+                        line.invoice_line_tax_ids.compute_all(line.price_unit, self.currency_id,
                                                               line.quantity,
                                                               line.product_id,
                                                               self.partner_id)['taxes']
@@ -55,10 +55,8 @@ class AccountInvoice(models.Model):
                     for tax in taxes:
                         if tax['name'] == line_tax.name:
                             if self.pricelist_id:
-                                tax['amount'] -= tax['amount'] * (
-                                        self.pricelist_id.phd_disc / 100)
-                                tax['amount'] -= tax['amount'] * (
-                                        self.pricelist_id.dd_disc / 100)
+                                tax['amount'] -= tax['amount'] * (self.pricelist_id.phd_disc / 100)
+                                tax['amount'] -= tax['amount'] * (self.pricelist_id.dd_disc / 100)
 
             else:
                 taxes = \
